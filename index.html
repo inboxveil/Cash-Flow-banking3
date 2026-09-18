@@ -1,86 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Cash Flow Bank — Prototype</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cash Flow Bank — Test Environment</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    [x-cloak] { display: none !important; }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-900">
-<!-- SINGLE BIG DISCLAIMER - ONE PLACE ONLY AT TOP -->
-<div class="bg-amber-400 text-black text-center font-extrabold text-sm md:text-base py-3 px-4 border-b-4 border-black">
-  ⚠️ THIS IS A DEMO ACCOUNT — IT IS NOT REAL • NO REAL MONEY • CASH FLOW BANK PROTOTYPE FOR TESTING ONLY
-</div>
-
-<div class="flex min-h-screen">
-<aside class="w-64 bg-white border-r hidden md:block">
-  <div class="p-6 font-black text-lg">Cash Flow Bank <span class="text-[10px] bg-black text-white px-2 py-1 rounded ml-1">PROTOTYPE</span></div>
-  <nav class="px-3 space-y-1 text-sm">
-    <div class="px-3 py-2 bg-black text-white rounded">Dashboard</div>
-    <div class="px-3 py-2">Account Summary</div>
-    <div class="px-3 py-2">Transfer</div>
-    <div class="px-3 py-2">Deposit Check</div>
-    <div class="px-3 py-2">Deposit Crypto</div>
-    <div class="px-3 py-2">Loans</div>
-    <div class="px-3 py-2">Cards</div>
-    <div class="px-3 py-2">KYC Verification</div>
-    <div class="px-3 py-2">Profile</div>
-    <div class="px-3 py-2">Settings</div>
-    <div class="px-3 py-2">Account Status</div>
-    <div class="px-3 py-2">Support</div>
-    <div class="px-3 py-2 mt-6 text-red-600">Sign Out</div>
-  </nav>
-</aside>
-
-<main class="flex-1 p-4 md:p-6 space-y-6">
-  <div class="flex justify-between items-center">
-    <h1 class="text-xl font-bold">Dashboard — Cash Flow Bank</h1>
-    <button onclick="document.getElementById('adminBox').classList.toggle('hidden')" class="text-xs border px-3 py-2 rounded bg-white">Open Admin</button>
+<body class="bg-gray-50 text-gray-900" x-data="bankApp()" x-cloak>
+  <!-- Top compliance bar -->
+  <div class="bg-slate-900 text-white text-center text-xs py-3 px-4 sticky top-0 z-50">
+    Cash Flow Bank — Test Environment • No real funds until go-live • Connected to sandbox only
   </div>
 
-  <div class="bg-white rounded-2xl p-5 shadow-sm">
-    <div class="flex justify-between"><h2 class="font-semibold">My Accounts</h2><span class="text-xs bg-gray-100 px-2 py-1 rounded">Sample</span></div>
-    <p class="text-xs text-gray-500 mt-2">Primary Account • Cash Flow Bank • Sample Data</p>
-    <p class="text-3xl font-bold mt-1">$1,514,000.00</p>
-    <p class="text-xs text-gray-400">Demo balance for UI testing only</p>
-  </div>
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r hidden md:flex flex-col">
+      <div class="p-6">
+        <div class="font-black text-lg leading-tight">Cash Flow Bank</div>
+        <span class="text-[10px] bg-slate-900 text-white px-2 py-1 rounded mt-1 inline-block">
+          TEST ENVIRONMENT
+        </span>
+      </div>
+      <nav class="px-3 space-y-1 text-sm flex-1">
+        <template x-for="item in nav" :key="item.id">
+          <button @click="current = item.id"
+                  :class="current === item.id ? 'bg-black text-white' : 'hover:bg-gray-100'"
+                  class="w-full text-left px-3 py-2.5 rounded transition">
+            <span x-text="item.label"></span>
+          </button>
+        </template>
+      </nav>
+      <div class="p-4 text-[10px] text-gray-400 border-t">
+        Sandbox only • No real money movement
+      </div>
+    </aside>
 
-  <div class="bg-white rounded-2xl p-5 shadow-sm">
-    <h2 class="font-semibold mb-3">Cashflow - Demo</h2>
-    <canvas id="flow" height="120"></canvas>
-  </div>
-
-  <div class="grid grid-cols-3 gap-3">
-    <div class="bg-white p-4 rounded-xl text-center text-sm font-medium">Send Money</div>
-    <div class="bg-white p-4 rounded-xl text-center text-sm font-medium">Pay Bills</div>
-    <div class="bg-white p-4 rounded-xl text-center text-sm font-medium">Transaction History</div>
-  </div>
-
-  <div class="bg-white rounded-2xl p-5 shadow-sm">
-    <h2 class="font-semibold">Recent Transactions — Sample</h2>
-    <div id="tx" class="mt-3 space-y-2 text-sm divide-y">
-      <div class="flex justify-between py-2"><span>Sample Data — Initial Demo Balance — Cash Flow Bank</span><span>$1,514,000</span></div>
+    <!-- Mobile header -->
+    <div class="md:hidden fixed top-12 left-0 right-0 bg-white border-b z-40 flex items-center justify-between px-4 py-3">
+      <div class="font-bold">Cash Flow Bank</div>
+      <button @click="mobileOpen = !mobileOpen" class="p-2 rounded hover:bg-gray-100">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </div>
+
+    <!-- Mobile menu -->
+    <div x-show="mobileOpen" @click.away="mobileOpen = false"
+         class="md:hidden fixed inset-0 z-30 bg-black/40" x-transition>
+      <div class="absolute right-0 top-0 h-full w-64 bg-white shadow-xl p-4 space-y-1">
+        <template x-for="item in nav" :key="item.id">
+          <button @click="current = item.id; mobileOpen = false"
+                  :class="current === item.id ? 'bg-black text-white' : 'hover:bg-gray-100'"
+                  class="w-full text-left px-3 py-2.5 rounded text-sm">
+            <span x-text="item.label"></span>
+          </button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <main class="flex-1 p-4 md:p-6 space-y-6 mt-14 md:mt-0">
+      <!-- Dashboard -->
+      <div x-show="current === 'dashboard'" class="space-y-6">
+        <h1 class="text-xl font-bold">Dashboard — Test Environment</h1>
+
+        <!-- Balance card -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm border-l-4 border-slate-900">
+          <h2 class="font-semibold">My Accounts — Live Ledger (Sandbox)</h2>
+          <p class="text-xs text-gray-500">Primary Account • Real balance from core — not sample</p>
+          <p class="text-3xl font-bold mt-2">₦0.00</p>
+          <p class="text-xs text-amber-600 mt-1">
+            Balance = 0 until real NIBSS settlement. No manual credit allowed.
+          </p>
+        </div>
+
+        <!-- Chart -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm">
+          <h2 class="font-semibold mb-3">Cashflow — Sandbox Data</h2>
+          <canvas id="flow" height="120"></canvas>
+        </div>
+
+        <!-- Transactions -->
+        <div class="bg-white rounded-2xl p-5 shadow-sm">
+          <h2 class="font-semibold">Recent Transactions — Real Audit Trail</h2>
+          <p class="text-xs text-gray-500 mb-3">
+            No manual wire injection. All transactions require NIP reference.
+          </p>
+          <div class="text-sm text-gray-400 py-8 text-center border-2 border-dashed rounded-xl">
+            No transactions yet — awaiting live settlement
+          </div>
+        </div>
+      </div>
+
+      <!-- Account Summary -->
+      <div x-show="current === 'accounts'" class="space-y-6">
+        <h1 class="text-xl font-bold">Account Summary — Real Ledger</h1>
+        <div class="bg-white rounded-2xl p-6 shadow-sm">
+          <p class="text-sm text-gray-500 mb-4">Connected to core banking sandbox only.</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="border rounded-xl p-4">
+              <div class="text-xs text-gray-500">Primary Current Account</div>
+              <div class="text-2xl font-bold mt-1">₦0.00</div>
+              <div class="text-xs text-amber-600 mt-1">Awaiting first NIBSS credit</div>
+            </div>
+            <div class="border rounded-xl p-4">
+              <div class="text-xs text-gray-500">Savings Account</div>
+              <div class="text-2xl font-bold mt-1">₦0.00</div>
+              <div class="text-xs text-amber-600 mt-1">Not yet funded</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transfer -->
+      <div x-show="current === 'transfer'" class="space-y-6">
+        <h1 class="text-xl font-bold">Transfer — NIP Pending</h1>
+        <div class="bg-white rounded-2xl p-6 shadow-sm max-w-lg">
+          <div class="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-lg p-3 mb-5">
+            Test environment only. Transfers will not move real funds.
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Beneficiary Account</label>
+              <input type="text" placeholder="10-digit account number"
+                     class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Bank</label>
+              <select class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black">
+                <option>Select bank…</option>
+                <option>Access Bank</option>
+                <option>GTBank</option>
+                <option>Zenith Bank</option>
+                <option>First Bank</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Amount (₦)</label>
+              <input type="number" placeholder="0.00"
+                     class="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-black">
+            </div>
+            <button class="w-full bg-black text-white py-2.5 rounded-lg text-sm font-medium opacity-60 cursor-not-allowed"
+                    disabled>
+              Initiate NIP Transfer (Disabled in Test)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deposit Check -->
+      <div x-show="current === 'deposit'" class="space-y-6">
+        <h1 class="text-xl font-bold">Deposit Check — Awaiting Clearing</h1>
+        <div class="bg-white rounded-2xl p-6 shadow-sm">
+          <p class="text-sm text-gray-500 mb-4">
+            Cheque deposits require physical clearing. This is a sandbox placeholder only.
+          </p>
+          <div class="border-2 border-dashed rounded-xl p-10 text-center text-gray-400">
+            No pending cheque deposits
+          </div>
+        </div>
+      </div>
+
+      <!-- KYC -->
+      <div x-show="current === 'kyc'" class="space-y-6">
+        <h1 class="text-xl font-bold">KYC Verification — Required</h1>
+        <div class="bg-white rounded-2xl p-6 shadow-sm max-w-lg">
+          <div class="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg p-3 mb-5">
+            KYC must be completed before any live settlement is allowed.
+          </div>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">BVN</label>
+              <input type="text" placeholder="11-digit BVN"
+                     class="w-full border rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">NIN</label>
+              <input type="text" placeholder="11-digit NIN"
+                     class="w-full border rounded-lg px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Upload ID Document</label>
+              <input type="file" class="w-full text-sm">
+            </div>
+            <button class="w-full bg-black text-white py-2.5 rounded-lg text-sm font-medium opacity-60 cursor-not-allowed"
+                    disabled>
+              Submit KYC (Disabled in Test)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audit Log -->
+      <div x-show="current === 'audit'" class="space-y-6">
+        <h1 class="text-xl font-bold">Audit Log</h1>
+        <div class="bg-white rounded-2xl p-6 shadow-sm">
+          <p class="text-sm text-gray-500 mb-4">
+            All actions are logged. No manual overrides permitted.
+          </p>
+          <div class="text-sm text-gray-400 py-8 text-center border-2 border-dashed rounded-xl">
+            No audit events yet — system idle
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance footer -->
+      <div class="bg-white p-4 rounded-xl text-xs text-gray-500 border">
+        <strong>Compliance Note:</strong> This dashboard is connected to the test environment only.
+        No funds have been moved.
+      </div>
+    </main>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-    <div class="bg-white p-5 rounded-2xl text-sm">My Cards<br><span class="text-gray-400">No cards available — Demo</span></div>
-    <div class="bg-white p-5 rounded-2xl text-sm">Loan<br><span class="text-gray-400">No active loan — Demo</span><div class="mt-3">Credit Score: <b>850 Excellent (Sample)</b></div></div>
-  </div>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script>
+    function bankApp() {
+      return {
+        current: 'dashboard',
+        mobileOpen: false,
+        nav: [
+          { id: 'dashboard', label: 'Dashboard' },
+          { id: 'accounts', label: 'Account Summary — Real ledger' },
+          { id: 'transfer', label: 'Transfer — NIP Pending' },
+          { id: 'deposit', label: 'Deposit Check — Awaiting clearing' },
+          { id: 'kyc', label: 'KYC Verification — Required' },
+          { id: 'audit', label: 'Audit Log' }
+        ]
+      }
+    }
 
-  <div id="adminBox" class="hidden bg-black text-white p-5 rounded-2xl">
-    <h3 class="font-bold">Cash Flow Bank — Admin Test Panel</h3>
-    <p class="text-xs text-gray-400 mb-3">Adds Demo Adjustment only. No wire receipts.</p>
-    <input id="amt" type="number" placeholder="Demo amount" class="text-black p-2 rounded w-full mb-2"/>
-    <button onclick="addDemo()" class="bg-white text-black px-4 py-2 rounded text-sm w-full">Add Demo Adjustment</button>
-  </div>
-</main>
-</div>
-
-<script>
-const ctx=document.getElementById('flow');
-new Chart(ctx,{type:'line',data:{labels:['Jan',[STRIPPED] Credit',data:[10,[STRIPPED] Debit',data:[5,[STRIPPED]
-function addDemo(){const v=document.getElementById('amt').value||0;const d=document.createElement('div');d.className='flex justify-between py-2';d.innerHTML=`<span>Demo Adjustment — Test Data — No real funds moved — Cash Flow Bank</span><span>+$${v} (Sample)</span>`;document.getElementById('tx').prepend(d);}
-</script>
+    // Chart
+    document.addEventListener('DOMContentLoaded', () => {
+      const ctx = document.getElementById('flow');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+              label: 'Sandbox Cashflow',
+              data: [0, 0, 0, 0, 0, 0],
+              borderColor: '#0f172a',
+              backgroundColor: 'rgba(15,23,42,0.05)',
+              tension: 0.3,
+              fill: true
+            }]
+          },
+          options: {
+            plugins: { legend: { display: false } },
+            scales: {
+              y: { beginAtZero: true, ticks: { callback: v => '₦' + v } }
+            }
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
