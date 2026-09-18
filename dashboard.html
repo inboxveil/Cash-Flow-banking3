@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Dashboard — Cash Flow Bank</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+  <!-- Side Menu -->
+  <div id="sideMenu" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="closeMenu()"></div>
+    <div class="absolute left-0 top-0 h-full w-72 bg-white shadow-xl flex flex-col">
+      <div class="flex items-center justify-between p-4 border-b">
+        <div class="w-9 h-9 bg-red-600 rounded-lg flex items-center justify-center text-white">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+        </div>
+        <button onclick="closeMenu()" class="p-2 rounded-full hover:bg-gray-100">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto py-2 text-sm">
+        <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase">Main</p>
+        <button onclick="showPage('dashboard')" class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50">🏠 Dashboard</button>
+        <button onclick="showPage('accounts')" class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50">💳 Account Summary</button>
+        <button onclick="showPage('transfer')" class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50">↔️ Transfer</button>
+        <button onclick="showPage('history')" class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50">📜 Transaction History</button>
+        <p class="px-4 py-2 mt-4 text-xs font-semibold text-gray-400 uppercase">Account</p>
+        <button onclick="showPage('profile')" class="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50">👤 Profile</button>
+        <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-left text-red-600 hover:bg-red-50">🚪 Sign Out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECEIPT MODAL -->
+  <div id="receiptModal" class="fixed inset-0 z-[60] hidden items-center justify-center p-4 bg-black/50">
+    <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-xl">
+      <div class="bg-red-600 text-white text-center py-4">
+        <p class="font-bold text-lg">Transaction Receipt</p>
+        <p class="text-sm opacity-90">Cash Flow Bank</p>
+      </div>
+      <div class="p-5 space-y-3 text-sm" id="receiptContent">
+        <!-- filled by JS -->
+      </div>
+      <div class="px-5 pb-5 flex gap-3">
+        <button onclick="printReceipt()" class="flex-1 bg-red-600 text-white py-2.5 rounded-xl text-sm font-medium">
+          Download / Print
+        </button>
+        <button onclick="closeReceipt()" class="flex-1 border border-gray-300 py-2.5 rounded-xl text-sm font-medium">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white sticky top-0 z-40 border-b">
+    <div class="flex items-center justify-between px-4 py-3">
+      <div class="flex items-center gap-3">
+        <button onclick="openMenu()" class="p-1.5 rounded-lg hover:bg-gray-100">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="userName" class="text-sm font-medium"></span>
+        <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
+          <img src="https://i.pravatar.cc/100?img=12" class="w-full h-full object-cover"/>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="px-4 py-5 max-w-lg mx-auto space-y-6">
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="space-y-6">
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-lg font-semibold">My Accounts</h2>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm border">
+          <div class="flex items-start justify-between">
+            <div>
+              <p class="text-sm text-gray-500">Primary Account</p>
+              <p class="text-xs text-blue-600 mt-1" id="accountNumber">—</p>
+            </div>
+            <div class="text-right">
+              <p class="text-2xl font-bold" id="balanceDisplay">$0.00</p>
+              <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="font-semibold mb-3">Shortcuts</h3>
+        <div class="grid grid-cols-2 gap-3">
+          <button onclick="showPage('transfer')" class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col items-center gap-2">
+            <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-xl">💸</div>
+            <span class="text-sm font-medium">Send Money</span>
+          </button>
+          <button onclick="showPage('history')" class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col items-center gap-2">
+            <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-xl">📜</div>
+            <span class="text-sm font-medium">History</span>
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="font-semibold">Recent Transactions</h3>
+          <button onclick="showPage('history')" class="text-sm text-red-600 font-medium">View All</button>
+        </div>
+        <div id="recentTx" class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+          <p class="text-center text-gray-400 py-8 text-sm">No transactions yet</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRANSFER -->
+    <div id="page-transfer" class="hidden space-y-5">
+      <div class="flex items-center gap-3">
+        <button onclick="showPage('dashboard')" class="p-1.5 rounded-lg hover:bg-gray-200">←</button>
+        <h2 class="text-lg font-semibold">Transfer</h2>
+      </div>
+      <div class="bg-white rounded-2xl p-5 shadow-sm border space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Beneficiary Account</label>
+          <input id="tfAccount" type="text" placeholder="Account number" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Bank</label>
+          <select id="tfBank" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+            <option value="">Select bank</option>
+            <option>Access Bank</option>
+            <option>GTBank</option>
+            <option>Zenith Bank</option>
+            <option>First Bank</option>
+            <option>UBA</option>
+            <option>Opay</option>
+            <option>Palmpay</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Amount ($)</label>
+          <input id="tfAmount" type="number" placeholder="0.00" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Narration</label>
+          <input id="tfNarration" type="text" placeholder="Optional" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
+        </div>
+        <button onclick="sendMoney()" class="w-full bg-red-600 text-white font-medium py-3.5 rounded-xl hover:bg-red-700">
+          Send Money
+        </button>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="page-history" class="hidden space-y-5">
+      <div class="flex items-center gap-3">
+        <button onclick="showPage('dashboard')" class="p-1.5 rounded-lg hover:bg-gray-200">←</button>
+        <h2 class="text-lg font-semibold">Transaction History</h2>
+      </div>
+      <div id="fullHistory" class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+        <p class="text-center text-gray-400 py-8 text-sm">No transactions yet</p>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="page-profile" class="hidden space-y-5">
+      <div class="flex items-center gap-3">
+        <button onclick="showPage('dashboard')" class="p-1.5 rounded-lg hover:bg-gray-200">←</button>
+        <h2 class="text-lg font-semibold">Profile</h2>
+      </div>
+      <div class="bg-white rounded-2xl p-6 shadow-sm border space-y-4">
+        <div>
+          <p class="text-sm text-gray-400">Full Name</p>
+          <p class="font-medium" id="profileName">—</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-400">Email</p>
+          <p class="font-medium" id="profileEmail">—</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-400">Phone</p>
+          <p class="font-medium" id="profilePhone">—</p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-400">Account Status</p>
+          <p class="font-medium text-green-600">Approved</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCOUNTS -->
+    <div id="page-accounts" class="hidden space-y-5">
+      <div class="flex items-center gap-3">
+        <button onclick="showPage('dashboard')" class="p-1.5 rounded-lg hover:bg-gray-200">←</button>
+        <h2 class="text-lg font-semibold">Account Summary</h2>
+      </div>
+      <div class="bg-white rounded-2xl p-5 shadow-sm border">
+        <p class="text-sm text-gray-500">Available Balance</p>
+        <p class="text-3xl font-bold mt-1" id="balanceDisplay2">$0.00</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
+      authDomain: "cash-flow-banking3.firebaseapp.com",
+      databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
+      projectId: "cash-flow-banking3",
+      storageBucket: "cash-flow-banking3.firebasestorage.app",
+      messagingSenderId: "782707432276",
+      appId: "1:782707432276:web:680425b777d227179c86c1"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let currentUser = null;
+    let lastReceipt = null;
+
+    function checkAuth() {
+      const saved = localStorage.getItem('cfb_currentUser');
+      if (!saved) {
+        window.location.href = 'login.html';
+        return;
+      }
+      currentUser = JSON.parse(saved);
+      loadUserData();
+    }
+
+    function loadUserData() {
+      document.getElementById('userName').textContent = currentUser.name.split(' ')[0];
+      document.getElementById('profileName').textContent = currentUser.name;
+      document.getElementById('profileEmail').textContent = currentUser.email;
+      document.getElementById('profilePhone').textContent = currentUser.phone || '—';
+      document.getElementById('accountNumber').textContent = currentUser.id.slice(-10);
+
+      db.ref('users/' + currentUser.id).once('value', snap => {
+        const data = snap.val();
+        if (data) {
+          currentUser.balance = data.balance || 0;
+          localStorage.setItem('cfb_currentUser', JSON.stringify(currentUser));
+          updateBalanceUI();
+        }
+      });
+
+      loadTransactions();
+    }
+
+    function updateBalanceUI() {
+      const bal = Number(currentUser.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('balanceDisplay').textContent = '$' + bal;
+      document.getElementById('balanceDisplay2').textContent = '$' + bal;
+    }
+
+    function loadTransactions() {
+      db.ref('transactions/' + currentUser.id).once('value', snap => {
+        const data = snap.val() || {};
+        const list = Object.entries(data).map(([id, tx]) => ({id, ...tx}))
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const recentBox = document.getElementById('recentTx');
+        const fullBox = document.getElementById('fullHistory');
+
+        if (list.length === 0) {
+          recentBox.innerHTML = '<p class="text-center text-gray-400 py-8 text-sm">No transactions yet</p>';
+          fullBox.innerHTML = '<p class="text-center text-gray-400 py-8 text-sm">No transactions yet</p>';
+          return;
+        }
+
+        let html = '';
+        list.forEach(tx => {
+          const color = tx.amount > 0 ? 'text-green-600' : 'text-red-600';
+          const sign = tx.amount > 0 ? '+' : '';
+          html += `
+            <div onclick='showReceipt(${JSON.stringify(tx)})' class="flex items-center justify-between px-4 py-3 border-b last:border-0 cursor-pointer hover:bg-gray-50">
+              <div>
+                <p class="font-medium ${color}">${sign}$${Math.abs(tx.amount).toLocaleString()}</p>
+                <p class="text-xs text-gray-500">${tx.desc}</p>
+                <p class="text-xs text-gray-400">${new Date(tx.date).toLocaleString()}</p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Successful</span>
+                <p class="text-xs text-red-600 mt-1">View Receipt</p>
+              </div>
+            </div>
+          `;
+        });
+
+        recentBox.innerHTML = html;
+        fullBox.innerHTML = html;
+      });
+    }
+
+    async function sendMoney() {
+      const account = document.getElementById('tfAccount').value.trim();
+      const bank = document.getElementById('tfBank').value;
+      const amount = Number(document.getElementById('tfAmount').value);
+      const narration = document.getElementById('tfNarration').value.trim() || 'Transfer';
+
+      if (!account || !bank || !amount || amount <= 0) {
+        return alert('Please fill all required fields');
+      }
+      if (amount > currentUser.balance) {
+        return alert('Insufficient balance');
+      }
+
+      const newBalance = currentUser.balance - amount;
+      const txId = 'TXN' + Date.now();
+
+      // Update balance
+      await db.ref('users/' + currentUser.id).update({ balance: newBalance });
+
+      // Save transaction
+      const txData = {
+        id: txId,
+        amount: -amount,
+        desc: `Transfer to ${bank} • ${account}`,
+        bank: bank,
+        account: account,
+        narration: narration,
+        date: new Date().toISOString(),
+        status: 'successful',
+        sender: currentUser.name,
+        senderEmail: currentUser.email
+      };
+
+      await db.ref('transactions/' + currentUser.id).push().set(txData);
+
+      currentUser.balance = newBalance;
+      localStorage.setItem('cfb_currentUser', JSON.stringify(currentUser));
+      updateBalanceUI();
+      loadTransactions();
+
+      // Show receipt automatically
+      showReceipt(txData);
+
+      // Clear form
+      document.getElementById('tfAccount').value = '';
+      document.getElementById('tfAmount').value = '';
+      document.getElementById('tfNarration').value = '';
+    }
+
+    function showReceipt(tx) {
+      lastReceipt = tx;
+      const content = document.getElementById('receiptContent');
+      content.innerHTML = `
+        <div class="flex justify-between">
+          <span class="text-gray-500">Transaction ID</span>
+          <span class="font-medium">${tx.id || tx.desc.slice(0,12)}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Date</span>
+          <span class="font-medium">${new Date(tx.date).toLocaleString()}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Amount</span>
+          <span class="font-bold text-red-600">$${Math.abs(tx.amount).toLocaleString()}</span>
+        </div>
+        <div class="border-t my-2"></div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">From</span>
+          <span class="font-medium">${tx.sender || currentUser.name}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">To</span>
+          <span class="font-medium text-right">${tx.bank || ''} ${tx.account || ''}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Narration</span>
+          <span class="font-medium">${tx.narration || tx.desc}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">Status</span>
+          <span class="text-green-600 font-medium">Successful</span>
+        </div>
+      `;
+      document.getElementById('receiptModal').classList.remove('hidden');
+      document.getElementById('receiptModal').classList.add('flex');
+    }
+
+    function closeReceipt() {
+      document.getElementById('receiptModal').classList.add('hidden');
+      document.getElementById('receiptModal').classList.remove('flex');
+    }
+
+    function printReceipt() {
+      const content = document.getElementById('receiptContent').innerHTML;
+      const win = window.open('', '', 'width=400,height=600');
+      win.document.write(`
+        <html>
+          <head><title>Receipt - Cash Flow Bank</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            .header { background: #dc2626; color: white; text-align: center; padding: 15px; border-radius: 8px 8px 0 0; }
+            .content { border: 1px solid #ddd; padding: 20px; border-radius: 0 0 8px 8px; }
+            .row { display: flex; justify-content: space-between; margin: 8px 0; font-size: 14px; }
+          </style>
+          </head>
+          <body>
+            <div class="header">
+              <h2>Transaction Receipt</h2>
+              <p>Cash Flow Bank</p>
+            </div>
+            <div class="content">${content}</div>
+            <p style="text-align:center;margin-top:20px;font-size:12px;color:#666;">Thank you for banking with us</p>
+          </body>
+        </html>
+      `);
+      win.document.close();
+      win.print();
+    }
+
+    function showPage(page) {
+      document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+      document.getElementById('page-' + page).classList.remove('hidden');
+      closeMenu();
+      window.scrollTo(0, 0);
+    }
+
+    function openMenu() { document.getElementById('sideMenu').classList.remove('hidden'); }
+    function closeMenu() { document.getElementById('sideMenu').classList.add('hidden'); }
+    function logout() {
+      localStorage.removeItem('cfb_currentUser');
+      window.location.href = 'login.html';
+    }
+
+    checkAuth();
+  </script>
+</body>
+</html>
