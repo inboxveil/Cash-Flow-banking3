@@ -7,34 +7,110 @@
 #loader.hide{opacity:0;pointer-events:none}
 .spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top:3px solid #00ff94;border-radius:50%;animation:spin 1s linear infinite;margin-top:20px}
 @keyframes spin{to{transform:rotate(360deg)}}
-.header{background:#fff;box-shadow:0 1px 10px rgba(0,0,0,.08);padding:14px 20px;display:flex;justify-content:space-between;position:sticky;top:0}
+.header{background:#fff;box-shadow:0 1px 10px rgba(0,0,0,.08);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
 .brand{font-weight:900;color:#0a2540}.brand span{color:#1e4bd8}
 .navbtn{padding:8px 14px;border:1px solid #cbd5e1;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:#fff}
 .navbtn.active{background:#0a2540;color:#fff}
 .hero{background:linear-gradient(105deg,#0a2540,#1e4bd8);color:#fff;padding:30px 20px}
-.hero h1{font-size:28px;font-weight:900}.hero p{color:#cbd5e1;font-size:13px;margin:10px 0}
-.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;margin:16px auto;max-width:600px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+.hero h1{font-size:28px;font-weight:900}.hero p{color:#cbd5e1;font-size:13px;margin:10px 0;max-width:500px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;margin:16px auto;max-width:650px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
 input{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 14px;margin:7px 0}
 button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;border-radius:12px;font-weight:800;cursor:pointer;margin-top:6px}
 .badge{background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800}
+.balCard{background:linear-gradient(135deg,#0a2540,#1e4bd8);color:#fff;padding:22px;border-radius:18px;margin:14px}
+.btn-red{background:#fee2e2;color:#b91c1c;height:40px;border:0;border-radius:10px;font-weight:800;padding:0 16px;cursor:pointer}
+.btn-dark{background:#0a2540;color:#fff;height:44px;border:0;border-radius:10px;font-weight:800;width:100%;cursor:pointer}
+.tx{border-bottom:1px solid #f1f5f9;padding:10px 0;display:flex;justify-content:space-between;font-size:13px}
 </style></head><body>
-<div id="loader"><div style="font-size:26px;font-weight:900;color:#fff">💳 CASH FLOW BANKING</div><div class="spinner"></div><div style="color:#94a3b8;font-size:10px;margin-top:12px">Loading secure banking...</div></div>
-<div class="header"><div class="brand">CASH FLOW <span>BANKING</span></div><div><button class="navbtn active">Home</button></div></div>
-<div class="hero"><h1>Banking That Moves With Your Cash Flow.</h1><p>Open account in 2 minutes, get instant approval, manage funds securely. USA Digital Banking Demo.</p></div>
-<div style="display:flex;justify-content:center;gap:8px;margin:14px"><button id="t1" class="navbtn active" onclick="show('create')">Create Account</button><button id="t2" class="navbtn" onclick="show('login')">Login with Account No</button></div>
-<div id="create" class="card"><span class="badge">NEW CUSTOMER</span><h3 style="margin:10px 0">Open Account</h3>
+
+<div id="loader"><div style="font-size:26px;font-weight:900;color:#fff">💳 CASH FLOW BANKING</div><div class="spinner"></div><div style="color:#94a3b8;font-size:10px;margin-top:12px">Establishing secure connection...</div></div>
+
+<!-- TOP HEADER -->
+<div class="header">
+<div class="brand">CASH FLOW <span>BANKING</span></div>
+<div id="headerBtns">
+<button id="hbHome" class="navbtn active" onclick="goHome()">Home</button>
+<button id="hbBank" class="navbtn" onclick="goBanking()">Banking</button>
+<button id="hbDash" class="navbtn" style="display:none" onclick="goDashboard()">Dashboard</button>
+<button id="hbLogout" class="navbtn" style="display:none;background:#fee2e2;color:#b91c1c;border-color:#fecaca" onclick="logout()">Logout</button>
+</div>
+</div>
+
+<!-- HOME VIEW -->
+<div id="homeView">
+<div class="hero"><h1>Banking That Moves With Your Cash Flow.</h1><p>Open account in 2 minutes, get instant approval, manage funds securely. USA Digital Banking Demo.</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px;max-width:800px;margin:0 auto"><div style="background:#fff;border:1px solid #e2e8f0;padding:14px;border-radius:12px"><b>⚡ Instant Approval</b><p style="font-size:11px;color:#64748b">Admin approves in real-time</p></div><div style="background:#fff;border:1px solid #e2e8f0;padding:14px;border-radius:12px"><b>🔒 Secure</b><p style="font-size:11px;color:#64748b">Account No login like real bank</p></div></div>
+</div>
+
+<!-- BANKING AUTH VIEW -->
+<div id="bankView" style="display:none">
+<div style="display:flex;justify-content:center;gap:8px;margin:14px"><button id="t1" class="navbtn active" onclick="showAuth('create')">Create Account</button><button id="t2" class="navbtn" onclick="showAuth('login')">Login with Account No</button></div>
+<div id="createCard" class="card"><span class="badge">NEW CUSTOMER</span><h3 style="margin:10px 0">Open Account</h3><p style="font-size:11px;color:#64748b">Use email to create - system go generate Account Number</p>
 <input id="fullname" placeholder="Full Name"><input id="email" placeholder="Email"><input id="pass" type="password" placeholder="Password min 6">
 <button class="primary" onclick="createAcc()">Create Account</button><div id="msg" style="margin-top:12px;font-size:13px"></div></div>
-<div id="login" class="card" style="display:none"><span class="badge">RETURNING</span><h3 style="margin:10px 0">Login with Account Number</h3>
+<div id="loginCard" class="card" style="display:none"><span class="badge">RETURNING</span><h3 style="margin:10px 0">Login with Account Number</h3>
 <input id="lacc" placeholder="Account Number CFB-USA-..."><input id="lpass" type="password" placeholder="Password">
-<button class="primary" onclick="login()">Login → Dashboard</button></div>
+<button class="primary" onclick="login()">Login to Dashboard →</button></div>
+</div>
+
+<!-- DASHBOARD VIEW - INSIDE SAME FILE -->
+<div id="dashView" style="display:none">
+<div class="balCard">
+<div style="font-size:11px;opacity:.7;letter-spacing:1px">WELCOME • AVAILABLE BALANCE</div>
+<div style="font-size:34px;font-weight:900;margin:6px 0">$<span id="dbal">0</span> <span style="font-size:11px;font-weight:600">USD DEMO</span></div>
+<div style="font-size:11px;opacity:.9"><b id="dname"></b><br>Account: <span id="dacc"></span> | Status: <span id="dstatus"></span><br>Email: <span id="demail"></span></div>
+</div>
+<div class="card"><h4>💸 Account Actions</h4>
+<p style="font-size:12px;color:#64748b;margin-top:6px">Only admin can fund accounts from admin panel.</p>
+<div style="margin-top:10px;background:#f1f5f9;padding:12px;border-radius:8px;font-size:12px">Balance: <b style="color:#0a2540">$<span id="dbal2">0</span> DEMO</b> | <span id="dacc2"></span></div>
+<button style="margin-top:10px;width:100%;height:44px;background:#e2e8f0;color:#334155;border:0;border-radius:10px;font-weight:700;cursor:pointer" onclick="alert('Contact admin to fund your account.')">📩 Request Funding from Admin</button>
+<button class="btn-dark" style="margin-top:8px" onclick="refreshBal()">🔄 Refresh Balance</button>
+</div>
+<div class="card"><h4>📜 Recent Activity</h4><div id="txList"><div class="tx"><span>Account Approved</span><b style="color:green">Active</b></div></div></div>
+<div class="card" style="background:#fffbeb;border-color:#fde68a"><p style="font-size:11px;color:#92400e">DEMO SIMULATOR - No real money. Only admin panel can fund accounts.</p></div>
+</div>
+
+<div style="text-align:center;padding:16px;font-size:10px;color:#94a3b8">© 2026 Cash Flow Banking USA • Demo</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",authDomain:"cash-flow-banking3.firebaseapp.com",projectId:"cash-flow-banking3",storageBucket:"cash-flow-banking3.firebasestorage.app",messagingSenderId:"782707432276",appId:"1:782707432276:web:680425b777d227179c86c1"};
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-window.addEventListener('load',()=>setTimeout(()=>loader.classList.add('hide'),1200));
-window.show=t=>{create.style.display=t=='create'?'block':'none';login.style.display=t=='login'?'block':'none';t1.classList.toggle('active',t=='create');t2.classList.toggle('active',t=='login');}
-window.createAcc=async()=>{const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;if(!n||!e||!p)return alert('Fill all');const ac='CFB-USA-'+Math.floor(100000000+Math.random()*900000000);await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now()});msg.innerHTML=`✅ Created!<br><b style="font-size:18px;color:#0a2540">${ac}</b><br>Save this number! Status: PENDING`;fullname.value=email.value=pass.value='';}
-window.login=async()=>{const acc=lacc.value.trim().toUpperCase(),p=lpass.value;if(!acc||!p)return alert('Enter details');const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));const s=await getDocs(q);if(s.empty)return alert('Wrong Account No or Password');const d=s.docs[0];const data=d.data();if(data.status!='APPROVED')return alert('Not approved yet: '+data.status);localStorage.setItem('cfb_id',d.id);localStorage.setItem('cfb_acc',acc);location.href='dashboard.html';}
+let cur=null,curId=null;
+
+window.addEventListener('load',()=>{
+setTimeout(()=>loader.classList.add('hide'),1000);
+const id=localStorage.getItem('cfb_id');if(id){loadDashboard(id);}
+});
+
+window.goHome=()=>{homeView.style.display='block';bankView.style.display='none';dashView.style.display='none';hbHome.classList.add('active');hbBank.classList.remove('active');hbDash.classList.remove('active');}
+window.goBanking=()=>{homeView.style.display='none';bankView.style.display='block';dashView.style.display='none';hbHome.classList.remove('active');hbBank.classList.add('active');hbDash.classList.remove('active');}
+window.goDashboard=()=>{if(!curId)return alert('Login first');homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';hbHome.classList.remove('active');hbBank.classList.remove('active');hbDash.classList.add('active');}
+window.showAuth=t=>{createCard.style.display=t=='create'?'block':'none';loginCard.style.display=t=='login'?'block':'none';t1.classList.toggle('active',t=='create');t2.classList.toggle('active',t=='login');}
+
+window.createAcc=async()=>{
+const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;
+if(!n||!e||!p)return alert('Fill all');if(p.length<6)return alert('Password min 6');
+const ac='CFB-USA-'+Math.floor(100000000+Math.random()*900000000);
+const btn=event.target;btn.textContent='Creating...';btn.disabled=true;
+try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now()});msg.innerHTML=`✅ Created!<br><b style="font-size:18px;color:#0a2540">${ac}</b><br>Save this number! Status: PENDING<br><br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account';btn.disabled=false}
+}
+
+window.login=async()=>{
+const acc=lacc.value.trim().toUpperCase(),p=lpass.value;if(!acc||!p)return alert('Enter details');
+const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));const s=await getDocs(q);
+if(s.empty)return alert('Wrong Account No or Password');const d=s.docs[0];const data=d.data();if(data.status!='APPROVED')return alert('Not approved yet: '+data.status+'\nGo admin.html to approve');
+localStorage.setItem('cfb_id',d.id);loadDashboard(d.id);
+}
+
+async function loadDashboard(id){
+curId=id;const snap=await getDoc(doc(db,'cashflow_accounts',id));if(!snap.exists()){logout();return}
+cur=snap.data();dname.textContent='Welcome, '+cur.name+' 👋';dacc.textContent=cur.accNo;dacc2.textContent=cur.accNo;dbal.textContent=cur.balance;dbal2.textContent=cur.balance;demail.textContent=cur.email;dstatus.textContent=cur.status;
+homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';
+hbHome.style.display='none';hbBank.style.display='none';hbDash.style.display='inline-block';hbLogout.style.display='inline-block';hbDash.classList.add('active');
+}
+
+window.refreshBal=async()=>{if(!curId)return;const snap=await getDoc(doc(db,'cashflow_accounts',curId));cur=snap.data();dbal.textContent=cur.balance;dbal2.textContent=cur.balance;alert('Balance refreshed: $'+cur.balance+' DEMO');}
+window.logout=()=>{localStorage.clear();cur=null;curId=null;hbHome.style.display='inline-block';hbBank.style.display='inline-block';hbDash.style.display='none';hbLogout.style.display='none';goHome();location.reload();}
 </script></body></html>
