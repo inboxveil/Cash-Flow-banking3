@@ -1,36 +1,80 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cash Flow Banking - USA</title>
-<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#f0f4ff;padding:14px}
-.header{background:linear-gradient(90deg,#0a2540,#1e4bd8);color:#fff;padding:18px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.badge{background:#00ff94;color:#000;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:900}
-.card{background:#fff;border:1px solid #dde3f0;border-radius:16px;padding:20px;margin-top:16px;max-width:600px;margin-left:auto;margin-right:auto}
-input{width:100%;height:48px;padding:0 14px;border:1px solid #cbd5e1;border-radius:12px;margin:8px 0}
-button{height:48px;padding:0 22px;border:0;border-radius:12px;background:#1e4bd8;color:#fff;font-weight:800;cursor:pointer;width:100%;margin-top:8px}
-button.green{background:#00b050}.tab{padding:10px 18px;border:1px solid #cbd5e1;border-radius:20px;cursor:pointer;display:inline-block;margin:4px;font-weight:700;font-size:13px}.tab.active{background:#0a2540;color:#fff}
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cash Flow Banking | Secure Digital Banking USA</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui,Segoe UI;background:#f8fafc;color:#0f172a}
+#loader{position:fixed;inset:0;background:#0a2540;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.8s}
+#loader.hide{opacity:0;pointer-events:none}
+.logo-load{font-size:28px;font-weight:900;color:#fff;letter-spacing:1px;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top:3px solid #00ff94;border-radius:50%;animation:spin 1s linear infinite;margin-top:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.topbar{background:#0a2540;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center;font-size:11px}
+.header{background:#fff;box-shadow:0 1px 10px rgba(0,0,0,.08);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.brand{font-weight:900;font-size:19px;color:#0a2540}.brand span{color:#1e4bd8}
+.navbtn{padding:8px 16px;border:1px solid #cbd5e1;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:#fff;margin-left:6px}
+.navbtn.active{background:#0a2540;color:#fff}
+.hero{background:linear-gradient(105deg,#0a2540 0%,#1e4bd8 100%);color:#fff;padding:36px 20px}
+.hero h1{font-size:30px;line-height:1.1;font-weight:900}.hero p{margin:14px 0;color:#cbd5e1;font-size:13px;max-width:500px;line-height:1.5}
+.btn{padding:13px 22px;border-radius:12px;border:0;font-weight:800;cursor:pointer;font-size:13px}
+.btn-white{background:#fff;color:#0a2540}.btn-outline{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px;max-width:500px}
+.stat{background:rgba(255,255,255,.1);padding:12px;border-radius:12px;text-align:center}.stat b{display:block;font-size:16px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:22px;margin:16px auto;max-width:650px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+input{width:100%;height:50px;padding:0 16px;border:1px solid #cbd5e1;border-radius:12px;margin:8px 0;font-size:15px}
+button.primary{width:100%;height:50px;background:#0a2540;color:#fff;border:0;border-radius:12px;font-weight:800;cursor:pointer;margin-top:8px}
+button.green{width:100%;height:50px;background:#00b050;color:#fff;border:0;border-radius:12px;font-weight:800;margin-top:10px}
+.badge{display:inline-block;background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;padding:16px;max-width:1000px;margin:0 auto}
+.feat{background:#fff;border:1px solid #e2e8f0;padding:16px;border-radius:14px}.feat p{font-size:11px;color:#64748b;margin-top:4px}
+.tabrow{display:flex;justify-content:center;gap:8px;margin:14px}
 </style></head><body>
-<div class="header"><div style="font-weight:900">💳 CASH FLOW BANKING | USA</div><span class="badge">DEMO - NO REAL MONEY</span></div>
-<div style="text-align:center;margin-top:12px"><div class="tab active" onclick="show('create',this)">Create Account</div><div class="tab" onclick="show('login',this)">Login with Account Number</div></div>
 
-<div id="create" class="card">
-<h3>Open Account - Cash Flow Banking</h3>
-<p style="font-size:12px;color:#64748b;margin:8px 0">Use Email to create, but you go login with Account Number</p>
-<input id="fullname" placeholder="Full Name"><input id="email" placeholder="Email - for creation only"><input id="pass" type="password" placeholder="Create Password">
-<button onclick="createAcc()">Create Account</button>
-<div id="msg" style="margin-top:12px;font-size:13px"></div>
+<div id="loader"><div class="logo-load">💳 CASH FLOW BANKING</div><div style="color:#94a3b8;font-size:11px;margin-top:8px;letter-spacing:2px">SECURE • USA • DIGITAL</div><div class="spinner"></div><div style="color:#64748b;font-size:10px;margin-top:20px">Establishing secure connection...</div></div>
+
+<div class="topbar"><span>📍 USA | FDIC Insured (Demo) | 24/7 Support</span><span id="liveBal">DEMO MODE</span></div>
+<div class="header"><div class="brand">CASH FLOW <span>BANKING</span></div><div><button class="navbtn active" onclick="switchView('home',this)">Home</button><button class="navbtn" onclick="switchView('auth',this)">Banking</button></div></div>
+
+<div id="homeView">
+<div class="hero">
+<h1>Banking That Moves With Your Cash Flow.</h1>
+<p>Cash Flow Banking is a next-generation digital banking platform built for individuals and businesses in the USA. Open an account in 2 minutes, get approved instantly, manage your funds securely.</p>
+<div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-white" onclick="switchView('auth',null,'create')">Open Account →</button><button class="btn btn-outline" onclick="switchView('auth',null,'login')">Login to Dashboard</button></div>
+<div class="stats"><div class="stat"><b>50k+</b><span style="font-size:10px">Accounts</span></div><div class="stat"><b>$2.4B+</b><span style="font-size:10px">Processed (Demo)</span></div><div class="stat"><b>99.9%</b><span style="font-size:10px">Uptime</span></div></div>
+</div>
+<div class="features">
+<div class="feat"><h4>⚡ Instant Approval</h4><p>Admin reviews and approves accounts in real-time. No waiting days like traditional banks.</p></div>
+<div class="feat"><h4>🔒 Bank-Grade Security</h4><p>Powered by Firebase, encrypted, account number login like real US banks.</p></div>
+<div class="feat"><h4>💸 Fund Anytime</h4><p>Add funds to your demo account instantly, track balance, simulate real banking.</p></div>
+<div class="feat"><h4>🇺🇸 Built for USA</h4><p>Account format CFB-USA-XXXXXXXXX, designed for US customers.</p></div>
+</div>
 </div>
 
-<div id="login" class="card" style="display:none">
-<h3>Login - With Account Number</h3>
-<p style="font-size:12px;color:#64748b">Enter your Cash Flow Banking Account Number wey system give you</p>
-<input id="lacc" placeholder="Account Number e.g CFB-USA-123456789"><input id="lpass" type="password" placeholder="Password">
-<button onclick="login()">Login with Account Number</button>
-<div id="dash" style="display:none;margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px">
-<h4 id="dname"></h4><p style="font-size:13px">Email: <span id="demail"></span><br>Status: <b id="dstatus"></b> | <span id="dacc"></span></p>
-<p style="font-size:34px;font-weight:900;color:#1e4bd8">$<span id="dbal">0</span> <span style="font-size:11px;color:#64748b">DEMO</span></p>
-<input id="famt" type="number" placeholder="Fake amount e.g 5000"><button class="green" onclick="fund()">Fund Fake Money</button>
+<div id="authView" style="display:none">
+<div class="tabrow"><button id="tabCreate" class="navbtn active" onclick="showAuth('create')">Create Account</button><button id="tabLogin" class="navbtn" onclick="showAuth('login')">Login with Account No</button></div>
+
+<div id="createCard" class="card">
+<span class="badge">NEW CUSTOMER</span>
+<h3 style="margin:12px 0 4px">Open Your Cash Flow Account</h3><p style="font-size:12px;color:#64748b;margin-bottom:12px">Use your email to create. System will generate your permanent Account Number.</p>
+<input id="fullname" placeholder="Full Legal Name"><input id="email" placeholder="Email Address"><input id="pass" type="password" placeholder="Create Password (min 6)">
+<button class="primary" onclick="createAcc()">Create Account & Generate Number</button>
+<div id="msg" style="margin-top:14px;font-size:13px"></div>
+</div>
+
+<div id="loginCard" class="card" style="display:none">
+<span class="badge">RETURNING CUSTOMER</span>
+<h3 style="margin:12px 0 4px">Secure Login</h3><p style="font-size:12px;color:#64748b;margin-bottom:12px">Login with your Account Number (CFB-USA-...) and password.</p>
+<input id="lacc" placeholder="Account Number e.g CFB-USA-446281915"><input id="lpass" type="password" placeholder="Password">
+<button class="primary" onclick="login()">Login to Dashboard →</button>
+<div id="dash" style="display:none;margin-top:20px;border-top:2px solid #f1f5f9;padding-top:20px">
+<div style="display:flex;justify-content:space-between"><div><h4 id="dname"></h4><p style="font-size:11px;color:#64748b">Email: <span id="demail"></span></p></div><span id="dstatusBadge" class="badge"></span></div>
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:14px 0"><p style="font-size:11px;color:#64748b">ACCOUNT NUMBER</p><b id="dacc"></b><p style="font-size:11px;color:#64748b;margin-top:10px">AVAILABLE BALANCE</p><p style="font-size:34px;font-weight:900;color:#0a2540">$<span id="dbal">0</span> <span style="font-size:12px;color:#64748b">USD DEMO</span></p></div>
+<input id="famt" type="number" placeholder="Enter amount e.g 5000"><button class="green" onclick="fund()">+ Fund Account (Fake Money)</button>
 </div>
 </div>
+</div>
+
+<div style="text-align:center;padding:18px;font-size:10px;color:#94a3b8">© 2026 Cash Flow Banking USA • Demo Simulator • Not a real bank • Built with Firebase</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -43,36 +87,12 @@ const firebaseConfig = {
   messagingSenderId: "782707432276",
   appId: "1:782707432276:web:680425b777d227179c86c1"
 };
-const app = initializeApp(firebaseConfig);const db=getFirestore(app);
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 let cur=null,curId=null;
-window.show=(id,el)=>{document.getElementById('create').style.display=id=='create'?'block':'none';document.getElementById('login').style.display=id=='login'?'block':'none';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
-
-window.createAcc=async()=>{
-const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;
-if(!n||!e||!p)return alert('Fill all fields');
-const ac='CFB-USA-'+Math.floor(100000000+Math.random()*900000000);
-await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now()});
-msg.innerHTML=`✅ <b>Account Created!</b><br>Your Cash Flow Banking Account Number:<br><b style="font-size:18px;color:#1e4bd8">${ac}</b><br><br>⚠️ SAVE THIS NUMBER! You go use am to Login.<br>Status: <b style='color:orange'>PENDING - Admin go approve</b>`;
-fullname.value=email.value=pass.value='';
-}
-
-window.login=async()=>{
-const acc=lacc.value.trim().toUpperCase(),p=lpass.value;
-if(!acc||!p)return alert('Enter Account Number & Password');
-const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));
-const s=await getDocs(q);
-if(s.empty)return alert('Account Number or Password no correct! Check your Account Number: '+acc);
-const d=s.docs[0];const data=d.data();
-if(data.status!='APPROVED')return alert('Your Cash Flow account never approved yet! Status: '+data.status+'\nTell admin to approve am for admin.html');
-cur=data;curId=d.id;dash.style.display='block';dname.textContent='Welcome, '+data.name+' 👋'; demail.textContent=data.email; dstatus.textContent=data.status; dacc.textContent=data.accNo; dbal.textContent=data.balance;
-}
-
-window.fund=async()=>{
-const a=parseFloat(famt.value);
-if(!a||a<=0)return alert('Enter valid amount');
-const nb=cur.balance+a;
-await updateDoc(doc(db,'cashflow_accounts',curId),{balance:nb});
-cur.balance=nb;dbal.textContent=nb;famt.value='';
-alert('Funded $'+a+' FAKE! New balance $'+nb+' (DEMO ONLY)');
-}
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('loader').classList.add('hide')},1800)});
+window.switchView=(v,el,authTab)=>{if(v=='home'){homeView.style.display='block';authView.style.display='none';}else{homeView.style.display='none';authView.style.display='block';if(authTab)showAuth(authTab);}document.querySelectorAll('.header.navbtn').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');if(v=='auth'&&!el){document.querySelectorAll('.header.navbtn')[1].classList.add('active')}}
+window.showAuth=(t)=>{createCard.style.display=t=='create'?'block':'none';loginCard.style.display=t=='login'?'block':'none';tabCreate.classList.toggle('active',t=='create');tabLogin.classList.toggle('active',t=='login');}
+window.createAcc=async()=>{const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;if(!n||!e||!p)return alert('Fill all');if(p.length<6)return alert('Password min 6');const ac='CFB-USA-'+Math.floor(100000000+Math.random()*900000000);const btn=event.target;btn.textContent='Creating...';btn.disabled=true;try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now()});msg.innerHTML=`<div style="background:#dcfce7;padding:14px;border-radius:12px"><b>✅ Account Created!</b><br><br><span style="font-size:11px">YOUR ACCOUNT NUMBER - SAVE IT!</span><br><b style="font-size:20px;color:#0a2540">${ac}</b><br><br>Status: <b style="color:orange">PENDING APPROVAL</b><br><br><button onclick="showAuth('login');lacc.value='${ac}'" style="background:#0a2540;color:#fff;border:0;padding:10px 16px;border-radius:8px;font-weight:700;cursor:pointer;width:auto">Go to Login →</button></div>`;fullname.value=email.value=pass.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account & Generate Number';btn.disabled=false}}
+window.login=async()=>{const acc=lacc.value.trim().toUpperCase(),p=lpass.value;if(!acc||!p)return alert('Enter Account Number & Password');const btn=event.target;btn.textContent='Verifying...';btn.disabled=true;try{const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));const s=await getDocs(q);if(s.empty){alert('Invalid Account Number or Password');return}const d=s.docs[0];const data=d.data();if(data.status!='APPROVED'){alert('Status: '+data.status+'\\nAdmin must approve at /admin.html');return}cur=data;curId=d.id;dash.style.display='block';dname.textContent='Welcome, '+data.name+' 👋'; demail.textContent=data.email; dacc.textContent=data.accNo; dbal.textContent=data.balance; dstatusBadge.textContent=data.status; liveBal.textContent=data.name+' | $'+data.balance+' DEMO';}catch(e){alert(e.message)}finally{btn.textContent='Login to Dashboard →';btn.disabled=false}}
+window.fund=async()=>{const a=parseFloat(famt.value);if(!a||a<=0)return alert('Enter amount');const btn=event.target;btn.textContent='Processing...';try{const nb=cur.balance+a;await updateDoc(doc(db,'cashflow_accounts',curId),{balance:nb});cur.balance=nb;dbal.textContent=nb;famt.value='';liveBal.textContent=cur.name+' | $'+nb+' DEMO';alert('✅ Funded $'+a+' FAKE - New bal $'+nb);}catch(e){alert(e.message)}finally{btn.textContent='+ Fund Account (Fake Money)'}}
 </script></body></html>
