@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cash Flow Banking - USA</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#f0f4ff;padding:14px}
+.header{background:linear-gradient(90deg,#0a2540,#1e4bd8);color:#fff;padding:18px;border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.badge{background:#00ff94;color:#000;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:900}
+.card{background:#fff;border:1px solid #dde3f0;border-radius:16px;padding:20px;margin-top:16px;max-width:600px;margin-left:auto;margin-right:auto}
+input{width:100%;height:48px;padding:0 14px;border:1px solid #cbd5e1;border-radius:12px;margin:8px 0}
+button{height:48px;padding:0 22px;border:0;border-radius:12px;background:#1e4bd8;color:#fff;font-weight:800;cursor:pointer;width:100%;margin-top:8px}
+button.green{background:#00b050}.tab{padding:10px 18px;border:1px solid #cbd5e1;border-radius:20px;cursor:pointer;display:inline-block;margin:4px;font-weight:700;font-size:13px}.tab.active{background:#0a2540;color:#fff}
+</style></head><body>
+<div class="header"><div style="font-weight:900">💳 CASH FLOW BANKING | USA</div><span class="badge">DEMO - NO REAL MONEY</span></div>
+<div style="text-align:center;margin-top:12px"><div class="tab active" onclick="show('create',this)">Create Account</div><div class="tab" onclick="show('login',this)">Login with Account Number</div></div>
+
+<div id="create" class="card">
+<h3>Open Account - Cash Flow Banking</h3>
+<p style="font-size:12px;color:#64748b;margin:8px 0">Use Email to create, but you go login with Account Number</p>
+<input id="fullname" placeholder="Full Name"><input id="email" placeholder="Email - for creation only"><input id="pass" type="password" placeholder="Create Password">
+<button onclick="createAcc()">Create Account</button>
+<div id="msg" style="margin-top:12px;font-size:13px"></div>
+</div>
+
+<div id="login" class="card" style="display:none">
+<h3>Login - With Account Number</h3>
+<p style="font-size:12px;color:#64748b">Enter your Cash Flow Banking Account Number wey system give you</p>
+<input id="lacc" placeholder="Account Number e.g CFB-USA-123456789"><input id="lpass" type="password" placeholder="Password">
+<button onclick="login()">Login with Account Number</button>
+<div id="dash" style="display:none;margin-top:16px;border-top:1px solid #e2e8f0;padding-top:16px">
+<h4 id="dname"></h4><p style="font-size:13px">Email: <span id="demail"></span><br>Status: <b id="dstatus"></b> | <span id="dacc"></span></p>
+<p style="font-size:34px;font-weight:900;color:#1e4bd8">$<span id="dbal">0</span> <span style="font-size:11px;color:#64748b">DEMO</span></p>
+<input id="famt" type="number" placeholder="Fake amount e.g 5000"><button class="green" onclick="fund()">Fund Fake Money</button>
+</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
+  authDomain: "cash-flow-banking3.firebaseapp.com",
+  projectId: "cash-flow-banking3",
+  storageBucket: "cash-flow-banking3.firebasestorage.app",
+  messagingSenderId: "782707432276",
+  appId: "1:782707432276:web:680425b777d227179c86c1"
+};
+const app = initializeApp(firebaseConfig);const db=getFirestore(app);
+let cur=null,curId=null;
+window.show=(id,el)=>{document.getElementById('create').style.display=id=='create'?'block':'none';document.getElementById('login').style.display=id=='login'?'block':'none';document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')}
+
+window.createAcc=async()=>{
+const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;
+if(!n||!e||!p)return alert('Fill all fields');
+const ac='CFB-USA-'+Math.floor(100000000+Math.random()*900000000);
+await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now()});
+msg.innerHTML=`✅ <b>Account Created!</b><br>Your Cash Flow Banking Account Number:<br><b style="font-size:18px;color:#1e4bd8">${ac}</b><br><br>⚠️ SAVE THIS NUMBER! You go use am to Login.<br>Status: <b style='color:orange'>PENDING - Admin go approve</b>`;
+fullname.value=email.value=pass.value='';
+}
+
+window.login=async()=>{
+const acc=lacc.value.trim().toUpperCase(),p=lpass.value;
+if(!acc||!p)return alert('Enter Account Number & Password');
+const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));
+const s=await getDocs(q);
+if(s.empty)return alert('Account Number or Password no correct! Check your Account Number: '+acc);
+const d=s.docs[0];const data=d.data();
+if(data.status!='APPROVED')return alert('Your Cash Flow account never approved yet! Status: '+data.status+'\nTell admin to approve am for admin.html');
+cur=data;curId=d.id;dash.style.display='block';dname.textContent='Welcome, '+data.name+' 👋'; demail.textContent=data.email; dstatus.textContent=data.status; dacc.textContent=data.accNo; dbal.textContent=data.balance;
+}
+
+window.fund=async()=>{
+const a=parseFloat(famt.value);
+if(!a||a<=0)return alert('Enter valid amount');
+const nb=cur.balance+a;
+await updateDoc(doc(db,'cashflow_accounts',curId),{balance:nb});
+cur.balance=nb;dbal.textContent=nb;famt.value='';
+alert('Funded $'+a+' FAKE! New balance $'+nb+' (DEMO ONLY)');
+}
+</script></body></html>
