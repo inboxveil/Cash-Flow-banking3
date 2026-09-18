@@ -1,76 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Cash Flow Bank — Prototype</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.chart-line {
-  fill: none;
-  stroke-width: 3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.chart-credit {
-  stroke: #111827;
-}
-
-.chart-debit {
-  stroke: #9ca3af;
-}
-
-.chart-grid {
-  stroke: #e5e7eb;
-  stroke-width: 1;
-}
-
-.mobile-menu {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .mobile-menu {
-    display: block;
-  }
-}
-</style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body class="bg-gray-100 text-gray-900">
-
-<!-- PROTOTYPE NOTICE -->
+<!-- SINGLE BIG DISCLAIMER - ONE PLACE ONLY AT TOP -->
 <div class="bg-amber-400 text-black text-center font-extrabold text-sm md:text-base py-3 px-4 border-b-4 border-black">
-  ⚠️ CASH FLOW BANK PROTOTYPE — NO REAL MONEY OR BANKING SERVICES
+  ⚠️ THIS IS A DEMO ACCOUNT — IT IS NOT REAL • NO REAL MONEY • CASH FLOW BANK PROTOTYPE FOR TESTING ONLY
 </div>
 
 <div class="flex min-h-screen">
-
-<!-- SIDEBAR -->
 <aside class="w-64 bg-white border-r hidden md:block">
-
-  <div class="p-6 font-black text-lg">
-    Cash Flow Bank
-    <span class="text-[10px] bg-black text-white px-2 py-1 rounded ml-1">
-      PROTOTYPE
-    </span>
-  </div>
-
+  <div class="p-6 font-black text-lg">Cash Flow Bank <span class="text-[10px] bg-black text-white px-2 py-1 rounded ml-1">PROTOTYPE</span></div>
   <nav class="px-3 space-y-1 text-sm">
-
-    <div class="px-3 py-2 bg-black text-white rounded">
-      Dashboard
-    </div>
-
+    <div class="px-3 py-2 bg-black text-white rounded">Dashboard</div>
     <div class="px-3 py-2">Account Summary</div>
     <div class="px-3 py-2">Transfer</div>
     <div class="px-3 py-2">Deposit Check</div>
@@ -82,415 +28,59 @@ body {
     <div class="px-3 py-2">Settings</div>
     <div class="px-3 py-2">Account Status</div>
     <div class="px-3 py-2">Support</div>
-
-    <div class="px-3 py-2 mt-6 text-red-600">
-      Sign Out
-    </div>
-
+    <div class="px-3 py-2 mt-6 text-red-600">Sign Out</div>
   </nav>
 </aside>
 
-
-<!-- MAIN -->
 <main class="flex-1 p-4 md:p-6 space-y-6">
-
-  <!-- HEADER -->
   <div class="flex justify-between items-center">
-
-    <div>
-      <h1 class="text-xl font-bold">
-        Dashboard — Cash Flow Bank
-      </h1>
-
-      <p class="text-xs text-gray-500 mt-1">
-        Account overview
-      </p>
-    </div>
-
-    <button
-      onclick="toggleAdmin()"
-      class="text-xs border px-3 py-2 rounded bg-white hover:bg-gray-50">
-      Open Admin
-    </button>
-
+    <h1 class="text-xl font-bold">Dashboard — Cash Flow Bank</h1>
+    <button onclick="document.getElementById('adminBox').classList.toggle('hidden')" class="text-xs border px-3 py-2 rounded bg-white">Open Admin</button>
   </div>
 
-
-  <!-- ACCOUNT -->
   <div class="bg-white rounded-2xl p-5 shadow-sm">
-
-    <div class="flex justify-between items-center">
-
-      <h2 class="font-semibold">
-        My Accounts
-      </h2>
-
-      <span class="text-xs bg-gray-100 px-2 py-1 rounded">
-        Sample
-      </span>
-
-    </div>
-
-    <p class="text-xs text-gray-500 mt-2">
-      Primary Account • Cash Flow Bank • Sample Data
-    </p>
-
-    <p class="text-3xl font-bold mt-2">
-      $1,514,000.00
-    </p>
-
-    <p class="text-xs text-gray-400 mt-1">
-      Prototype balance for interface testing
-    </p>
-
+    <div class="flex justify-between"><h2 class="font-semibold">My Accounts</h2><span class="text-xs bg-gray-100 px-2 py-1 rounded">Sample</span></div>
+    <p class="text-xs text-gray-500 mt-2">Primary Account • Cash Flow Bank • Sample Data</p>
+    <p class="text-3xl font-bold mt-1">$1,514,000.00</p>
+    <p class="text-xs text-gray-400">Demo balance for UI testing only</p>
   </div>
 
-
-  <!-- CASHFLOW -->
   <div class="bg-white rounded-2xl p-5 shadow-sm">
-
-    <div class="flex justify-between items-center mb-4">
-
-      <div>
-        <h2 class="font-semibold">
-          Cashflow
-        </h2>
-
-        <p class="text-xs text-gray-400">
-          Account activity overview
-        </p>
-      </div>
-
-      <div class="text-xs text-gray-500">
-        <span class="inline-block w-2 h-2 rounded-full bg-black mr-1"></span>
-        Credits
-
-        <span class="inline-block w-2 h-2 rounded-full bg-gray-400 ml-3 mr-1"></span>
-        Debits
-      </div>
-
-    </div>
-
-
-    <!-- SVG CHART -->
-    <div class="w-full overflow-hidden">
-
-      <svg
-        viewBox="0 0 800 300"
-        width="100%"
-        height="300"
-        preserveAspectRatio="none">
-
-        <!-- GRID -->
-        <line x1="50" y1="40" x2="780" y2="40" class="chart-grid"/>
-        <line x1="50" y1="95" x2="780" y2="95" class="chart-grid"/>
-        <line x1="50" y1="150" x2="780" y2="150" class="chart-grid"/>
-        <line x1="50" y1="205" x2="780" y2="205" class="chart-grid"/>
-        <line x1="50" y1="260" x2="780" y2="260" class="chart-grid"/>
-
-        <!-- CREDIT LINE -->
-        <polyline
-          points="
-          60,225
-          180,170
-          300,195
-          420,110
-          540,135
-          660,70
-          770,45
-          "
-          class="chart-line chart-credit"/>
-
-        <!-- DEBIT LINE -->
-        <polyline
-          points="
-          60,250
-          180,220
-          300,230
-          420,190
-          540,205
-          660,165
-          770,145
-          "
-          class="chart-line chart-debit"/>
-
-        <!-- CREDIT POINTS -->
-        <circle cx="60" cy="225" r="4" fill="#111827"/>
-        <circle cx="180" cy="170" r="4" fill="#111827"/>
-        <circle cx="300" cy="195" r="4" fill="#111827"/>
-        <circle cx="420" cy="110" r="4" fill="#111827"/>
-        <circle cx="540" cy="135" r="4" fill="#111827"/>
-        <circle cx="660" cy="70" r="4" fill="#111827"/>
-        <circle cx="770" cy="45" r="4" fill="#111827"/>
-
-        <!-- DEBIT POINTS -->
-        <circle cx="60" cy="250" r="4" fill="#9ca3af"/>
-        <circle cx="180" cy="220" r="4" fill="#9ca3af"/>
-        <circle cx="300" cy="230" r="4" fill="#9ca3af"/>
-        <circle cx="420" cy="190" r="4" fill="#9ca3af"/>
-        <circle cx="540" cy="205" r="4" fill="#9ca3af"/>
-        <circle cx="660" cy="165" r="4" fill="#9ca3af"/>
-        <circle cx="770" cy="145" r="4" fill="#9ca3af"/>
-
-        <!-- MONTHS -->
-        <text x="50" y="285" font-size="12" fill="#6b7280">Jan</text>
-        <text x="170" y="285" font-size="12" fill="#6b7280">Feb</text>
-        <text x="290" y="285" font-size="12" fill="#6b7280">Mar</text>
-        <text x="410" y="285" font-size="12" fill="#6b7280">Apr</text>
-        <text x="530" y="285" font-size="12" fill="#6b7280">May</text>
-        <text x="650" y="285" font-size="12" fill="#6b7280">Jun</text>
-        <text x="760" y="285" font-size="12" fill="#6b7280">Jul</text>
-
-      </svg>
-
-    </div>
-
+    <h2 class="font-semibold mb-3">Cashflow - Demo</h2>
+    <canvas id="flow" height="120"></canvas>
   </div>
 
-
-  <!-- QUICK ACTIONS -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-
-    <button
-      onclick="showMessage('Send Money')"
-      class="bg-white p-4 rounded-xl text-center text-sm font-medium shadow-sm hover:bg-gray-50">
-      Send Money
-    </button>
-
-    <button
-      onclick="showMessage('Pay Bills')"
-      class="bg-white p-4 rounded-xl text-center text-sm font-medium shadow-sm hover:bg-gray-50">
-      Pay Bills
-    </button>
-
-    <button
-      onclick="showMessage('Transaction History')"
-      class="bg-white p-4 rounded-xl text-center text-sm font-medium shadow-sm hover:bg-gray-50">
-      Transaction History
-    </button>
-
+  <div class="grid grid-cols-3 gap-3">
+    <div class="bg-white p-4 rounded-xl text-center text-sm font-medium">Send Money</div>
+    <div class="bg-white p-4 rounded-xl text-center text-sm font-medium">Pay Bills</div>
+    <div class="bg-white p-4 rounded-xl text-center text-sm font-medium">Transaction History</div>
   </div>
 
-
-  <!-- TRANSACTIONS -->
   <div class="bg-white rounded-2xl p-5 shadow-sm">
-
-    <div class="flex justify-between items-center">
-
-      <h2 class="font-semibold">
-        Recent Transactions
-      </h2>
-
-      <button
-        onclick="showMessage('Transaction History')"
-        class="text-xs text-gray-500">
-        View All
-      </button>
-
+    <h2 class="font-semibold">Recent Transactions — Sample</h2>
+    <div id="tx" class="mt-3 space-y-2 text-sm divide-y">
+      <div class="flex justify-between py-2"><span>Sample Data — Initial Demo Balance — Cash Flow Bank</span><span>$1,514,000</span></div>
     </div>
-
-    <div
-      id="tx"
-      class="mt-3 space-y-2 text-sm divide-y">
-
-      <div class="flex justify-between py-3">
-
-        <div>
-          <p class="font-medium">
-            Initial Account Balance
-          </p>
-
-          <p class="text-xs text-gray-400">
-            Account opening balance
-          </p>
-        </div>
-
-        <span class="font-semibold">
-          $1,514,000
-        </span>
-
-      </div>
-
-    </div>
-
   </div>
 
-
-  <!-- CARDS / LOAN -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-
-    <!-- CARDS -->
-    <div class="bg-white p-5 rounded-2xl shadow-sm">
-
-      <h3 class="font-semibold">
-        My Cards
-      </h3>
-
-      <p class="text-sm text-gray-400 mt-2">
-        No cards available
-      </p>
-
-      <button
-        onclick="showMessage('Cards')"
-        class="mt-4 text-xs border px-3 py-2 rounded-lg">
-        Manage Cards
-      </button>
-
-    </div>
-
-
-    <!-- LOAN -->
-    <div class="bg-white p-5 rounded-2xl shadow-sm">
-
-      <h3 class="font-semibold">
-        Loan
-      </h3>
-
-      <p class="text-sm text-gray-400 mt-2">
-        No active loan
-      </p>
-
-      <div class="mt-4">
-        Credit Score:
-        <b>850</b>
-      </div>
-
-      <button
-        onclick="showMessage('Loans')"
-        class="mt-4 text-xs border px-3 py-2 rounded-lg">
-        View Loans
-      </button>
-
-    </div>
-
+    <div class="bg-white p-5 rounded-2xl text-sm">My Cards<br><span class="text-gray-400">No cards available — Demo</span></div>
+    <div class="bg-white p-5 rounded-2xl text-sm">Loan<br><span class="text-gray-400">No active loan — Demo</span><div class="mt-3">Credit Score: <b>850 Excellent (Sample)</b></div></div>
   </div>
 
-
-  <!-- ADMIN -->
-  <div
-    id="adminBox"
-    class="hidden bg-black text-white p-5 rounded-2xl">
-
-    <h3 class="font-bold">
-      Cash Flow Bank — Admin Test Panel
-    </h3>
-
-    <p class="text-xs text-gray-400 mb-3">
-      Adds sample interface data only. No real funds are moved.
-    </p>
-
-    <input
-      id="amt"
-      type="number"
-      placeholder="Sample amount"
-      class="text-black p-3 rounded-lg w-full mb-2"
-    />
-
-    <button
-      onclick="addSampleTransaction()"
-      class="bg-white text-black px-4 py-3 rounded-lg text-sm w-full font-semibold">
-      Add Sample Adjustment
-    </button>
-
+  <div id="adminBox" class="hidden bg-black text-white p-5 rounded-2xl">
+    <h3 class="font-bold">Cash Flow Bank — Admin Test Panel</h3>
+    <p class="text-xs text-gray-400 mb-3">Adds Demo Adjustment only. No wire receipts.</p>
+    <input id="amt" type="number" placeholder="Demo amount" class="text-black p-2 rounded w-full mb-2"/>
+    <button onclick="addDemo()" class="bg-white text-black px-4 py-2 rounded text-sm w-full">Add Demo Adjustment</button>
   </div>
-
 </main>
 </div>
 
-
-<!-- MESSAGE -->
-<div
-  id="message"
-  class="fixed bottom-5 left-1/2 -translate-x-1/2 hidden bg-black text-white px-5 py-3 rounded-xl text-sm shadow-lg z-50">
-</div>
-
-
 <script>
-
-/* ADMIN PANEL */
-
-function toggleAdmin() {
-
-  const box = document.getElementById("adminBox");
-
-  box.classList.toggle("hidden");
-
-}
-
-
-/* QUICK ACTION MESSAGE */
-
-function showMessage(action) {
-
-  const message = document.getElementById("message");
-
-  message.textContent =
-    action + " is available in this prototype interface.";
-
-  message.classList.remove("hidden");
-
-  setTimeout(function() {
-
-    message.classList.add("hidden");
-
-  }, 2500);
-
-}
-
-
-/* ADD SAMPLE TRANSACTION */
-
-function addSampleTransaction() {
-
-  const input = document.getElementById("amt");
-
-  const value = Number(input.value || 0);
-
-  if (value <= 0) {
-
-    showMessage("Enter an amount first.");
-
-    return;
-
-  }
-
-  const transaction =
-    document.createElement("div");
-
-  transaction.className =
-    "flex justify-between py-3";
-
-  transaction.innerHTML = `
-
-    <div>
-
-      <p class="font-medium">
-        Account Adjustment
-      </p>
-
-      <p class="text-xs text-gray-400">
-        Sample interface transaction
-      </p>
-
-    </div>
-
-    <span class="font-semibold">
-      +$${value.toLocaleString()}
-    </span>
-
-  `;
-
-  document
-    .getElementById("tx")
-    .prepend(transaction);
-
-  input.value = "";
-
-  showMessage("Sample transaction added.");
-
-}
-
+const ctx=document.getElementById('flow');
+new Chart(ctx,{type:'line',data:{labels:['Jan',[STRIPPED] Credit',data:[10,[STRIPPED] Debit',data:[5,[STRIPPED]
+function addDemo(){const v=document.getElementById('amt').value||0;const d=document.createElement('div');d.className='flex justify-between py-2';d.innerHTML=`<span>Demo Adjustment — Test Data — No real funds moved — Cash Flow Bank</span><span>+$${v} (Sample)</span>`;document.getElementById('tx').prepend(d);}
 </script>
-
 </body>
 </html>
