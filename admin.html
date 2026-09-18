@@ -1,123 +1,151 @@
 <!DOCTYPE html>
 <html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ADMIN - Cash Flow Banking</title>
+<title>Cash Flow Banking USA</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#0f172a;color:#fff;padding:14px}
-.card{background:#fff;color:#0f172a;border-radius:16px;padding:20px;margin-top:16px;max-width:1100px}
-input{width:100%;height:44px;padding:0 12px;border:1px solid #cbd5e1;border-radius:10px;margin:6px 0}
-button{height:40px;padding:0 14px;border:0;border-radius:8px;background:#1e4bd8;color:#fff;font-weight:800;cursor:pointer;margin:3px;font-size:12px}
-button.green{background:#00b050}button.red{background:#e11d48}button.gray{background:#e2e8f0;color:#111}button.orange{background:#f59e0b;color:#000}
-.acc{border:1px solid #e2e8f0;padding:14px;border-radius:12px;margin:8px 0}
-.fundBox{background:#f8fafc;border:1px dashed #94a3b8;padding:10px;border-radius:10px;margin-top:8px;display:none}
-.tab{padding:10px 16px;border-radius:20px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;font-weight:800;cursor:pointer;margin-right:6px}
-.tab.active{background:#0a2540;color:#fff}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:system-ui;background:#f8fafc}
+#loader{position:fixed;inset:0;background:#0a2540;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.8s}
+#loader.hide{opacity:0;pointer-events:none}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,.2);border-top:3px solid #00ff94;border-radius:50%;animation:spin 1s linear infinite;margin-top:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.header{background:#fff;box-shadow:0 1px 10px rgba(0,0,0,.08);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.brand{font-weight:900;color:#0a2540}.brand span{color:#1e4bd8}
+.navbtn{padding:8px 14px;border:1px solid #cbd5e1;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:#fff}
+.navbtn.active{background:#0a2540;color:#fff}
+.hero{background:linear-gradient(105deg,#0a2540,#1e4bd8);color:#fff;padding:30px 20px}
+.hero h1{font-size:28px;font-weight:900}.hero p{color:#cbd5e1;font-size:13px;margin:10px 0;max-width:500px}
+.card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;margin:16px auto;max-width:650px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+input,select{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 14px;margin:7px 0}
+button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;border-radius:12px;font-weight:800;cursor:pointer;margin-top:6px}
+.badge{background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800}
+.badge.pending{background:#fef9c3;color:#854d0e}.badge.approved{background:#dcfce7;color:#166534}.badge.declined{background:#fee2e2;color:#991b1b}
+.balCard{background:linear-gradient(135deg,#0a2540,#1e4bd8);color:#fff;padding:22px;border-radius:18px;margin:14px}
+.tx{border-bottom:1px solid #f1f5f9;padding:12px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.tx small{color:#64748b;font-size:11px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modalBox{background:#fff;border-radius:16px;padding:20px;max-width:500px;width:100%;max-height:90vh;overflow:auto}
 </style></head><body>
-<h2>🔒 ADMIN PANEL - Cash Flow Banking</h2><p style="font-size:11px;color:#94a3b8">PIN: admin123</p>
+<div id="loader"><div style="font-size:26px;font-weight:900;color:#fff">💳 CASH FLOW BANKING</div><div class="spinner"></div><div style="color:#94a3b8;font-size:10px;margin-top:12px">Establishing secure connection...</div></div>
+<div class="header">
+<div class="brand">CASH FLOW <span>BANKING</span></div>
+<div id="headerBtns">
+<button id="hbHome" class="navbtn active" onclick="goHome()">Home</button>
+<button id="hbBank" class="navbtn" onclick="goBanking()">Banking</button>
+<button id="hbDash" class="navbtn" style="display:none" onclick="goDashboard()">Dashboard</button>
+<button id="hbLogout" class="navbtn" style="display:none;background:#fee2e2;color:#b91c1c;border-color:#fecaca" onclick="logout()">Logout</button>
+</div>
+</div>
+<div id="homeView"><div class="hero"><h1>Banking That Moves With Your Cash Flow.</h1><p>Open account in 2 minutes, get instant approval, manage funds securely.</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div></div>
+<div id="bankView" style="display:none">
+<div style="display:flex;justify-content:center;gap:8px;margin:14px"><button id="t1" class="navbtn active" onclick="showAuth('create')">Create Account</button><button id="t2" class="navbtn" onclick="showAuth('login')">Login with Account No</button></div>
+<div id="createCard" class="card"><span class="badge">NEW CUSTOMER</span><h3 style="margin:10px 0">Open Account</h3>
+<input id="fullname" placeholder="Full Name"><input id="email" placeholder="Email"><input id="pass" type="password" placeholder="Password min 6">
+<button class="primary" onclick="createAcc()">Create Account</button><div id="msg" style="margin-top:12px;font-size:13px"></div></div>
+<div id="loginCard" class="card" style="display:none"><span class="badge">RETURNING</span><h3 style="margin:10px 0">Login with Account Number</h3>
+<input id="lacc" placeholder="Account Number e.g 9030189563"><input id="lpass" type="password" placeholder="Password">
+<button class="primary" onclick="login()">Login to Dashboard →</button></div>
+</div>
+<div id="dashView" style="display:none">
+<div class="balCard">
+<div style="font-size:11px;opacity:.7;letter-spacing:1px">WELCOME • AVAILABLE BALANCE</div>
+<div style="font-size:36px;font-weight:900;margin:6px 0">$<span id="dbal">0</span> <span style="font-size:11px;font-weight:600">USD</span></div>
+<div style="font-size:11px;opacity:.9"><b id="dname"></b><br>Account: <span id="dacc"></span> | Status: <span id="dstatus"></span><br>Email: <span id="demail"></span></div>
+</div>
 <div class="card">
-<input id="pin" type="password" placeholder="Enter PIN: admin123"><button onclick="unlock()">Unlock</button>
-<div id="area" style="display:none;margin-top:16px">
-<div style="margin-bottom:12px"><button id="tab1" class="tab active" onclick="showTab('accounts')">Accounts</button><button id="tab2" class="tab" onclick="showTab('transfers')">Pending Transfers <span id="pendCount" style="background:#f59e0b;color:#000;padding:2px 8px;border-radius:10px">0</span></button></div>
-<div id="accountsTab">
-<div style="display:flex;gap:10px;font-size:12px;margin-bottom:12px;flex-wrap:wrap"><div>Total: <b id="t">0</b></div><div>Pending: <b id="p" style="color:orange">0</b></div><div>Approved: <b id="a" style="color:green">0</b></div><div>Funds: $<b id="tf">0</b></div></div>
-<input id="search" placeholder="Search..." onkeyup="filterList()"><div id="list"></div>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<h4>💸 Transfer History</h4><button style="background:#0a2540;color:#fff;border:0;padding:8px 14px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer" onclick="openTransfer()">+ New Transfer</button>
 </div>
-<div id="transfersTab" style="display:none"><div id="transferList"></div></div>
-<button class="gray" onclick="loadAll()">Refresh All</button>
+<div style="margin-top:12px;border-top:1px solid #e2e8f0">
+<div class="tx" style="font-weight:700;color:#94a3b8;font-size:11px"><span>DATE / DESCRIPTION</span><span>AMOUNT / STATUS</span></div>
+<div id="txList"></div>
+</div>
+<span style="font-size:11px;background:#f1f5f9;padding:4px 10px;border-radius:20px;margin-top:10px;display:inline-block" id="txCount">0 transactions</span>
+</div>
+<div class="card">
+<h4 style="font-size:13px">Account Summary</h4>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+<div style="background:#f8fafc;padding:12px;border-radius:10px"><small style="color:#64748b;font-size:10px">ACCOUNT NUMBER</small><br><b style="font-size:14px" id="dacc2"></b></div>
+<div style="background:#f8fafc;padding:12px;border-radius:10px"><small style="color:#64748b;font-size:10px">CURRENT BALANCE</small><br><b style="font-size:14px;color:#0a2540">$<span id="dbal2">0</span></b></div>
 </div>
 </div>
+</div>
+<div id="transferModal" class="modal"><div class="modalBox">
+<h3>Send Money Transfer</h3><p style="font-size:11px;color:#64748b;margin:6px 0">Transfer will be PENDING till admin approves</p>
+<input id="toName" placeholder="Recipient Full Name">
+<input id="toBank" placeholder="Recipient Bank e.g Chase Bank USA">
+<input id="toAcc" placeholder="Recipient Account Number">
+<input id="toAmount" type="number" placeholder="Amount e.g 5000">
+<input id="toDesc" placeholder="Description e.g Rent Payment">
+<button class="primary" onclick="sendTransfer()">Send Transfer → PENDING</button>
+<button style="width:100%;height:44px;background:#e2e8f0;border:0;border-radius:10px;margin-top:8px;font-weight:700;cursor:pointer" onclick="closeTransfer()">Cancel</button>
+<div id="tMsg" style="margin-top:10px;font-size:12px"></div>
+</div></div>
+<div style="text-align:center;padding:16px;font-size:10px;color:#94a3b8">© 2026 Cash Flow Banking USA</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",authDomain:"cash-flow-banking3.firebaseapp.com",projectId:"cash-flow-banking3",storageBucket:"cash-flow-banking3.firebasestorage.app",messagingSenderId:"782707432276",appId:"1:782707432276:web:680425b777d227179c86c1"};
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-let allDocs=[],allTransfers=[];
-window.unlock=()=>{if(pin.value!=='admin123')return alert('Wrong PIN');area.style.display='block';loadAll();}
-window.showTab=t=>{
-accountsTab.style.display=t=='accounts'?'block':'none';
-transfersTab.style.display=t=='transfers'?'block':'none';
-tab1.classList.toggle('active',t=='accounts');
-tab2.classList.toggle('active',t=='transfers');
-}
-window.loadAll=async()=>{await loadAccounts();await loadTransfers();}
-async function loadAccounts(){const s=await getDocs(collection(db,'cashflow_accounts'));allDocs=s.docs;renderAccounts(allDocs)}
-function renderAccounts(docs){let totalFunds=0,pend=0,appr=0;docs.forEach(d=>{totalFunds+=d.data().balance||0;if(d.data().status=='PENDING')pend++;if(d.data().status=='APPROVED')appr++;});t.textContent=docs.length;p.textContent=pend;a.textContent=appr;tf.textContent=totalFunds.toLocaleString();let h='';docs.sort((x,y)=>y.data().created-x.data().created).forEach(d=>{const c=d.data();h+=`<div class="acc"><div><b>${c.name}</b> - <small>${c.email}</small><br><small><b>${c.accNo}</b> | Bal: <b style="color:#1e4bd8">$${c.balance}</b> | <b style="color:${c.status=='PENDING'?'orange':'green'}">${c.status}</b></small></div><div style="margin-top:6px">${c.status=='PENDING'?`<button class="green" onclick="appv('${d.id}')">Approve</button><button class="red" onclick="dec('${d.id}')">Decline</button>`:`<button class="orange" onclick="toggleFund('${d.id}')">💰 Fund</button><button class="gray" onclick="del('${d.id}')">Delete</button>`}<div id="fund-${d.id}" class="fundBox"><input id="amt-${d.id}" type="number" placeholder="Amount"><input id="desc-${d.id}" placeholder="Desc e.g Wire from Chase"><button class="green" onclick="fundAcc('${d.id}')">Add Funds</button></div></div></div>`});list.innerHTML=h||'No users';}
-async function loadTransfers(){
-const q=query(collection(db,'cashflow_transfers'),where('status','==','PENDING'));
-const s=await getDocs(q);
-allTransfers=s.docs;
-pendCount.textContent=allTransfers.length;
-let h='';if(s.empty){h='<p style="color:#64748b">No pending transfers</p>';}else{
-s.docs.forEach(d=>{
-const t=d.data();
-h+=`<div class="acc" style="border-left:4px solid #f59e0b"><div><b>${t.fromName} (${t.fromAcc})</b> wants to transfer <b style="color:#dc2626">$${t.amount}</b><br><small>To: <b>${t.toName}</b> | Bank: ${t.toBank} | Acc: ${t.toAcc}<br>Desc: ${t.desc}<br>Date: ${new Date(t.created).toLocaleString()}</small><br><span style="background:#fef9c3;padding:2px 8px;border-radius:10px;font-size:10px">PENDING</span></div><div style="margin-top:8px"><button class="green" onclick="approveTransfer('${d.id}')">✅ Approve & Deduct Balance</button><button class="red" onclick="declineTransfer('${d.id}')">❌ Decline</button></div></div>`;
+let cur=null,curId=null;
+window.addEventListener('load',()=>{
+setTimeout(()=>loader.classList.add('hide'),1000);
+const id=localStorage.getItem('cfb_id');if(id){loadDashboard(id);}
 });
+window.goHome=()=>{homeView.style.display='block';bankView.style.display='none';dashView.style.display='none';hbHome.classList.add('active');hbBank.classList.remove('active');hbDash.classList.remove('active');}
+window.goBanking=()=>{homeView.style.display='none';bankView.style.display='block';dashView.style.display='none';hbHome.classList.remove('active');hbBank.classList.add('active');hbDash.classList.remove('active');}
+window.goDashboard=()=>{if(!curId)return alert('Login first');homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';hbHome.classList.remove('active');hbBank.classList.remove('active');hbDash.classList.add('active');}
+window.showAuth=t=>{createCard.style.display=t=='create'?'block':'none';loginCard.style.display=t=='login'?'block':'none';t1.classList.toggle('active',t=='create');t2.classList.toggle('active',t=='login');}
+window.openTransfer=()=>{transferModal.style.display='flex';}
+window.closeTransfer=()=>{transferModal.style.display='none';}
+window.createAcc=async()=>{
+const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;
+if(!n||!e||!p)return alert('Fill all');if(p.length<6)return alert('Password min 6');
+const ac=Math.floor(1000000000 + Math.random()*9000000000).toString();
+const btn=event.target;btn.textContent='Creating...';btn.disabled=true;
+try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now(),history:[{date:Date.now(),desc:'Account Created',amount:0,type:'credit',status:'APPROVED',balanceAfter:0}]});msg.innerHTML=`✅ Created!<br><b style="font-size:22px;color:#0a2540;letter-spacing:1px">${ac}</b><br><span style="font-size:11px">YOUR ACCOUNT NUMBER - SAVE IT!</span><br>Status: PENDING<br><br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account';btn.disabled=false}
 }
-transferList.innerHTML=h;
+window.login=async()=>{
+const acc=lacc.value.trim(),p=lpass.value;if(!acc||!p)return alert('Enter details');
+const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));const s=await getDocs(q);
+if(s.empty)return alert('Wrong Account No or Password');const d=s.docs[0];const data=d.data();if(data.status!='APPROVED')return alert('Not approved yet: '+data.status);
+localStorage.setItem('cfb_id',d.id);loadDashboard(d.id);
 }
-window.toggleFund=id=>{const el=document.getElementById('fund-'+id);el.style.display=el.style.display=='block'?'none':'block';}
-window.fundAcc=async id=>{
-const a=parseFloat(document.getElementById('amt-'+id).value);
-const desc=document.getElementById('desc-'+id).value||'Admin Funding';
-if(!a||a<=0)return alert('Enter amount');
-const target=allDocs.find(d=>d.id===id);
-const newBal=(target.data().balance||0)+a;
-const newHist=[...(target.data().history||[]),{date:Date.now(),desc:desc,amount:a,type:'credit',status:'APPROVED',balanceAfter:newBal}];
-await updateDoc(doc(db,'cashflow_accounts',id),{balance:newBal,history:newHist});
-alert('Funded $'+a);loadAll();
+async function loadDashboard(id){
+curId=id;const snap=await getDoc(doc(db,'cashflow_accounts',id));if(!snap.exists()){logout();return}
+cur=snap.data();dname.textContent='Welcome, '+cur.name+' 👋';dacc.textContent=cur.accNo;dacc2.textContent=cur.accNo;dbal.textContent=cur.balance.toLocaleString();dbal2.textContent=cur.balance.toLocaleString();demail.textContent=cur.email;dstatus.textContent=cur.status;
+renderHistory();
+homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';
+hbHome.style.display='none';hbBank.style.display='none';hbDash.style.display='inline-block';hbLogout.style.display='inline-block';hbDash.classList.add('active');
 }
-window.approveTransfer=async tid=>{
-if(!confirm('Approve this transfer? Balance go deduct from sender'))return;
-const tdoc=allTransfers.find(d=>d.id===tid);
-const t=tDocData(tid);
-const fromId=t.fromId;
-const fromSnap=await getDocs(query(collection(db,'cashflow_accounts'),where('accNo','==',t.fromAcc)));
-if(fromSnap.empty)return alert('Sender account not found');
-const fromDoc=fromSnap.docs[0];
-const fromData=fromDoc.data();
-if(fromData.balance < t.amount)return alert('Insufficient balance! Sender has $'+fromData.balance+' but wants to send $'+t.amount);
-const newBal=fromData.balance - t.amount;
-// Update sender history - find pending and mark approved
-let hist=fromData.history||[];
-hist=hist.map(h=>{
-if(h.status=='PENDING' && h.toName==t.toName && h.amount==t.amount && h.desc.includes(t.toAcc.slice(-4) ) || h.desc.includes(t.toName)){
-return {...h,status:'APPROVED',balanceAfter:newBal};
-}
-return h;
+function renderHistory(){
+const hist = cur.history || [];
+let html='';hist.slice().reverse().forEach(h=>{
+const dt=new Date(h.date);const dateStr=dt.toLocaleDateString()+' '+dt.toLocaleTimeString();
+const isCredit = h.type=='credit';
+const status = h.status||'APPROVED';
+let badgeClass='approved';if(status=='PENDING')badgeClass='pending';if(status=='DECLINED')badgeClass='declined';
+html+=`<div class="tx"><div><div style="font-weight:600">${h.desc}</div><small>${dateStr}${h.toName?` • To: ${h.toName}`:''}</small><br><span class="badge ${badgeClass}">${status}</span></div><div style="text-align:right"><b style="color:${isCredit?'#16a34a':'#dc2626'}">${isCredit?'+':'-'}$${Math.abs(h.amount).toLocaleString()}</b><br><small>Bal: $${(h.balanceAfter!=null?h.balanceAfter:cur.balance).toLocaleString()}</small></div></div>`;
 });
-// Better: update last pending matching
-let updated=false;
-for(let i=hist.length-1;i>=0;i--){
-if(hist[i].status=='PENDING' && hist[i].amount==t.amount &&!updated){
-hist[i]={...hist[i],status:'APPROVED',balanceAfter:newBal};
-updated=true;break;
+txList.innerHTML=html||'<div style="padding:20px;text-align:center;color:#94a3b8;font-size:12px">No transactions yet</div>';
+txCount.textContent=hist.length+' transactions';
 }
+window.sendTransfer=async()=>{
+const name=toName.value.trim(),bank=toBank.value.trim(),acc=toAcc.value.trim(),amt=parseFloat(toAmount.value),desc=toDesc.value.trim()||'Wire Transfer';
+if(!name||!bank||!acc||!amt)return alert('Fill all transfer fields');
+if(amt<=0)return alert('Invalid amount');
+if(amt>cur.balance)return alert('Insufficient balance! Your balance $'+cur.balance);
+const btn=event.target;btn.textContent='Processing...';btn.disabled=true;
+try{
+const transferData={fromId:curId,fromAcc:cur.accNo,fromName:cur.name,toName:name,toBank:bank,toAcc:acc,amount:amt,desc:desc,status:'PENDING',created:Date.now()};
+await addDoc(collection(db,'cashflow_transfers'),transferData);
+const newEntry={date:Date.now(),desc:`Transfer to ${name} • ${bank} • ${acc} - ${desc}`,amount:amt,type:'debit',status:'PENDING',toName:name,balanceAfter:cur.balance};
+const newHist=[...(cur.history||[]),newEntry];
+await updateDoc(doc(db,'cashflow_accounts',curId),{history:newHist});
+cur.history=newHist;
+renderHistory();
+closeTransfer();
+toName.value=toBank.value=toAcc.value=toAmount.value=toDesc.value='';
+alert('✅ Transfer of $'+amt+' to '+name+' is now PENDING. Admin must approve.');
+}catch(e){alert(e.message)}finally{btn.textContent='Send Transfer → PENDING';btn.disabled=false}
 }
-await updateDoc(doc(db,'cashflow_accounts',fromDoc.id),{balance:newBal,history:hist});
-await updateDoc(doc(db,'cashflow_transfers',tid),{status:'APPROVED'});
-alert('✅ Transfer APPROVED! Deducted $'+t.amount+' from '+t.fromName+' New bal $'+newBal);
-loadAll();
-}
-function tDocData(id){const d=allTransfers.find(x=>x.id===id);return d?d.data():null;}
-window.declineTransfer=async tid=>{
-if(!confirm('Decline this transfer?'))return;
-const t=tDocData(tid);
-const fromSnap=await getDocs(query(collection(db,'cashflow_accounts'),where('accNo','==',t.fromAcc)));
-if(!fromSnap.empty){
-const fromDoc=fromSnap.docs[0];
-let hist=fromDoc.data().history||[];
-for(let i=hist.length-1;i>=0;i--){
-if(hist[i].status=='PENDING' && hist[i].amount==t.amount){
-hist[i]={...hist[i],status:'DECLINED',balanceAfter:fromDoc.data().balance};break;
-}
-}
-await updateDoc(doc(db,'cashflow_accounts',fromDoc.id),{history:hist});
-}
-await updateDoc(doc(db,'cashflow_transfers',tid),{status:'DECLINED'});
-alert('❌ Transfer DECLINED');
-loadAll();
-}
-window.filterList=()=>{const q=search.value.toLowerCase();const filtered=allDocs.filter(d=>{const c=d.data();return c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q)||c.accNo.toLowerCase().includes(q)});renderAccounts(filtered);}
-window.appv=async id=>{await updateDoc(doc(db,'cashflow_accounts',id),{status:'APPROVED'});loadAll();}
-window.dec=async id=>{await updateDoc(doc(db,'cashflow_accounts',id),{status:'DECLINED'});loadAll();}
-window.del=async id=>{if(confirm('Delete?')){await deleteDoc(doc(db,'cashflow_accounts',id));loadAll();}}
+window.logout=()=>{localStorage.clear();cur=null;curId=null;hbHome.style.display='inline-block';hbBank.style.display='inline-block';hbDash.style.display='none';hbLogout.style.display='none';goHome();location.reload();}
 </script></body></html>
