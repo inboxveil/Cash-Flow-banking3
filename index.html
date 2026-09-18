@@ -14,12 +14,15 @@
 .hero{background:linear-gradient(105deg,#0a2540,#1e4bd8);color:#fff;padding:30px 20px}
 .hero h1{font-size:28px;font-weight:900}.hero p{color:#cbd5e1;font-size:13px;margin:10px 0;max-width:500px}
 .card{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:20px;margin:16px auto;max-width:650px;box-shadow:0 4px 20px rgba(0,0,0,.05)}
-input{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 14px;margin:7px 0}
+input,select{width:100%;height:48px;border:1px solid #cbd5e1;border-radius:12px;padding:0 14px;margin:7px 0}
 button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;border-radius:12px;font-weight:800;cursor:pointer;margin-top:6px}
 .badge{background:#dcfce7;color:#166534;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800}
+.badge.pending{background:#fef9c3;color:#854d0e}.badge.approved{background:#dcfce7;color:#166534}.badge.declined{background:#fee2e2;color:#991b1b}
 .balCard{background:linear-gradient(135deg,#0a2540,#1e4bd8);color:#fff;padding:22px;border-radius:18px;margin:14px}
 .tx{border-bottom:1px solid #f1f5f9;padding:12px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px}
 .tx small{color:#64748b;font-size:11px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+.modalBox{background:#fff;border-radius:16px;padding:20px;max-width:500px;width:100%;max-height:90vh;overflow:auto}
 </style></head><body>
 <div id="loader"><div style="font-size:26px;font-weight:900;color:#fff">💳 CASH FLOW BANKING</div><div class="spinner"></div><div style="color:#94a3b8;font-size:10px;margin-top:12px">Establishing secure connection...</div></div>
 <div class="header">
@@ -31,9 +34,7 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 <button id="hbLogout" class="navbtn" style="display:none;background:#fee2e2;color:#b91c1c;border-color:#fecaca" onclick="logout()">Logout</button>
 </div>
 </div>
-<div id="homeView">
-<div class="hero"><h1>Banking That Moves With Your Cash Flow.</h1><p>Open account in 2 minutes, get instant approval, manage funds securely. USA Digital Banking Demo.</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div>
-</div>
+<div id="homeView"><div class="hero"><h1>Banking That Moves With Your Cash Flow.</h1><p>Open account in 2 minutes, get instant approval, manage funds securely. USA Digital Banking Demo.</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div></div>
 <div id="bankView" style="display:none">
 <div style="display:flex;justify-content:center;gap:8px;margin:14px"><button id="t1" class="navbtn active" onclick="showAuth('create')">Create Account</button><button id="t2" class="navbtn" onclick="showAuth('login')">Login with Account No</button></div>
 <div id="createCard" class="card"><span class="badge">NEW CUSTOMER</span><h3 style="margin:10px 0">Open Account</h3>
@@ -51,12 +52,13 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 </div>
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center">
-<h4>💸 Transfer History</h4><span style="font-size:11px;background:#f1f5f9;padding:4px 10px;border-radius:20px" id="txCount">0 transactions</span>
+<h4>💸 Transfer History</h4><button style="background:#0a2540;color:#fff;border:0;padding:8px 14px;border-radius:20px;font-weight:800;font-size:12px;cursor:pointer" onclick="openTransfer()">+ New Transfer</button>
 </div>
 <div style="margin-top:12px;border-top:1px solid #e2e8f0">
-<div class="tx" style="font-weight:700;color:#94a3b8;font-size:11px"><span>DATE / DESCRIPTION</span><span>AMOUNT</span></div>
+<div class="tx" style="font-weight:700;color:#94a3b8;font-size:11px"><span>DATE / DESCRIPTION</span><span>AMOUNT / STATUS</span></div>
 <div id="txList"></div>
 </div>
+<span style="font-size:11px;background:#f1f5f9;padding:4px 10px;border-radius:20px;margin-top:10px;display:inline-block" id="txCount">0 transactions</span>
 </div>
 <div class="card">
 <h4 style="font-size:13px">Account Summary</h4>
@@ -66,10 +68,25 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 </div>
 </div>
 </div>
+
+<!-- TRANSFER MODAL -->
+<div id="transferModal" class="modal"><div class="modalBox">
+<h3>Send Money Transfer</h3><p style="font-size:11px;color:#64748b;margin:6px 0">Transfer will be PENDING till admin approves</p>
+<input id="toName" placeholder="Recipient Full Name">
+<input id="toBank" placeholder="Recipient Bank e.g Chase Bank USA">
+<input id="toAcc" placeholder="Recipient Account Number">
+<input id="toAmount" type="number" placeholder="Amount e.g 5000">
+<input id="toDesc" placeholder="Description e.g Rent Payment">
+<button class="primary" onclick="sendTransfer()">Send Transfer → PENDING</button>
+<button style="width:100%;height:44px;background:#e2e8f0;border:0;border-radius:10px;margin-top:8px;font-weight:700;cursor:pointer" onclick="closeTransfer()">Cancel</button>
+<div id="tMsg" style="margin-top:10px;font-size:12px"></div>
+</div></div>
+
 <div style="text-align:center;padding:16px;font-size:10px;color:#94a3b8">© 2026 Cash Flow Banking USA • Secure Digital Banking</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 const firebaseConfig={apiKey:"AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",authDomain:"cash-flow-banking3.firebaseapp.com",projectId:"cash-flow-banking3",storageBucket:"cash-flow-banking3.firebasestorage.app",messagingSenderId:"782707432276",appId:"1:782707432276:web:680425b777d227179c86c1"};
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 let cur=null,curId=null;
@@ -81,32 +98,64 @@ window.goHome=()=>{homeView.style.display='block';bankView.style.display='none';
 window.goBanking=()=>{homeView.style.display='none';bankView.style.display='block';dashView.style.display='none';hbHome.classList.remove('active');hbBank.classList.add('active');hbDash.classList.remove('active');}
 window.goDashboard=()=>{if(!curId)return alert('Login first');homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';hbHome.classList.remove('active');hbBank.classList.remove('active');hbDash.classList.add('active');}
 window.showAuth=t=>{createCard.style.display=t=='create'?'block':'none';loginCard.style.display=t=='login'?'block':'none';t1.classList.toggle('active',t=='create');t2.classList.toggle('active',t=='login');}
+window.openTransfer=()=>{transferModal.style.display='flex';}
+window.closeTransfer=()=>{transferModal.style.display='none';}
 window.createAcc=async()=>{
 const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;
 if(!n||!e||!p)return alert('Fill all');if(p.length<6)return alert('Password min 6');
 const ac='CFB-USA-'+Math.floor(100000000+Math.random()*900000000);
 const btn=event.target;btn.textContent='Creating...';btn.disabled=true;
-try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now(),history:[{date:Date.now(),desc:'Account Created',amount:0,type:'credit',balanceAfter:0}]});msg.innerHTML=`✅ Created!<br><b style="font-size:18px;color:#0a2540">${ac}</b><br>Save this number! Status: PENDING<br><br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account';btn.disabled=false}
+try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now(),history:[{date:Date.now(),desc:'Account Created',amount:0,type:'credit',status:'APPROVED',balanceAfter:0}]});msg.innerHTML=`✅ Created!<br><b style="font-size:18px;color:#0a2540">${ac}</b><br>Save this number! Status: PENDING<br><br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account';btn.disabled=false}
 }
 window.login=async()=>{
 const acc=lacc.value.trim().toUpperCase(),p=lpass.value;if(!acc||!p)return alert('Enter details');
 const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));const s=await getDocs(q);
-if(s.empty)return alert('Wrong Account No or Password');const d=s.docs[0];const data=d.data();if(data.status!='APPROVED')return alert('Not approved yet: '+data.status+'\nGo admin.html to approve');
+if(s.empty)return alert('Wrong Account No or Password');const d=s.docs[0];const data=d.data();if(data.status!='APPROVED')return alert('Not approved yet: '+data.status);
 localStorage.setItem('cfb_id',d.id);loadDashboard(d.id);
 }
 async function loadDashboard(id){
 curId=id;const snap=await getDoc(doc(db,'cashflow_accounts',id));if(!snap.exists()){logout();return}
 cur=snap.data();dname.textContent='Welcome, '+cur.name+' 👋';dacc.textContent=cur.accNo;dacc2.textContent=cur.accNo;dbal.textContent=cur.balance.toLocaleString();dbal2.textContent=cur.balance.toLocaleString();demail.textContent=cur.email;dstatus.textContent=cur.status;
-const hist = cur.history || [{date:cur.created,desc:'Account Opening',amount:0,type:'credit',balanceAfter:cur.balance}];
-let html='';hist.slice().reverse().forEach(h=>{
-const dt=new Date(h.date);const dateStr=dt.toLocaleDateString()+' '+dt.toLocaleTimeString();
-const isCredit = h.type=='credit' || h.amount>=0;
-html+=`<div class="tx"><div><div style="font-weight:600">${h.desc}</div><small>${dateStr}</small></div><div style="text-align:right"><b style="color:${isCredit?'#16a34a':'#dc2626'}">${isCredit&&h.amount>0?'+':''}$${Math.abs(h.amount).toLocaleString()}</b><br><small>Bal: $${(h.balanceAfter!=null?h.balanceAfter:cur.balance).toLocaleString()}</small></div></div>`;
-});
-txList.innerHTML=html||'<div style="padding:20px;text-align:center;color:#94a3b8;font-size:12px">No transactions yet</div>';
-txCount.textContent=hist.length+' transactions';
+renderHistory();
 homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';
 hbHome.style.display='none';hbBank.style.display='none';hbDash.style.display='inline-block';hbLogout.style.display='inline-block';hbDash.classList.add('active');
+}
+function renderHistory(){
+const hist = cur.history || [];
+let html='';hist.slice().reverse().forEach(h=>{
+const dt=new Date(h.date);const dateStr=dt.toLocaleDateString()+' '+dt.toLocaleTimeString();
+const isCredit = h.type=='credit';
+const status = h.status||'APPROVED';
+let badgeClass='approved';if(status=='PENDING')badgeClass='pending';if(status=='DECLINED')badgeClass='declined';
+html+=`<div class="tx"><div><div style="font-weight:600">${h.desc}</div><small>${dateStr}${h.toName?` • To: ${h.toName}`:''}</small><br><span class="badge ${badgeClass}">${status}</span></div><div style="text-align:right"><b style="color:${isCredit?'#16a34a':'#dc2626'}">${isCredit?'+':'-'}$${Math.abs(h.amount).toLocaleString()}</b><br><small>Bal: $${(h.balanceAfter!=null?h.balanceAfter:cur.balance).toLocaleString()}</small></div></div>`;
+});
+txList.innerHTML=html||'<div style="padding:20px;text-align:center;color:#94a3b8;font-size:12px">No transactions yet - Make a transfer</div>';
+txCount.textContent=hist.length+' transactions';
+}
+window.sendTransfer=async()=>{
+const name=toName.value.trim(),bank=toBank.value.trim(),acc=toAcc.value.trim(),amt=parseFloat(toAmount.value),desc=toDesc.value.trim()||'Wire Transfer';
+if(!name||!bank||!acc||!amt)return alert('Fill all transfer fields');
+if(amt<=0)return alert('Invalid amount');
+if(amt>cur.balance)return alert('Insufficient balance! Your balance $'+cur.balance);
+const btn=event.target;btn.textContent='Processing...';btn.disabled=true;
+try{
+const transferData={
+fromId:curId,fromAcc:cur.accNo,fromName:cur.name,
+toName:name,toBank:bank,toAcc:acc,
+amount:amt,desc:desc,
+status:'PENDING',
+created:Date.now()
+};
+await addDoc(collection(db,'cashflow_transfers'),transferData);
+const newEntry={date:Date.now(),desc:`Transfer to ${name} • ${bank} • ${acc} - ${desc}`,amount:amt,type:'debit',status:'PENDING',toName:name,balanceAfter:cur.balance};
+const newHist=[...(cur.history||[]),newEntry];
+await updateDoc(doc(db,'cashflow_accounts',curId),{history:newHist});
+cur.history=newHist;
+renderHistory();
+closeTransfer();
+toName.value=toBank.value=toAcc.value=toAmount.value=toDesc.value='';
+alert('✅ Transfer of $'+amt+' to '+name+' is now PENDING. Admin must approve am for admin panel.');
+}catch(e){alert(e.message)}finally{btn.textContent='Send Transfer → PENDING';btn.disabled=false}
 }
 window.logout=()=>{localStorage.clear();cur=null;curId=null;hbHome.style.display='inline-block';hbBank.style.display='inline-block';hbDash.style.display='none';hbLogout.style.display='none';goHome();location.reload();}
 </script></body></html>
