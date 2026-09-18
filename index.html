@@ -1,390 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Cash Flow Bank</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account — Cash Flow Bank</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <style>
-    [x-cloak] { display: none !important; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
-  </style>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
 </head>
-<body class="bg-gray-100 text-gray-900" x-data="app()" x-cloak>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
 
-  <!-- SIDE MENU -->
-  <div x-show="menuOpen" class="fixed inset-0 z-50" x-transition.opacity>
-    <div class="absolute inset-0 bg-black/40" @click="menuOpen = false"></div>
-    <div class="absolute left-0 top-0 h-full w-72 bg-white shadow-xl flex flex-col" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="-translate-x-full" x-transition:enter-end="translate-x-0">
-      <div class="flex items-center justify-between p-4 border-b">
-        <div class="flex items-center gap-2">
-          <div class="w-9 h-9 bg-red-600 rounded-lg flex items-center justify-center text-white">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
-          </div>
-        </div>
-        <button @click="menuOpen = false" class="p-2 rounded-full hover:bg-gray-100">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <div class="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-3">
+        <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+      </div>
+      <h1 class="text-2xl font-bold">Cash Flow Bank</h1>
+      <p class="text-gray-500 text-sm mt-1">Create your account</p>
+    </div>
+
+    <div id="formBox" class="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Full Name</label>
+        <input id="name" type="text" placeholder="John Doe" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Email</label>
+        <input id="email" type="email" placeholder="john@email.com" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Phone Number</label>
+        <input id="phone" type="tel" placeholder="+234 801 234 5678" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Password</label>
+        <input id="password" type="password" placeholder="••••••••" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-600 mb-1">Confirm Password</label>
+        <input id="confirm" type="password" placeholder="••••••••" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
       </div>
 
-      <div class="flex-1 overflow-y-auto py-2">
-        <p class="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Main</p>
-        <button @click="page='dashboard'; menuOpen=false" :class="page==='dashboard' ? 'bg-red-50 text-red-600 border-l-4 border-red-600' : 'text-gray-700'" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-medium">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
-          Dashboard
-        </button>
-        <button @click="page='accounts'; menuOpen=false" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Account Summary
-        </button>
-        <button @click="page='transfer'; menuOpen=false" class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-          Transfer
-        </button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-          Deposit Check
-        </button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
-          Deposit Crypto
-        </button>
+      <button onclick="createAccount()" id="btn" class="w-full bg-red-600 text-white font-medium py-3.5 rounded-xl hover:bg-red-700 transition">
+        Create Account
+      </button>
 
-        <p class="px-4 py-2 mt-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Services</p>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Loans
-        </button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-          Cards
-        </button>
+      <p class="text-xs text-center text-gray-400">After creating, wait for admin approval before you can login.</p>
+    </div>
 
-        <p class="px-4 py-2 mt-4 text-xs font-semibold text-gray-400 uppercase tracking-wider">Account</p>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-          KYC Verification
-        </button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-          Profile
-        </button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-          Settings
-        </button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Account Status
-        </button>
-        <button class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-          Support
-        </button>
+    <div id="successBox" class="hidden bg-white rounded-2xl shadow-sm border p-8 text-center">
+      <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
       </div>
-
-      <div class="border-t p-4">
-        <button class="w-full flex items-center gap-3 px-2 py-2 text-sm font-medium text-red-600">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-          Sign Out
-        </button>
-      </div>
+      <h2 class="text-xl font-bold mb-2">Account Created!</h2>
+      <p class="text-gray-500 text-sm">Your request has been sent.<br>You will be able to login after admin approval.</p>
     </div>
   </div>
 
-  <!-- HEADER -->
-  <header class="bg-white sticky top-0 z-40 border-b">
-    <div class="flex items-center justify-between px-4 py-3">
-      <div class="flex items-center gap-3">
-        <button @click="menuOpen = true" class="p-1.5 rounded-lg hover:bg-gray-100">
-          <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
-        <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white">
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
-        </div>
-      </div>
-      <div class="flex items-center gap-2">
-        <button class="p-2 rounded-full hover:bg-gray-100 relative">
-          <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
-        </button>
-        <div class="w-8 h-8 rounded-full bg-gray-200 overflow-hidden">
-          <img src="https://i.pravatar.cc/100?img=12" alt="Profile" class="w-full h-full object-cover"/>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- MAIN CONTENT -->
-  <main class="px-4 py-5 space-y-6 max-w-lg mx-auto safe-bottom">
-
-    <!-- DASHBOARD -->
-    <div x-show="page === 'dashboard'" class="space-y-6">
-      <!-- My Accounts -->
-      <div>
-        <div class="flex items-center justify-between mb-3">
-          <h2 class="text-lg font-semibold">My Accounts</h2>
-          <div class="flex items-center gap-2">
-            <button class="text-sm text-red-600 font-medium flex items-center gap-1">View all →</button>
-            <button class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center text-lg font-light">+</button>
-          </div>
-        </div>
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <div class="flex items-start justify-between">
-            <div>
-              <div class="flex items-center gap-2">
-                <div class="w-1 h-8 bg-red-600 rounded-full"></div>
-                <div>
-                  <p class="font-semibold">Primary Account</p>
-                  <p class="text-xs text-blue-600 underline">2015961076</p>
-                </div>
-              </div>
-            </div>
-            <div class="text-right">
-              <p class="text-lg font-bold">$1,514,000.00</p>
-              <svg class="w-4 h-4 text-gray-400 ml-auto mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cashflow Chart -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="font-semibold">Cashflow</h3>
-          <select class="text-xs border rounded-full px-3 py-1 bg-gray-50">
-            <option>1 Month</option>
-            <option>3 Months</option>
-            <option>6 Months</option>
-          </select>
-        </div>
-        <div class="flex flex-wrap gap-3 text-xs mb-3">
-          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-blue-500"></span> Credit</span>
-          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-teal-400"></span> Deposit</span>
-          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-orange-400"></span> Debit</span>
-          <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-sm bg-pink-500"></span> Transfer</span>
-        </div>
-        <canvas id="cashflowChart" height="180"></canvas>
-      </div>
-
-      <!-- Shortcuts -->
-      <div>
-        <h3 class="font-semibold mb-3">Shortcuts</h3>
-        <div class="grid grid-cols-2 gap-3">
-          <button class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col items-center gap-2">
-            <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-              <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-            </div>
-            <span class="text-sm font-medium">Send Money</span>
-          </button>
-          <button class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col items-center gap-2">
-            <div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-              <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-            </div>
-            <span class="text-sm font-medium">Pay Bills</span>
-          </button>
-        </div>
-        <button class="mt-3 w-full bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-center gap-2">
-          <div class="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
-            <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
-          </div>
-          <span class="text-sm font-medium">Transaction History</span>
-        </button>
-      </div>
-
-      <!-- My Cards -->
-      <div>
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="font-semibold">My Cards</h3>
-          <button class="text-sm text-purple-600 font-medium">View All</button>
-        </div>
-        <div class="bg-white rounded-2xl p-8 shadow-sm border border-dashed border-gray-200 text-center">
-          <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
-            <svg class="w-7 h-7 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-          </div>
-          <p class="font-medium text-gray-700">No cards available</p>
-          <p class="text-sm text-gray-400 mt-1">You haven’t added any cards yet.</p>
-        </div>
-      </div>
-
-      <!-- Recent Transactions -->
-      <div>
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="font-semibold">Recent Transactions</h3>
-          <button class="text-sm text-red-600 font-medium">View All</button>
-        </div>
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div class="grid grid-cols-3 text-xs font-medium text-gray-400 px-4 py-2 border-b bg-gray-50">
-            <span>AMOUNT</span>
-            <span class="text-center">STATUS</span>
-            <span class="text-right">ACTIONS</span>
-          </div>
-          <div class="divide-y">
-            <div class="flex items-center justify-between px-4 py-3">
-              <div>
-                <p class="font-medium text-red-600">-$27,500.00</p>
-                <p class="text-xs text-gray-400">Transfer</p>
-              </div>
-              <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Successful</span>
-              <button class="text-gray-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-              </button>
-            </div>
-            <div class="flex items-center justify-between px-4 py-3">
-              <div>
-                <p class="font-medium text-green-600">+$85,000.00</p>
-                <p class="text-xs text-gray-400">Salary Credit</p>
-              </div>
-              <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Successful</span>
-              <button class="text-gray-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-              </button>
-            </div>
-            <div class="flex items-center justify-between px-4 py-3">
-              <div>
-                <p class="font-medium text-red-600">-$12,450.00</p>
-                <p class="text-xs text-gray-400">POS • Shoprite</p>
-              </div>
-              <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Successful</span>
-              <button class="text-gray-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ACCOUNTS PAGE -->
-    <div x-show="page === 'accounts'" class="space-y-6">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold">My Accounts</h2>
-        <span class="text-xs bg-green-100 text-green-700 px-2.5 py-1 rounded-full font-medium">Active</span>
-      </div>
-
-      <!-- Loan -->
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100">
-        <div class="flex items-center gap-2 mb-3">
-          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          <span class="font-semibold">Loan</span>
-        </div>
-        <p class="text-gray-400 text-sm">No active loan.</p>
-      </div>
-
-      <!-- Credit Score -->
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 text-center">
-        <div class="flex items-center justify-center gap-2 mb-2">
-          <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
-          <span class="font-semibold">Credit Score</span>
-        </div>
-        <p class="text-5xl font-bold text-green-600 my-3">850</p>
-        <span class="inline-block bg-green-100 text-green-700 text-xs font-medium px-3 py-1 rounded-full">Excellent</span>
-      </div>
-
-      <!-- Primary Account again -->
-      <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-        <div class="flex items-start justify-between">
-          <div class="flex items-center gap-2">
-            <div class="w-1 h-10 bg-red-600 rounded-full"></div>
-            <div>
-              <p class="font-semibold">Primary Account</p>
-              <p class="text-xs text-blue-600 underline">2015961076</p>
-            </div>
-          </div>
-          <p class="text-lg font-bold">$1,514,000.00</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- TRANSFER PAGE -->
-    <div x-show="page === 'transfer'" class="space-y-5">
-      <h2 class="text-lg font-semibold">Transfer</h2>
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 space-y-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1.5">Beneficiary Account</label>
-          <input type="text" placeholder="Enter 10-digit account number" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"/>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1.5">Bank</label>
-          <select class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
-            <option>Select bank</option>
-            <option>Access Bank</option>
-            <option>GTBank</option>
-            <option>Zenith Bank</option>
-            <option>First Bank</option>
-            <option>UBA</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1.5">Amount</label>
-          <input type="number" placeholder="0.00" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1.5">Narration (optional)</label>
-          <input type="text" placeholder="What’s this for?" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
-        </div>
-        <button class="w-full bg-red-600 text-white font-medium py-3.5 rounded-xl hover:bg-red-700 transition">
-          Send Money
-        </button>
-      </div>
-    </div>
-
-  </main>
-
   <script>
-    function app() {
-      return {
-        menuOpen: false,
-        page: 'dashboard'
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
+      authDomain: "cash-flow-banking3.firebaseapp.com",
+      databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
+      projectId: "cash-flow-banking3",
+      storageBucket: "cash-flow-banking3.firebasestorage.app",
+      messagingSenderId: "782707432276",
+      appId: "1:782707432276:web:680425b777d227179c86c1"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    async function createAccount() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const phone = document.getElementById('phone').value.trim();
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirm').value;
+
+      if (!name || !email || !phone || !password) {
+        return alert('Please fill all fields');
+      }
+      if (password !== confirm) {
+        return alert('Passwords do not match');
+      }
+      if (password.length < 6) {
+        return alert('Password must be at least 6 characters');
+      }
+
+      const btn = document.getElementById('btn');
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+
+      try {
+        // Check if email already exists
+        const snapshot = await db.ref('users').orderByChild('email').equalTo(email).once('value');
+        if (snapshot.exists()) {
+          alert('This email is already registered');
+          btn.disabled = false;
+          btn.textContent = 'Create Account';
+          return;
+        }
+
+        const newUserRef = db.ref('users').push();
+        await newUserRef.set({
+          name,
+          email,
+          phone,
+          password,           // Note: In real production we should use Firebase Auth instead
+          status: 'pending',
+          balance: 0,
+          createdAt: new Date().toISOString()
+        });
+
+        document.getElementById('formBox').classList.add('hidden');
+        document.getElementById('successBox').classList.remove('hidden');
+      } catch (error) {
+        console.error(error);
+        alert('Error: ' + error.message);
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
       }
     }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const ctx = document.getElementById('cashflowChart');
-      if (ctx) {
-        new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: ['2026-09-18', '2026-09-22'],
-            datasets: [
-              {
-                label: 'Transfer',
-                data: [75000, 27000],
-                borderColor: '#ec4899',
-                backgroundColor: 'transparent',
-                tension: 0.3,
-                pointRadius: 5,
-                pointBackgroundColor: '#ec4899'
-              },
-              {
-                label: 'Credit',
-                data: [0, 0],
-                borderColor: '#3b82f6',
-                backgroundColor: 'transparent',
-                tension: 0.3,
-                pointRadius: 4
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  callback: value => '$' + value.toLocaleString()
-                },
-                grid: { color: '#f3f4f6' }
-              },
-              x: { grid: { display: false } }
-            }
-          }
-        });
-      }
-    });
   </script>
 </body>
 </html>
