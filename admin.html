@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Panel — Cash Flow Bank</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
 </head>
-<body class="bg-gray-100 min-h-screen" x-data="adminApp()" x-init="loadUsers()">
+<body class="bg-gray-100 min-h-screen">
 
-  <!-- Header -->
   <header class="bg-white border-b sticky top-0 z-10">
     <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
@@ -21,7 +21,7 @@
           <p class="text-xs text-gray-500">Cash Flow Bank</p>
         </div>
       </div>
-      <button @click="loadUsers()" class="text-sm text-red-600 font-medium hover:underline">Refresh</button>
+      <button onclick="loadUsers()" class="text-sm text-red-600 font-medium hover:underline">Refresh</button>
     </div>
   </header>
 
@@ -30,48 +30,25 @@
     <!-- Stats -->
     <div class="grid grid-cols-3 gap-4 mb-8">
       <div class="bg-white rounded-2xl p-5 shadow-sm border text-center">
-        <p class="text-3xl font-bold text-yellow-600" x-text="pendingCount"></p>
+        <p id="pendingCount" class="text-3xl font-bold text-yellow-600">0</p>
         <p class="text-sm text-gray-500 mt-1">Pending</p>
       </div>
       <div class="bg-white rounded-2xl p-5 shadow-sm border text-center">
-        <p class="text-3xl font-bold text-green-600" x-text="approvedCount"></p>
+        <p id="approvedCount" class="text-3xl font-bold text-green-600">0</p>
         <p class="text-sm text-gray-500 mt-1">Approved</p>
       </div>
       <div class="bg-white rounded-2xl p-5 shadow-sm border text-center">
-        <p class="text-3xl font-bold text-gray-700" x-text="users.length"></p>
+        <p id="totalCount" class="text-3xl font-bold text-gray-700">0</p>
         <p class="text-sm text-gray-500 mt-1">Total Users</p>
       </div>
     </div>
 
-    <!-- Pending Requests -->
+    <!-- Pending -->
     <div class="mb-10">
       <h2 class="text-lg font-semibold mb-4">Pending Approvals</h2>
-
-      <div x-show="pendingUsers.length === 0" class="bg-white rounded-2xl p-10 text-center border shadow-sm">
+      <div id="pendingList" class="space-y-3"></div>
+      <div id="noPending" class="hidden bg-white rounded-2xl p-10 text-center border shadow-sm">
         <p class="text-gray-400">No pending requests</p>
-      </div>
-
-      <div class="space-y-3">
-        <template x-for="user in pendingUsers" :key="user.id">
-          <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p class="font-semibold" x-text="user.name"></p>
-              <p class="text-sm text-gray-500" x-text="user.email"></p>
-              <p class="text-sm text-gray-500" x-text="user.phone"></p>
-              <p class="text-xs text-gray-400 mt-1" x-text="'Requested: ' + new Date(user.createdAt).toLocaleString()"></p>
-            </div>
-            <div class="flex gap-2">
-              <button @click="approve(user.id)"
-                      class="bg-green-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-green-700 transition">
-                Approve
-              </button>
-              <button @click="reject(user.id)"
-                      class="bg-red-100 text-red-600 px-5 py-2 rounded-xl text-sm font-medium hover:bg-red-200 transition">
-                Reject
-              </button>
-            </div>
-          </div>
-        </template>
       </div>
     </div>
 
@@ -91,31 +68,7 @@
                 <th class="px-5 py-3 font-medium">Action</th>
               </tr>
             </thead>
-            <tbody class="divide-y">
-              <template x-for="user in users" :key="user.id">
-                <tr>
-                  <td class="px-5 py-3.5 font-medium" x-text="user.name"></td>
-                  <td class="px-5 py-3.5 text-gray-600" x-text="user.email"></td>
-                  <td class="px-5 py-3.5 text-gray-600" x-text="user.phone"></td>
-                  <td class="px-5 py-3.5">
-                    <span class="text-xs px-2.5 py-1 rounded-full font-medium"
-                          :class="{
-                            'bg-yellow-100 text-yellow-700': user.status === 'pending',
-                            'bg-green-100 text-green-700': user.status === 'approved',
-                            'bg-red-100 text-red-700': user.status === 'rejected'
-                          }"
-                          x-text="user.status"></span>
-                  </td>
-                  <td class="px-5 py-3.5 text-gray-500 text-xs" x-text="new Date(user.createdAt).toLocaleDateString()"></td>
-                  <td class="px-5 py-3.5">
-                    <button x-show="user.status === 'approved'" @click="revoke(user.id)"
-                            class="text-xs text-red-600 hover:underline">Revoke</button>
-                    <button x-show="user.status === 'rejected'" @click="approve(user.id)"
-                            class="text-xs text-green-600 hover:underline">Re-approve</button>
-                  </td>
-                </tr>
-              </template>
-            </tbody>
+            <tbody id="usersTable" class="divide-y"></tbody>
           </table>
         </div>
       </div>
@@ -123,58 +76,110 @@
   </main>
 
   <script>
-    function adminApp() {
-      return {
-        users: [],
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
+      authDomain: "cash-flow-banking3.firebaseapp.com",
+      databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
+      projectId: "cash-flow-banking3",
+      storageBucket: "cash-flow-banking3.firebasestorage.app",
+      messagingSenderId: "782707432276",
+      appId: "1:782707432276:web:680425b777d227179c86c1"
+    };
 
-        get pendingUsers() {
-          return this.users.filter(u => u.status === 'pending');
-        },
-        get pendingCount() {
-          return this.pendingUsers.length;
-        },
-        get approvedCount() {
-          return this.users.filter(u => u.status === 'approved').length;
-        },
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-        loadUsers() {
-          this.users = JSON.parse(localStorage.getItem('cfb_users') || '[]');
-        },
+    function loadUsers() {
+      db.ref('users').once('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        const users = Object.entries(data).map(([id, user]) => ({ id, ...user }));
 
-        save() {
-          localStorage.setItem('cfb_users', JSON.stringify(this.users));
-          this.loadUsers();
-        },
+        // Stats
+        const pending = users.filter(u => u.status === 'pending');
+        const approved = users.filter(u => u.status === 'approved');
 
-        approve(id) {
-          const user = this.users.find(u => u.id === id);
-          if (user) {
-            user.status = 'approved';
-            user.balance = 1000; // Starting bonus balance
-            this.save();
-            alert(user.name + ' has been approved!');
-          }
-        },
+        document.getElementById('pendingCount').textContent = pending.length;
+        document.getElementById('approvedCount').textContent = approved.length;
+        document.getElementById('totalCount').textContent = users.length;
 
-        reject(id) {
-          if (!confirm('Reject this user?')) return;
-          const user = this.users.find(u => u.id === id);
-          if (user) {
-            user.status = 'rejected';
-            this.save();
-          }
-        },
+        // Pending list
+        const pendingList = document.getElementById('pendingList');
+        const noPending = document.getElementById('noPending');
+        pendingList.innerHTML = '';
 
-        revoke(id) {
-          if (!confirm('Revoke access for this user?')) return;
-          const user = this.users.find(u => u.id === id);
-          if (user) {
-            user.status = 'rejected';
-            this.save();
-          }
+        if (pending.length === 0) {
+          noPending.classList.remove('hidden');
+        } else {
+          noPending.classList.add('hidden');
+          pending.forEach(user => {
+            pendingList.innerHTML += `
+              <div class="bg-white rounded-2xl p-5 shadow-sm border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <p class="font-semibold">${user.name}</p>
+                  <p class="text-sm text-gray-500">${user.email}</p>
+                  <p class="text-sm text-gray-500">${user.phone || ''}</p>
+                  <p class="text-xs text-gray-400 mt-1">Requested: ${new Date(user.createdAt).toLocaleString()}</p>
+                </div>
+                <div class="flex gap-2">
+                  <button onclick="approve('${user.id}')" class="bg-green-600 text-white px-5 py-2 rounded-xl text-sm font-medium hover:bg-green-700">Approve</button>
+                  <button onclick="reject('${user.id}')" class="bg-red-100 text-red-600 px-5 py-2 rounded-xl text-sm font-medium hover:bg-red-200">Reject</button>
+                </div>
+              </div>
+            `;
+          });
         }
-      }
+
+        // All users table
+        const table = document.getElementById('usersTable');
+        table.innerHTML = '';
+        users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        users.forEach(user => {
+          const statusClass = {
+            pending: 'bg-yellow-100 text-yellow-700',
+            approved: 'bg-green-100 text-green-700',
+            rejected: 'bg-red-100 text-red-700'
+          }[user.status] || 'bg-gray-100 text-gray-700';
+
+          table.innerHTML += `
+            <tr>
+              <td class="px-5 py-3.5 font-medium">${user.name}</td>
+              <td class="px-5 py-3.5 text-gray-600">${user.email}</td>
+              <td class="px-5 py-3.5 text-gray-600">${user.phone || '-'}</td>
+              <td class="px-5 py-3.5">
+                <span class="text-xs px-2.5 py-1 rounded-full font-medium ${statusClass}">${user.status}</span>
+              </td>
+              <td class="px-5 py-3.5 text-gray-500 text-xs">${new Date(user.createdAt).toLocaleDateString()}</td>
+              <td class="px-5 py-3.5">
+                ${user.status === 'approved' ? `<button onclick="reject('${user.id}')" class="text-xs text-red-600 hover:underline">Revoke</button>` : ''}
+                ${user.status === 'rejected' ? `<button onclick="approve('${user.id}')" class="text-xs text-green-600 hover:underline">Re-approve</button>` : ''}
+              </td>
+            </tr>
+          `;
+        });
+      });
     }
+
+    function approve(id) {
+      db.ref('users/' + id).update({
+        status: 'approved',
+        balance: 1000
+      }).then(() => {
+        alert('User approved!');
+        loadUsers();
+      });
+    }
+
+    function reject(id) {
+      if (!confirm('Reject this user?')) return;
+      db.ref('users/' + id).update({ status: 'rejected' }).then(() => {
+        loadUsers();
+      });
+    }
+
+    // Load on start + auto refresh every 10 seconds
+    loadUsers();
+    setInterval(loadUsers, 10000);
   </script>
 </body>
 </html>
