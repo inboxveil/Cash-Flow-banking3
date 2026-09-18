@@ -10,7 +10,7 @@
 </head>
 <body class="bg-gray-100 text-gray-900 min-h-screen">
 
-  <!-- LOGIN -->
+  <!-- ==================== LOGIN ==================== -->
   <div id="page-login" class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
@@ -37,7 +37,7 @@
     </div>
   </div>
 
-  <!-- REGISTER -->
+  <!-- ==================== REGISTER ==================== -->
   <div id="page-register" class="hidden min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
       <div class="text-center mb-8">
@@ -47,6 +47,7 @@
         <h1 class="text-2xl font-bold">Cash Flow Bank</h1>
         <p class="text-gray-500 text-sm mt-1">Create your account</p>
       </div>
+
       <div id="regForm" class="bg-white rounded-2xl shadow-sm border p-6 space-y-4">
         <div>
           <label class="block text-sm font-medium text-gray-600 mb-1">Full Name</label>
@@ -60,6 +61,24 @@
           <label class="block text-sm font-medium text-gray-600 mb-1">Phone Number</label>
           <input id="regPhone" type="tel" placeholder="+234 801 234 5678" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
         </div>
+
+        <!-- Country -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Country</label>
+          <select id="regCountry" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+            <option value="">Select your country</option>
+            <option value="Nigeria">Nigeria</option>
+            <option value="Ghana">Ghana</option>
+            <option value="Kenya">Kenya</option>
+            <option value="South Africa">South Africa</option>
+            <option value="United States">United States</option>
+            <option value="United Kingdom">United Kingdom</option>
+            <option value="Canada">Canada</option>
+            <option value="India">India</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
         <div>
           <label class="block text-sm font-medium text-gray-600 mb-1">Account Type</label>
           <select id="regType" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
@@ -70,6 +89,7 @@
             <option value="Student">Student Account</option>
           </select>
         </div>
+
         <div>
           <label class="block text-sm font-medium text-gray-600 mb-1">Password</label>
           <input id="regPass" type="password" placeholder="••••••••" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
@@ -78,11 +98,15 @@
           <label class="block text-sm font-medium text-gray-600 mb-1">Confirm Password</label>
           <input id="regConfirm" type="password" placeholder="••••••••" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500"/>
         </div>
-        <button onclick="doRegister()" id="regBtn" class="w-full bg-red-600 text-white font-medium py-3.5 rounded-xl hover:bg-red-700">Create Account</button>
+
+        <button onclick="doRegister()" id="regBtn" class="w-full bg-red-600 text-white font-medium py-3.5 rounded-xl hover:bg-red-700">
+          Create Account
+        </button>
         <p class="text-sm text-center text-gray-500">
           Already have an account? <button onclick="show('login')" class="text-red-600 font-medium">Login</button>
         </p>
       </div>
+
       <div id="regSuccess" class="hidden bg-white rounded-2xl shadow-sm border p-8 text-center">
         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
@@ -96,7 +120,7 @@
     </div>
   </div>
 
-  <!-- DASHBOARD -->
+  <!-- ==================== DASHBOARD ==================== -->
   <div id="page-dashboard" class="hidden">
     <!-- Side Menu -->
     <div id="sideMenu" class="fixed inset-0 z-50 hidden">
@@ -262,6 +286,7 @@
           <div><p class="text-gray-400">Full Name</p><p class="font-medium" id="pName">—</p></div>
           <div><p class="text-gray-400">Account Number</p><p class="font-medium text-red-600" id="pAcc">—</p></div>
           <div><p class="text-gray-400">Account Type</p><p class="font-medium" id="pType">—</p></div>
+          <div><p class="text-gray-400">Country</p><p class="font-medium" id="pCountry">—</p></div>
           <div><p class="text-gray-400">Email</p><p class="font-medium" id="pEmail">—</p></div>
           <div><p class="text-gray-400">Phone</p><p class="font-medium" id="pPhone">—</p></div>
         </div>
@@ -278,6 +303,7 @@
         <div class="bg-white rounded-2xl p-5 shadow-sm border space-y-3">
           <div class="flex justify-between"><span class="text-gray-500">Account Type</span><span id="sType">—</span></div>
           <div class="flex justify-between"><span class="text-gray-500">Account Number</span><span class="text-red-600 font-medium" id="sAcc">—</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Country</span><span id="sCountry">—</span></div>
           <div class="border-t pt-3 flex justify-between items-center">
             <span class="text-gray-500">Balance</span>
             <span class="text-2xl font-bold" id="bal2">$0.00</span>
@@ -288,8 +314,294 @@
   </div>
 
   <script>
-    // (The JavaScript remains exactly the same as the previous full index.html)
-    // Just copy the entire <script> section from the last full index.html I gave you.
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
+      authDomain: "cash-flow-banking3.firebaseapp.com",
+      databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
+      projectId: "cash-flow-banking3",
+      storageBucket: "cash-flow-banking3.firebasestorage.app",
+      messagingSenderId: "782707432276",
+      appId: "1:782707432276:web:680425b777d227179c86c1"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let currentUser = null;
+    let allTx = [];
+    let filterType = 'all';
+
+    function show(page) {
+      ['login','register','dashboard'].forEach(p => {
+        document.getElementById('page-' + p).classList.add('hidden');
+      });
+      document.getElementById('page-' + page).classList.remove('hidden');
+      if (page === 'dashboard') loadDashboard();
+    }
+
+    function showDash(sec) {
+      ['home','transfer','history','profile','accounts'].forEach(s => {
+        document.getElementById('dash-' + s).classList.add('hidden');
+      });
+      document.getElementById('dash-' + sec).classList.remove('hidden');
+      closeMenu();
+    }
+
+    function openMenu() { document.getElementById('sideMenu').classList.remove('hidden'); }
+    function closeMenu() { document.getElementById('sideMenu').classList.add('hidden'); }
+
+    function generateAcc() {
+      return String(1000000000 + Math.floor(Math.random() * 900000000)).slice(0, 10);
+    }
+
+    async function doRegister() {
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const phone = document.getElementById('regPhone').value.trim();
+      const country = document.getElementById('regCountry').value;
+      const type = document.getElementById('regType').value;
+      const pass = document.getElementById('regPass').value;
+      const conf = document.getElementById('regConfirm').value;
+
+      if (!name || !email || !phone || !country || !type || !pass) {
+        return alert('Please fill all fields');
+      }
+      if (pass !== conf) return alert('Passwords do not match');
+      if (pass.length < 6) return alert('Password must be at least 6 characters');
+
+      const btn = document.getElementById('regBtn');
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+
+      try {
+        const snap = await db.ref('users').orderByChild('email').equalTo(email).once('value');
+        if (snap.exists()) {
+          alert('This email is already registered');
+          btn.disabled = false;
+          btn.textContent = 'Create Account';
+          return;
+        }
+
+        const accNo = generateAcc();
+        await db.ref('users').push().set({
+          name,
+          email,
+          phone,
+          country,
+          accountType: type,
+          accountNumber: accNo,
+          password: pass,
+          status: 'pending',
+          balance: 0,
+          createdAt: new Date().toISOString()
+        });
+
+        document.getElementById('regForm').classList.add('hidden');
+        document.getElementById('regSuccess').classList.remove('hidden');
+        document.getElementById('genAcc').textContent = accNo;
+      } catch (e) {
+        alert(e.message);
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    }
+
+    async function doLogin() {
+      const acc = document.getElementById('loginAcc').value.trim();
+      const pass = document.getElementById('loginPass').value;
+
+      if (!acc || !pass) return alert('Enter Account Number and Password');
+
+      const snap = await db.ref('users').orderByChild('accountNumber').equalTo(acc).once('value');
+      if (!snap.exists()) return alert('Account not found');
+
+      let user = null, id = null;
+      snap.forEach(c => { user = c.val(); id = c.key; });
+
+      if (user.password !== pass) return alert('Incorrect password');
+      if (user.status === 'pending') return alert('Your account is still pending approval');
+      if (user.status === 'rejected') return alert('Your account has been rejected');
+
+      currentUser = { id, ...user };
+      localStorage.setItem('cfb_user', JSON.stringify(currentUser));
+      show('dashboard');
+    }
+
+    function loadDashboard() {
+      const saved = localStorage.getItem('cfb_user');
+      if (!saved) return show('login');
+      currentUser = JSON.parse(saved);
+
+      document.getElementById('userName').textContent = currentUser.name.split(' ')[0];
+      document.getElementById('accNumber').textContent = currentUser.accountNumber;
+      document.getElementById('accTypeLabel').textContent = (currentUser.accountType || '') + ' Account';
+      document.getElementById('pName').textContent = currentUser.name;
+      document.getElementById('pAcc').textContent = currentUser.accountNumber;
+      document.getElementById('pType').textContent = currentUser.accountType;
+      document.getElementById('pCountry').textContent = currentUser.country || '—';
+      document.getElementById('pEmail').textContent = currentUser.email;
+      document.getElementById('pPhone').textContent = currentUser.phone || '—';
+      document.getElementById('sType').textContent = currentUser.accountType;
+      document.getElementById('sAcc').textContent = currentUser.accountNumber;
+      document.getElementById('sCountry').textContent = currentUser.country || '—';
+
+      db.ref('users/' + currentUser.id).once('value', s => {
+        if (s.val()) {
+          currentUser.balance = s.val().balance || 0;
+          localStorage.setItem('cfb_user', JSON.stringify(currentUser));
+          updateBal();
+        }
+      });
+
+      loadTx();
+      showDash('home');
+    }
+
+    function updateBal() {
+      const b = Number(currentUser.balance || 0).toLocaleString('en-US', {minimumFractionDigits: 2});
+      document.getElementById('balDisplay').textContent = '$' + b;
+      document.getElementById('bal2').textContent = '$' + b;
+    }
+
+    function loadTx() {
+      db.ref('transactions/' + currentUser.id).once('value', snap => {
+        allTx = Object.entries(snap.val() || {}).map(([id, t]) => ({id, ...t}))
+          .sort((a,b) => new Date(b.date) - new Date(a.date));
+        renderTx(allTx);
+        document.getElementById('recentTx').innerHTML = allTx.slice(0,5).map(txHTML).join('') ||
+          '<p class="text-center text-gray-400 py-8 text-sm">No transactions yet</p>';
+      });
+    }
+
+    function txHTML(tx) {
+      const color = tx.amount > 0 ? 'text-green-600' : 'text-red-600';
+      const sign = tx.amount > 0 ? '+' : '';
+      return `
+        <div onclick='showReceipt(${JSON.stringify(tx)})' class="flex justify-between px-4 py-3 border-b last:border-0 cursor-pointer hover:bg-gray-50">
+          <div>
+            <p class="font-medium ${color}">${sign}$${Math.abs(tx.amount).toLocaleString()}</p>
+            <p class="text-xs text-gray-500">${tx.desc}</p>
+            <p class="text-xs text-gray-400">${new Date(tx.date).toLocaleString()}</p>
+          </div>
+          <div class="text-right">
+            <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Successful</span>
+            <p class="text-xs text-red-600 mt-1">Receipt</p>
+          </div>
+        </div>`;
+    }
+
+    function renderTx(list) {
+      document.getElementById('fullHistory').innerHTML = list.length ?
+        list.map(txHTML).join('') :
+        '<p class="text-center text-gray-400 py-8 text-sm">No transactions found</p>';
+    }
+
+    function setFilter(t) {
+      filterType = t;
+      ['all','credit','debit'].forEach(x => {
+        document.getElementById('f-' + x).className = x === t ?
+          'flex-1 py-2 rounded-xl text-sm bg-red-600 text-white' :
+          'flex-1 py-2 rounded-xl text-sm bg-gray-100';
+      });
+      filterTx();
+    }
+
+    function filterTx() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      let list = allTx;
+      if (filterType === 'credit') list = list.filter(t => t.amount > 0);
+      if (filterType === 'debit') list = list.filter(t => t.amount < 0);
+      if (q) {
+        list = list.filter(t => 
+          (t.desc + t.bank + t.account + t.narration + Math.abs(t.amount)).toLowerCase().includes(q)
+        );
+      }
+      renderTx(list);
+    }
+
+    async function sendMoney() {
+      const acc = document.getElementById('tfAcc').value.trim();
+      const bank = document.getElementById('tfBank').value;
+      const amount = Number(document.getElementById('tfAmount').value);
+      const narr = document.getElementById('tfNarr').value.trim() || 'Transfer';
+
+      if (!acc || !bank || !amount) return alert('Please fill all fields');
+      if (amount > currentUser.balance) return alert('Insufficient balance');
+
+      const newBal = currentUser.balance - amount;
+      await db.ref('users/' + currentUser.id).update({ balance: newBal });
+
+      const tx = {
+        id: 'TXN' + Date.now(),
+        amount: -amount,
+        desc: `Transfer to ${bank} • ${acc}`,
+        bank, account: acc, narration: narr,
+        date: new Date().toISOString(),
+        status: 'successful',
+        sender: currentUser.name,
+        senderAccount: currentUser.accountNumber
+      };
+      await db.ref('transactions/' + currentUser.id).push().set(tx);
+
+      currentUser.balance = newBal;
+      localStorage.setItem('cfb_user', JSON.stringify(currentUser));
+      updateBal();
+      loadTx();
+      showReceipt(tx);
+
+      document.getElementById('tfAcc').value = '';
+      document.getElementById('tfAmount').value = '';
+      document.getElementById('tfNarr').value = '';
+    }
+
+    function showReceipt(tx) {
+      document.getElementById('receiptContent').innerHTML = `
+        <div class="flex justify-between"><span class="text-gray-500">TXN ID</span><span>${tx.id}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Date</span><span>${new Date(tx.date).toLocaleString()}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Amount</span><span class="font-bold text-red-600">$${Math.abs(tx.amount).toLocaleString()}</span></div>
+        <div class="border-t my-2"></div>
+        <div class="flex justify-between"><span class="text-gray-500">From</span><span>${tx.sender}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Account</span><span>${tx.senderAccount}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">To</span><span>${tx.bank} ${tx.account}</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">Status</span><span class="text-green-600">Successful</span></div>
+      `;
+      document.getElementById('receiptModal').classList.remove('hidden');
+      document.getElementById('receiptModal').classList.add('flex');
+    }
+
+    function closeReceipt() {
+      document.getElementById('receiptModal').classList.add('hidden');
+      document.getElementById('receiptModal').classList.remove('flex');
+    }
+
+    function printReceipt() {
+      const c = document.getElementById('receiptContent').innerHTML;
+      const w = window.open('', '', 'width=400,height=600');
+      w.document.write(`
+        <html><body style="font-family:Arial;padding:20px">
+          <div style="background:#dc2626;color:white;text-align:center;padding:15px;border-radius:8px 8px 0 0">
+            <h2>Transaction Receipt</h2>
+            <p>Cash Flow Bank</p>
+          </div>
+          <div style="border:1px solid #ddd;padding:20px">${c}</div>
+          <p style="text-align:center;margin-top:20px;color:#666;font-size:12px">Thank you for banking with us</p>
+        </body></html>
+      `);
+      w.document.close();
+      w.print();
+    }
+
+    function logout() {
+      localStorage.removeItem('cfb_user');
+      currentUser = null;
+      show('login');
+    }
+
+    // Auto start
+    if (localStorage.getItem('cfb_user')) {
+      show('dashboard');
+    } else {
+      show('login');
+    }
   </script>
 </body>
 </html>
