@@ -34,11 +34,12 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 <button id="hbLogout" class="navbtn" style="display:none;background:#fee2e2;color:#b91c1c;border-color:#fecaca" onclick="logout()">Logout</button>
 </div>
 </div>
-<div id="homeView"><div class="hero"><h1>Banking That Moves With Your Cash Flow.</h1><p>Open account in 2 minutes, get instant approval, manage funds securely.</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div></div>
+<div id="homeView"><div class="hero"><h1>Banking That Moves With Your Cash Flow.</h1><p>Open account in 2 minutes, get instant approval.</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div></div>
 <div id="bankView" style="display:none">
-<div style="display:flex;justify-content:center;gap:8px;margin:14px"><button id="t1" class="navbtn active" onclick="showAuth('create')">Create Account</button><button id="t2" class="navbtn" onclick="showAuth('login')">Login with Account No</button></div>
+<div style="display:flex;justify-content:center;gap:8px;margin:14px"><button id="t1" class="navbtn active" onclick="showAuth('create')">Create Account</button><button id="t2" class="navbtn" onclick="showAuth('login')">Login</button></div>
 <div id="createCard" class="card"><span class="badge">NEW CUSTOMER</span><h3 style="margin:10px 0">Open Account</h3>
-<input id="fullname" placeholder="Full Name"><input id="email" placeholder="Email"><input id="pass" type="password" placeholder="Password min 6">
+<input id="fullname" placeholder="Full Name"><input id="email" placeholder="Email"><input id="pass" type="password" placeholder="Password min 6"><input id="tpin" type="password" maxlength="4" placeholder="Create 4-digit Transfer PIN e.g 1234" inputmode="numeric">
+<p style="font-size:10px;color:#64748b">This PIN go be needed for every transfer</p>
 <button class="primary" onclick="createAcc()">Create Account</button><div id="msg" style="margin-top:12px;font-size:13px"></div></div>
 <div id="loginCard" class="card" style="display:none"><span class="badge">RETURNING</span><h3 style="margin:10px 0">Login with Account Number</h3>
 <input id="lacc" placeholder="Account Number e.g 9030189563"><input id="lpass" type="password" placeholder="Password">
@@ -60,26 +61,25 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 </div>
 <span style="font-size:11px;background:#f1f5f9;padding:4px 10px;border-radius:20px;margin-top:10px;display:inline-block" id="txCount">0 transactions</span>
 </div>
-<div class="card">
-<h4 style="font-size:13px">Account Summary</h4>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-<div style="background:#f8fafc;padding:12px;border-radius:10px"><small style="color:#64748b;font-size:10px">ACCOUNT NUMBER</small><br><b style="font-size:14px" id="dacc2"></b></div>
-<div style="background:#f8fafc;padding:12px;border-radius:10px"><small style="color:#64748b;font-size:10px">CURRENT BALANCE</small><br><b style="font-size:14px;color:#0a2540">$<span id="dbal2">0</span></b></div>
 </div>
-</div>
-</div>
+
 <div id="transferModal" class="modal"><div class="modalBox">
-<h3>Send Money Transfer</h3><p style="font-size:11px;color:#64748b;margin:6px 0">Transfer will be PENDING till admin approves</p>
+<h3>🔒 Confirm Transfer</h3><p style="font-size:11px;color:#64748b;margin:6px 0">Enter your Transfer PIN to proceed. PENDING till admin approves</p>
 <input id="toName" placeholder="Recipient Full Name">
 <input id="toBank" placeholder="Recipient Bank e.g Chase Bank USA">
 <input id="toAcc" placeholder="Recipient Account Number">
 <input id="toAmount" type="number" placeholder="Amount e.g 5000">
 <input id="toDesc" placeholder="Description e.g Rent Payment">
-<button class="primary" onclick="sendTransfer()">Send Transfer → PENDING</button>
+<div style="background:#fef9c3;padding:12px;border-radius:10px;margin-top:8px;border:1px solid #fde68a">
+<label style="font-size:11px;font-weight:800;color:#854d0e">ENTER YOUR 4-DIGIT TRANSFER PIN *</label>
+<input id="confirmPin" type="password" maxlength="4" placeholder="Enter Transfer PIN" inputmode="numeric" style="margin-top:6px;border-color:#f59e0b">
+</div>
+<button class="primary" onclick="sendTransfer()">🔒 Confirm with PIN → Send PENDING</button>
 <button style="width:100%;height:44px;background:#e2e8f0;border:0;border-radius:10px;margin-top:8px;font-weight:700;cursor:pointer" onclick="closeTransfer()">Cancel</button>
-<div id="tMsg" style="margin-top:10px;font-size:12px"></div>
 </div></div>
+
 <div style="text-align:center;padding:16px;font-size:10px;color:#94a3b8">© 2026 Cash Flow Banking USA</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -92,16 +92,18 @@ const id=localStorage.getItem('cfb_id');if(id){loadDashboard(id);}
 });
 window.goHome=()=>{homeView.style.display='block';bankView.style.display='none';dashView.style.display='none';hbHome.classList.add('active');hbBank.classList.remove('active');hbDash.classList.remove('active');}
 window.goBanking=()=>{homeView.style.display='none';bankView.style.display='block';dashView.style.display='none';hbHome.classList.remove('active');hbBank.classList.add('active');hbDash.classList.remove('active');}
-window.goDashboard=()=>{if(!curId)return alert('Login first');homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';hbHome.classList.remove('active');hbBank.classList.remove('active');hbDash.classList.add('active');}
+window.goDashboard=()=>{if(!curId)return alert('Login first');homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';}
 window.showAuth=t=>{createCard.style.display=t=='create'?'block':'none';loginCard.style.display=t=='login'?'block':'none';t1.classList.toggle('active',t=='create');t2.classList.toggle('active',t=='login');}
 window.openTransfer=()=>{transferModal.style.display='flex';}
-window.closeTransfer=()=>{transferModal.style.display='none';}
+window.closeTransfer=()=>{transferModal.style.display='none';confirmPin.value='';}
 window.createAcc=async()=>{
-const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value;
-if(!n||!e||!p)return alert('Fill all');if(p.length<6)return alert('Password min 6');
+const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value,pin=tpin.value.trim();
+if(!n||!e||!p||!pin)return alert('Fill all fields including Transfer PIN');
+if(p.length<6)return alert('Password min 6');
+if(pin.length!=4||isNaN(pin))return alert('Transfer PIN must be 4 digits e.g 1234');
 const ac=Math.floor(1000000000 + Math.random()*9000000000).toString();
 const btn=event.target;btn.textContent='Creating...';btn.disabled=true;
-try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,accNo:ac,status:'PENDING',balance:0,created:Date.now(),history:[{date:Date.now(),desc:'Account Created',amount:0,type:'credit',status:'APPROVED',balanceAfter:0}]});msg.innerHTML=`✅ Created!<br><b style="font-size:22px;color:#0a2540;letter-spacing:1px">${ac}</b><br><span style="font-size:11px">YOUR ACCOUNT NUMBER - SAVE IT!</span><br>Status: PENDING<br><br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account';btn.disabled=false}
+try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,pin:pin,accNo:ac,status:'PENDING',balance:0,created:Date.now(),history:[{date:Date.now(),desc:'Account Created',amount:0,type:'credit',status:'APPROVED',balanceAfter:0}]});msg.innerHTML=`✅ Created!<br><b style="font-size:22px;color:#0a2540;letter-spacing:1px">${ac}</b><br><small>Account Number</small><br><small>Transfer PIN: <b>${pin}</b> - Keep it secret!</small><br>Status: PENDING<br><br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value=tpin.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account';btn.disabled=false}
 }
 window.login=async()=>{
 const acc=lacc.value.trim(),p=lpass.value;if(!acc||!p)return alert('Enter details');
@@ -111,10 +113,10 @@ localStorage.setItem('cfb_id',d.id);loadDashboard(d.id);
 }
 async function loadDashboard(id){
 curId=id;const snap=await getDoc(doc(db,'cashflow_accounts',id));if(!snap.exists()){logout();return}
-cur=snap.data();dname.textContent='Welcome, '+cur.name+' 👋';dacc.textContent=cur.accNo;dacc2.textContent=cur.accNo;dbal.textContent=cur.balance.toLocaleString();dbal2.textContent=cur.balance.toLocaleString();demail.textContent=cur.email;dstatus.textContent=cur.status;
+cur=snap.data();dname.textContent='Welcome, '+cur.name+' 👋';dacc.textContent=cur.accNo;dbal.textContent=cur.balance.toLocaleString();demail.textContent=cur.email;dstatus.textContent=cur.status;
 renderHistory();
 homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';
-hbHome.style.display='none';hbBank.style.display='none';hbDash.style.display='inline-block';hbLogout.style.display='inline-block';hbDash.classList.add('active');
+hbHome.style.display='none';hbBank.style.display='none';hbDash.style.display='inline-block';hbLogout.style.display='inline-block';
 }
 function renderHistory(){
 const hist = cur.history || [];
@@ -129,10 +131,16 @@ txList.innerHTML=html||'<div style="padding:20px;text-align:center;color:#94a3b8
 txCount.textContent=hist.length+' transactions';
 }
 window.sendTransfer=async()=>{
-const name=toName.value.trim(),bank=toBank.value.trim(),acc=toAcc.value.trim(),amt=parseFloat(toAmount.value),desc=toDesc.value.trim()||'Wire Transfer';
-if(!name||!bank||!acc||!amt)return alert('Fill all transfer fields');
+const name=toName.value.trim(),bank=toBank.value.trim(),acc=toAcc.value.trim(),amt=parseFloat(toAmount.value),desc=toDesc.value.trim()||'Wire Transfer',pin=confirmPin.value.trim();
+if(!name||!bank||!acc||!amt||!pin)return alert('Fill all fields including PIN');
 if(amt<=0)return alert('Invalid amount');
-if(amt>cur.balance)return alert('Insufficient balance! Your balance $'+cur.balance);
+if(amt>cur.balance)return alert('Insufficient balance! $'+cur.balance);
+// CHECK PIN
+if(!cur.pin){
+if(pin!=cur.pass)return alert('❌ Wrong PIN! Your Transfer PIN is your 4-digit PIN or password. For old accounts without PIN, use your password');
+}else{
+if(pin!=cur.pin)return alert('❌ Wrong Transfer PIN! You set '+cur.pin+' when creating account');
+}
 const btn=event.target;btn.textContent='Processing...';btn.disabled=true;
 try{
 const transferData={fromId:curId,fromAcc:cur.accNo,fromName:cur.name,toName:name,toBank:bank,toAcc:acc,amount:amt,desc:desc,status:'PENDING',created:Date.now()};
@@ -143,9 +151,9 @@ await updateDoc(doc(db,'cashflow_accounts',curId),{history:newHist});
 cur.history=newHist;
 renderHistory();
 closeTransfer();
-toName.value=toBank.value=toAcc.value=toAmount.value=toDesc.value='';
-alert('✅ Transfer of $'+amt+' to '+name+' is now PENDING. Admin must approve.');
-}catch(e){alert(e.message)}finally{btn.textContent='Send Transfer → PENDING';btn.disabled=false}
+toName.value=toBank.value=toAcc.value=toAmount.value=toDesc.value=confirmPin.value='';
+alert('✅ Transfer of $'+amt+' to '+name+' is PENDING. Admin must approve.');
+}catch(e){alert(e.message)}finally{btn.textContent='🔒 Confirm with PIN → Send PENDING';btn.disabled=false}
 }
 window.logout=()=>{localStorage.clear();cur=null;curId=null;hbHome.style.display='inline-block';hbBank.style.display='inline-block';hbDash.style.display='none';hbLogout.style.display='none';goHome();location.reload();}
 </script></body></html>
