@@ -23,8 +23,19 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 .modalBox{background:#fff;border-radius:16px;padding:20px;max-width:500px;width:100%;max-height:90vh;overflow:auto}
 .typeOpt{border:2px solid #e2e8f0;padding:12px;border-radius:12px;margin:6px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
 .typeOpt.selected{border-color:#0a2540;background:#f0f7ff}
+
+/* FINE ALERT POPUP - NO MORE UGLY BROWSER ALERT */
+#fineAlert{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.fineBox{background:#fff;border-radius:20px;padding:24px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:pop.3s ease}
+@keyframes pop{0%{transform:scale(.8);opacity:0}100%{transform:scale(1);opacity:1}}
+.fineIcon{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px}
+.fineIcon.error{background:#fee2e2;color:#dc2626}.fineIcon.success{background:#dcfce7;color:#16a34a}.fineIcon.info{background:#dbeafe;color:#1e4bd8}
+.fineTitle{font-weight:900;font-size:16px;margin-bottom:6px;color:#0f172a}
+.fineMsg{font-size:13px;color:#475569;line-height:1.4;margin-bottom:16px}
+.fineBtn{width:100%;height:44px;border:0;border-radius:12px;font-weight:800;cursor:pointer;background:#0a2540;color:#fff}
 </style></head><body>
 <div id="loader"><div style="font-size:26px;font-weight:900;color:#fff">💳 CASH FLOW BANKING</div><div class="spinner"></div><div style="color:#94a3b8;font-size:10px;margin-top:12px">Establishing secure connection...</div></div>
+
 <div class="header">
 <div class="brand">CASH FLOW <span>BANKING</span></div>
 <div id="headerBtns">
@@ -34,7 +45,9 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 <button id="hbLogout" class="navbtn" style="display:none;background:#fee2e2;color:#b91c1c;border-color:#fecaca" onclick="logout()">Logout</button>
 </div>
 </div>
-<div id="homeView"><div style="background:linear-gradient(105deg,#0a2540,#1e4bd8);color:#fff;padding:30px 20px"><h1 style="font-size:28px;font-weight:900">Banking That Moves With Your Cash Flow.</h1><p style="color:#cbd5e1;font-size:13px;margin:10px 0">Open account in 2 minutes. Account No like 9030189563</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div></div>
+
+<div id="homeView"><div style="background:linear-gradient(105deg,#0a2540,#1e4bd8);color:#fff;padding:30px 20px"><h1 style="font-size:28px;font-weight:900">Banking That Moves With Your Cash Flow.</h1><p style="color:#cbd5e1;font-size:13px;margin:10px 0">Account No like 9030189563 • Transfer PIN secured</p><button style="margin-top:14px;padding:12px 20px;background:#fff;color:#0a2540;border:0;border-radius:10px;font-weight:800;cursor:pointer" onclick="goBanking()">Open Account →</button></div></div>
+
 <div id="bankView" style="display:none">
 <div style="display:flex;justify-content:center;gap:8px;margin:14px"><button id="t1" class="navbtn active" onclick="showAuth('create')">Create Account</button><button id="t2" class="navbtn" onclick="showAuth('login')">Login</button></div>
 <div id="createCard" class="card"><span class="badge">NEW CUSTOMER</span><h3 style="margin:10px 0">Open Account</h3>
@@ -44,6 +57,7 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 <input id="lacc" placeholder="Account No e.g 9030189563"><input id="lpass" type="password" placeholder="Password">
 <button class="primary" onclick="login()">Login →</button></div>
 </div>
+
 <div id="dashView" style="display:none">
 <div class="balCard">
 <div style="font-size:11px;opacity:.7;letter-spacing:1px">WELCOME • AVAILABLE BALANCE</div>
@@ -62,17 +76,16 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 </div>
 </div>
 
+<!-- TRANSFER MODAL -->
 <div id="transferModal" class="modal"><div class="modalBox">
 <h3>💸 Choose Transfer Type</h3>
 <p style="font-size:11px;color:#64748b;margin:6px 0">Select how you want to transfer</p>
-
 <div id="typeSelector">
-<div class="typeOpt" onclick="selectType('Domestic Wire')"><div><b>🏦 Domestic Wire</b><br><small style="color:#64748b">Same day USA bank transfer • Fee $15</small></div><span id="check-Domestic Wire">○</span></div>
-<div class="typeOpt" onclick="selectType('ACH Transfer')"><div><b>⚡ ACH Transfer</b><br><small style="color:#64748b">1-3 business days • Free</small></div><span id="check-ACH Transfer">○</span></div>
-<div class="typeOpt" onclick="selectType('International Wire')"><div><b>🌍 International Wire</b><br><small style="color:#64748b">SWIFT worldwide • Fee $45</small></div><span id="check-International Wire">○</span></div>
-<div class="typeOpt" onclick="selectType('Internal Transfer')"><div><b>🔄 Internal Transfer</b><br><small style="color:#64748b">Cash Flow to Cash Flow • Free & Instant</small></div><span id="check-Internal Transfer">○</span></div>
+<div class="typeOpt" onclick="selectType('Domestic Wire')"><div><b>🏦 Domestic Wire</b><br><small style="color:#64748b">Same day USA • Fee $15</small></div><span id="check-Domestic Wire">○</span></div>
+<div class="typeOpt" onclick="selectType('ACH Transfer')"><div><b>⚡ ACH Transfer</b><br><small style="color:#64748b">1-3 days • Free</small></div><span id="check-ACH Transfer">○</span></div>
+<div class="typeOpt" onclick="selectType('International Wire')"><div><b>🌍 International Wire</b><br><small style="color:#64748b">SWIFT • Fee $45</small></div><span id="check-International Wire">○</span></div>
+<div class="typeOpt" onclick="selectType('Internal Transfer')"><div><b>🔄 Internal Transfer</b><br><small style="color:#64748b">Cash Flow to Cash Flow • Free</small></div><span id="check-Internal Transfer">○</span></div>
 </div>
-
 <div id="transferForm" style="display:none;margin-top:12px;border-top:1px solid #e2e8f0;padding-top:12px">
 <div style="background:#f0f7ff;padding:8px 12px;border-radius:8px;font-size:12px;margin-bottom:8px">Selected: <b id="selectedType">None</b></div>
 <input id="toName" placeholder="Recipient Full Name">
@@ -86,8 +99,15 @@ button.primary{width:100%;height:48px;background:#0a2540;color:#fff;border:0;bor
 </div>
 <button class="primary" onclick="sendTransfer()">🔒 Confirm with PIN → Send PENDING</button>
 </div>
-
 <button style="width:100%;height:44px;background:#e2e8f0;border:0;border-radius:10px;margin-top:8px;font-weight:700;cursor:pointer" onclick="closeTransfer()">Cancel</button>
+</div></div>
+
+<!-- FINE BEAUTIFUL ALERT -->
+<div id="fineAlert"><div class="fineBox">
+<div id="fineIcon" class="fineIcon error">❌</div>
+<div id="fineTitle" class="fineTitle">Wrong PIN</div>
+<div id="fineMsg" class="fineMsg">Your PIN is incorrect</div>
+<button class="fineBtn" onclick="closeFineAlert()">OK, Got it</button>
 </div></div>
 
 <div style="text-align:center;padding:16px;font-size:10px;color:#94a3b8">© 2026 Cash Flow Banking USA</div>
@@ -98,13 +118,26 @@ import { getFirestore, collection, addDoc, getDocs, query, where, doc, getDoc, u
 const firebaseConfig={apiKey:"AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",authDomain:"cash-flow-banking3.firebaseapp.com",projectId:"cash-flow-banking3",storageBucket:"cash-flow-banking3.firebasestorage.app",messagingSenderId:"782707432276",appId:"1:782707432276:web:680425b777d227179c86c1"};
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 let cur=null,curId=null,selectedTransferType='';
+
+// FINE ALERT FUNCTION - NO MORE UGLY BROWSER ALERT
+window.showFineAlert=(title,msg,type='error')=>{
+fineTitle.textContent=title;
+fineMsg.textContent=msg;
+fineIcon.className='fineIcon '+type;
+if(type=='error')fineIcon.textContent='❌';
+if(type=='success')fineIcon.textContent='✅';
+if(type=='info')fineIcon.textContent='ℹ️';
+fineAlert.style.display='flex';
+}
+window.closeFineAlert=()=>{fineAlert.style.display='none';}
+
 window.addEventListener('load',()=>{
 setTimeout(()=>loader.classList.add('hide'),1000);
 const id=localStorage.getItem('cfb_id');if(id){loadDashboard(id);}
 });
 window.goHome=()=>{homeView.style.display='block';bankView.style.display='none';dashView.style.display='none';hbHome.classList.add('active');hbBank.classList.remove('active');}
 window.goBanking=()=>{homeView.style.display='none';bankView.style.display='block';dashView.style.display='none';hbHome.classList.remove('active');hbBank.classList.add('active');}
-window.goDashboard=()=>{if(!curId)return alert('Login first');homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';}
+window.goDashboard=()=>{if(!curId){showFineAlert('Login Required','Please login first','info');return}homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';}
 window.showAuth=t=>{createCard.style.display=t=='create'?'block':'none';loginCard.style.display=t=='login'?'block':'none';t1.classList.toggle('active',t=='create');t2.classList.toggle('active',t=='login');}
 window.openTransfer=()=>{transferModal.style.display='flex';selectedTransferType='';transferForm.style.display='none';document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('selected'));document.querySelectorAll('[id^="check-"]').forEach(el=>el.textContent='○');}
 window.closeTransfer=()=>{transferModal.style.display='none';}
@@ -112,29 +145,31 @@ window.selectType=type=>{
 selectedTransferType=type;
 document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('selected'));
 document.querySelectorAll('[id^="check-"]').forEach(el=>el.textContent='○');
-const selectedEl=[...document.querySelectorAll('.typeOpt')].find(el=>el.innerHTML.includes(type));
-if(selectedEl)selectedEl.classList.add('selected');
 document.getElementById('check-'+type).textContent='✅';
+[...document.querySelectorAll('.typeOpt')].find(el=>el.innerHTML.includes(type))?.classList.add('selected');
 selectedType.textContent=type;
 transferForm.style.display='block';
 if(type=='Internal Transfer'){toBank.value='Cash Flow Banking USA';}else{toBank.value='';}
 }
 window.createAcc=async()=>{
 const n=fullname.value.trim(),e=email.value.toLowerCase().trim(),p=pass.value,pin=tpin.value.trim();
-if(!n||!e||!p||!pin)return alert('Fill all');if(p.length<6)return alert('Password min 6');if(pin.length!=4||isNaN(pin))return alert('PIN must be 4 digits');
+if(!n||!e||!p||!pin){showFineAlert('Missing Fields','Fill all fields including Transfer PIN','error');return}
+if(p.length<6){showFineAlert('Weak Password','Password must be min 6 characters','error');return}
+if(pin.length!=4||isNaN(pin)){showFineAlert('Invalid PIN','Transfer PIN must be 4 digits e.g 1234','error');return}
 const ac=Math.floor(1000000000 + Math.random()*9000000000).toString();
 const btn=event.target;btn.textContent='Creating...';btn.disabled=true;
-try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,pin:pin,accNo:ac,status:'PENDING',balance:0,created:Date.now(),history:[{date:Date.now(),desc:'Account Created',amount:0,type:'credit',status:'APPROVED',balanceAfter:0}]});msg.innerHTML=`✅ Created!<br><b style="font-size:22px">${ac}</b><br>PIN: ${pin}<br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value=tpin.value='';}catch(err){alert(err.message)}finally{btn.textContent='Create Account';btn.disabled=false}
+try{await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,pin:pin,accNo:ac,status:'PENDING',balance:0,created:Date.now(),history:[{date:Date.now(),desc:'Account Created',amount:0,type:'credit',status:'APPROVED',balanceAfter:0}]});msg.innerHTML=`✅ Created!<br><b style="font-size:22px">${ac}</b><br>PIN: ${pin}<br><button onclick="showAuth('login');lacc.value='${ac}'" style="padding:8px 14px;background:#0a2540;color:#fff;border:0;border-radius:8px;cursor:pointer">Go Login</button>`;fullname.value=email.value=pass.value=tpin.value='';showFineAlert('Account Created','Your account '+ac+' created! Save your number','success');}catch(err){showFineAlert('Error',err.message,'error')}finally{btn.textContent='Create Account';btn.disabled=false}
 }
 window.login=async()=>{
-const acc=lacc.value.trim(),p=lpass.value;if(!acc||!p)return alert('Enter details');
+const acc=lacc.value.trim(),p=lpass.value;if(!acc||!p){showFineAlert('Missing','Enter account and password','error');return}
 const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc),where('pass','==',p));const s=await getDocs(q);
-if(s.empty)return alert('Wrong details');const d=s.docs[0];if(d.data().status!='APPROVED')return alert('Not approved: '+d.data().status);
+if(s.empty){showFineAlert('Login Failed','Wrong Account Number or Password','error');return}
+const d=s.docs[0];if(d.data().status!='APPROVED'){showFineAlert('Not Approved','Your account is '+d.data().status+' - Contact admin','info');return}
 localStorage.setItem('cfb_id',d.id);loadDashboard(d.id);
 }
 async function loadDashboard(id){
 curId=id;const snap=await getDoc(doc(db,'cashflow_accounts',id));if(!snap.exists()){logout();return}
-cur=snap.data();dname.textContent='Welcome, '+cur.name+' 👋';dacc.textContent=cur.accNo;dbal.textContent=cur.balance.toLocaleString();demail.textContent=cur.email;dstatus.textContent=cur.status;
+cur=snap.data();dname.textContent='Welcome, '+cur.name+' 👋';dacc.textContent=cur.accNo;dbal.textContent=cur.balance.toLocaleString();dstatus.textContent=cur.status;
 renderHistory();
 homeView.style.display='none';bankView.style.display='none';dashView.style.display='block';
 hbHome.style.display='none';hbBank.style.display='none';hbDash.style.display='inline-block';hbLogout.style.display='inline-block';
@@ -153,12 +188,17 @@ txList.innerHTML=html||'<div style="padding:20px;text-align:center;color:#94a3b8
 txCount.textContent=hist.length+' transactions';
 }
 window.sendTransfer=async()=>{
-if(!selectedTransferType)return alert('Choose transfer type first!');
+if(!selectedTransferType){showFineAlert('Select Type','Please choose transfer type first - Domestic Wire, ACH, etc','info');return}
 const name=toName.value.trim(),bank=toBank.value.trim(),acc=toAcc.value.trim(),amt=parseFloat(toAmount.value),desc=toDesc.value.trim()||'Transfer',pin=confirmPin.value.trim();
-if(!name||!bank||!acc||!amt||!pin)return alert('Fill all');
-if(amt<=0)return alert('Invalid amount');
-if(amt>cur.balance)return alert('Insufficient balance!');
-if(cur.pin){if(pin!=cur.pin)return alert('❌ Wrong PIN!');}else{if(pin!=cur.pass)return alert('Wrong PIN! Use password for old accounts');}
+if(!name||!bank||!acc||!amt||!pin){showFineAlert('Missing Fields','Fill all fields including your 4-digit PIN','error');return}
+if(amt<=0){showFineAlert('Invalid Amount','Enter valid amount','error');return}
+if(amt>cur.balance){showFineAlert('Insufficient Funds','Your balance is $'+cur.balance.toLocaleString()+' but you want to send $'+amt.toLocaleString(),'error');return}
+// CHECK PIN WITH FINE POPUP
+if(cur.pin){
+if(pin!=cur.pin){showFineAlert('Wrong PIN ❌','The PIN you entered is incorrect. Your Transfer PIN is: '+cur.pin+' (You set this when creating account)','error');return}
+}else{
+if(pin!=cur.pass){showFineAlert('Wrong PIN ❌','For old accounts, your PIN is your password. Try your login password','error');return}
+}
 const btn=event.target;btn.textContent='Processing...';btn.disabled=true;
 try{
 const transferData={fromId:curId,fromAcc:cur.accNo,fromName:cur.name,toName:name,toBank:bank,toAcc:acc,amount:amt,desc:desc,transferType:selectedTransferType,status:'PENDING',created:Date.now()};
@@ -170,8 +210,8 @@ cur.history=newHist;
 renderHistory();
 closeTransfer();
 toName.value=toBank.value=toAcc.value=toAmount.value=toDesc.value=confirmPin.value='';
-alert('✅ '+selectedTransferType+' of $'+amt+' to '+name+' is PENDING. Admin must approve.');
-}catch(e){alert(e.message)}finally{btn.textContent='🔒 Confirm with PIN → Send PENDING';btn.disabled=false}
+showFineAlert('Transfer Sent ✅',selectedTransferType+' of $'+amt.toLocaleString()+' to '+name+' is now PENDING. Admin will approve soon.','success');
+}catch(e){showFineAlert('Error',e.message,'error')}finally{btn.textContent='🔒 Confirm with PIN → Send PENDING';btn.disabled=false}
 }
 window.logout=()=>{localStorage.clear();cur=null;curId=null;hbHome.style.display='inline-block';hbBank.style.display='inline-block';hbDash.style.display='none';hbLogout.style.display='none';goHome();location.reload();}
 </script></body></html>
