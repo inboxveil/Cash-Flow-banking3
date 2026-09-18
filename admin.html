@@ -1,94 +1,34 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Admin Panel - Cash Flow Banking</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><style>*{font-family:'Inter',system-ui}body{background:#f4f6f9}</style></head><body class="antialiased">
-<svg style="display:none"><symbol id="i-bank" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L2 7v2h20V7L12 2zm-8 8v10h3v-3h2v3h2v-3h2v3h2v-3h2v3h3V10H4z"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 2L4 5v6c0 5 3.5 8.5 8 11c4.5-2.5 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M5 13l4 4L19 7"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></symbol></svg>
-
-<header class="bg-[#0a2540] text-white h-[60px] flex items-center px-4 sticky top-0 z-20"><div class="flex items-center gap-2 font-black"><div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center"><svg class="w-5 h-5"><use href="#i-bank"/></svg></div>CASH FLOW ADMIN</div><div class="ml-auto flex gap-2"><span class="text-[11px] bg-white/10 px-3 py-1 rounded-full flex items-center gap-1"><svg class="w-3 h-3"><use href="#i-shield"/></svg>SECURE ACCESS</span></div></header>
-
-<div id="loginView" class="max-w-[400px] mx-auto mt-20 bg-white rounded-[20px] p-6 shadow"><h3 class="font-bold text-lg">Admin Login</h3><p class="text-[11px] text-gray-500 mt-1">Enter admin password to continue</p><input id="adminPass" type="password" placeholder="Admin Password" class="w-full h-12 border rounded-xl px-4 mt-4 text-sm"><button onclick="adminLogin()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold mt-3 text-sm">Login → Admin Panel</button><div id="loginMsg" class="text-xs mt-2 text-red-600"></div></div>
-
-<div id="adminView" style="display:none" class="max-w-[1100px] mx-auto p-4">
-<div class="grid grid-cols-3 gap-3 mt-2"><div class="bg-white rounded-[16px] p-4 shadow"><div class="text-[10px] text-gray-500 font-bold tracking-widest">TOTAL ACCOUNTS</div><div class="text-2xl font-black mt-1" id="totalAcc">0</div></div><div class="bg-white rounded-[16px] p-4 shadow"><div class="text-[10px] text-gray-500 font-bold tracking-widest">TOTAL BALANCE</div><div class="text-2xl font-black mt-1 text-green-600">$<span id="totalBal">0</span></div></div><div class="bg-white rounded-[16px] p-4 shadow"><div class="text-[10px] text-gray-500 font-bold tracking-widest">PENDING</div><div class="text-2xl font-black mt-1 text-amber-600" id="totalPend">0</div></div></div>
-
-<div class="mt-6"><div class="flex gap-2"><button onclick="showTab('accounts')" id="tabAcc" class="px-4 py-2 rounded-full text-xs font-bold bg-[#0a2540] text-white">Accounts</button><button onclick="showTab('transfers')" id="tabTrans" class="px-4 py-2 rounded-full text-xs font-bold bg-white border">Transfers (Pending)</button></div>
-
-<div id="accountsTab" class="mt-4"><div class="bg-white rounded-[16px] shadow overflow-hidden"><div class="p-4 border-b font-bold flex justify-between"><span>All Accounts</span><button onclick="loadData()" class="text-xs bg-gray-100 px-3 py-1 rounded-full">Refresh</button></div><div id="accList"></div></div></div>
-
-<div id="transfersTab" style="display:none" class="mt-4"><div class="bg-white rounded-[16px] shadow overflow-hidden"><div class="p-4 border-b font-bold">Pending Transfers - Approve/Decline</div><div id="transferList"></div></div></div>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<title>Admin</title>
+</head>
+<body class="bg-gray-100">
+<div class="max-w-md mx-auto mt-10 bg-white p-6 rounded-2xl shadow">
+<h1 class="font-bold">Admin</h1>
+<input
+  id="email"
+  placeholder="user email"
+  class="w-full border p-2 rounded mb-2"
+/>
+<input
+  id="amount"
+  type="number"
+  placeholder="amount"
+  class="w-full border p-2 rounded mb-2"
+/>
+<button
+  onclick="alert('Saved Adjustment for '+email.value+' — $'+amount.value)"
+  class="w-full bg-black text-white py-2 rounded"
+>
+  Save Adjustment
+</button>
+<a href="index.html" class="text-xs underline block mt-4">
+  Back to Dashboard
+</a>
 </div>
-</div>
-
-<div id="editModal" class="fixed inset-0 z-50 hidden bg-black/60 p-4 flex items-center justify-center"><div class="bg-white rounded-[20px] p-5 w-full max-w-[360px]"><h3 class="font-bold">Edit Balance & Status</h3><p id="editName" class="text-[11px] text-gray-500 mt-1"></p><input id="editBal" type="number" placeholder="New Balance" class="w-full h-12 border rounded-xl px-4 mt-4 text-sm"><select id="editStatus" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"><option value="PENDING">PENDING</option><option value="APPROVED">APPROVED</option><option value="DECLINED">DECLINED</option><option value="FROZEN">FROZEN</option></select><button onclick="saveEdit()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold mt-3 text-sm">Save Changes</button><button onclick="closeEdit()" class="w-full h-12 bg-gray-100 rounded-xl font-bold mt-2 text-sm">Cancel</button></div></div>
-
-<div id="fineAlert" class="fixed inset-0 z-[100] hidden bg-black/50 p-6 flex items-center justify-center"><div class="bg-white rounded-[20px] p-6 w-full max-w-[340px] text-center shadow-2xl"><div id="fineIcon" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl bg-green-100">✓</div><div id="fineTitle" class="font-black mt-3">Done</div><div id="fineMsg" class="text-[13px] text-gray-600 mt-1 whitespace-pre-line"></div><button onclick="closeFine()" class="w-full h-11 bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">OK</button></div></div>
-
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";import{getFirestore,collection,getDocs,doc,getDoc,updateDoc,query,where,orderBy}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",authDomain:"cash-flow-banking3.firebaseapp.com",projectId:"cash-flow-banking3",storageBucket:"cash-flow-banking3.firebasestorage.app",messagingSenderId:"782707432276",appId:"1:782707432276:web:680425b777d227179c86c1"};
-const app=initializeApp(firebaseConfig);const db=getFirestore(app);
-let allAccounts=[],currentEditId=null;
-const ADMIN_PASSWORD="admin123";
-window.adminLogin=()=>{const p=document.getElementById('adminPass').value;if(p===ADMIN_PASSWORD){document.getElementById('loginView').style.display='none';document.getElementById('adminView').style.display='block';loadData();}else{document.getElementById('loginMsg').textContent='Wrong password! Hint: admin123';}};
-window.showTab=t=>{document.getElementById('accountsTab').style.display=t==='accounts'?'block':'none';document.getElementById('transfersTab').style.display=t==='transfers'?'block':'none';document.getElementById('tabAcc').className=t==='accounts'?'px-4 py-2 rounded-full text-xs font-bold bg-[#0a2540] text-white':'px-4 py-2 rounded-full text-xs font-bold bg-white border';document.getElementById('tabTrans').className=t==='transfers'?'px-4 py-2 rounded-full text-xs font-bold bg-[#0a2540] text-white':'px-4 py-2 rounded-full text-xs font-bold bg-white border';if(t==='transfers')loadTransfers();};
-function showFine(t,m,type='success'){document.getElementById('fineTitle').textContent=t;document.getElementById('fineMsg').textContent=m;document.getElementById('fineIcon').className='w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl '+(type==='success'?'bg-green-100':'bg-red-100');document.getElementById('fineIcon').textContent=type==='success'?'✓':'✕';document.getElementById('fineAlert').style.display='flex';}
-window.closeFine=()=>{document.getElementById('fineAlert').style.display='none';};
-async function loadData(){
-const snap=await getDocs(collection(db,'cashflow_accounts'));
-allAccounts=[];let totalBal=0,pend=0;
-snap.forEach(d=>{const data=d.data();data._id=d.id;allAccounts.push(data);totalBal+=parseFloat(data.balance||0);if(data.status==='PENDING')pend++;});
-document.getElementById('totalAcc').textContent=allAccounts.length;
-document.getElementById('totalBal').textContent=totalBal.toLocaleString();
-document.getElementById('totalPend').textContent=pend;
-let html='';
-allAccounts.sort((a,b)=>b.created-a.created).forEach(acc=>{
-const statusColor=acc.status==='APPROVED'?'bg-green-50 text-green-700 border-green-200':acc.status==='PENDING'?'bg-amber-50 text-amber-700 border-amber-200':'bg-red-50 text-red-700 border-red-200';
-html+=`<div class="p-4 border-b hover:bg-gray-50/50 flex justify-between items-center">
-<div class="flex-1"><div class="flex items-center gap-2"><span class="font-bold text-sm">${acc.name}</span><span class="border px-2 py-0.5 rounded-full text-[9px] font-bold ${statusColor}">${acc.status}</span></div>
-<div class="text-[11px] text-gray-500 mt-1">Acc: <span class="font-mono font-bold text-gray-800">${acc.accNo}</span> • ${acc.email} • PIN: <b>${acc.pin||'N/A'}</b> • Pass: <b>${acc.pass||''}</b></div>
-<div class="text-[12px] font-bold mt-1">Balance: $${(acc.balance||0).toLocaleString()} • Created: ${new Date(acc.created).toLocaleDateString()}</div>
-<div class="text-[10px] text-gray-400 mt-1">${(acc.history||[]).length} transactions</div>
-</div>
-<div class="flex flex-col gap-1 ml-2">
-${acc.status!=='APPROVED'?`<button onclick="approveAcc('${acc._id}')" class="h-7 px-3 bg-green-600 text-white rounded-full text-[11px] font-bold flex items-center gap-1"><svg class="w-3 h-3"><use href="#i-check"/></svg>Approve</button>`:''}
-<button onclick="openEdit('${acc._id}')" class="h-7 px-3 bg-[#0a2540] text-white rounded-full text-[11px] font-bold">Edit Balance</button>
-${acc.status!=='DECLINED'?`<button onclick="declineAcc('${acc._id}')" class="h-7 px-3 bg-red-50 text-red-600 border border-red-200 rounded-full text-[11px] font-bold">Decline</button>`:''}
-</div></div>`;
-});
-document.getElementById('accList').innerHTML=html||'<div class="p-8 text-center text-gray-400 text-xs">No accounts yet</div>';
-}
-window.loadData=loadData;
-window.approveAcc=async(id)=>{await updateDoc(doc(db,'cashflow_accounts',id),{status:'APPROVED'});showFine('Approved ✓','Account approved! User can now login','success');loadData();};
-window.declineAcc=async(id)=>{await updateDoc(doc(db,'cashflow_accounts',id),{status:'DECLINED'});showFine('Declined','Account declined','success');loadData();};
-window.openEdit=id=>{currentEditId=id;const acc=allAccounts.find(a=>a._id===id);if(!acc)return;document.getElementById('editName').textContent=acc.name+' • '+acc.accNo;document.getElementById('editBal').value=acc.balance||0;document.getElementById('editStatus').value=acc.status;document.getElementById('editModal').style.display='flex';};
-window.closeEdit=()=>{document.getElementById('editModal').style.display='none';currentEditId=null;};
-window.saveEdit=async()=>{if(!currentEditId)return;const newBal=parseFloat(document.getElementById('editBal').value)||0;const newStatus=document.getElementById('editStatus').value;const acc=allAccounts.find(a=>a._id===currentEditId);let newHist=acc.history||[];if(newBal!==acc.balance){const diff=newBal-acc.balance;newHist=[...newHist,{date:Date.now(),desc:`Admin adjustment • Balance updated from $${acc.balance.toLocaleString()} to $${newBal.toLocaleString()}`,amount:Math.abs(diff),type:diff>=0?'credit':'debit',status:'APPROVED',balanceAfter:newBal}];}await updateDoc(doc(db,'cashflow_accounts',currentEditId),{balance:newBal,status:newStatus,history:newHist});showFine('Saved ✓','Balance $'+newBal.toLocaleString()+' • Status '+newStatus,'success');closeEdit();loadData();};
-async function loadTransfers(){
-const snap=await getDocs(collection(db,'cashflow_transfers'));
-let html='';let count=0;
-snap.forEach(d=>{const t=d.data();if(t.status!=='PENDING')return;count++;html+=`<div class="p-4 border-b hover:bg-gray-50 flex justify-between items-start"><div class="flex-1"><div class="font-bold text-sm">${t.transferType} • $${t.amount.toLocaleString()} • <span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full text-[10px]">${t.status}</span></div><div class="text-[11px] text-gray-600 mt-1">From: ${t.fromName} (${t.fromAcc}) • To: ${t.toName} • Bank: ${t.toBank} • Acc: ${t.toAcc}</div><div class="text-[11px] text-gray-500 mt-1">Desc: ${t.desc} • ${new Date(t.created).toLocaleString()}</div></div><div class="flex flex-col gap-1 ml-3"><button onclick="approveTransfer('${d.id}','${t.fromId}',${t.amount})" class="h-8 px-4 bg-green-600 text-white rounded-full text-xs font-bold">Approve</button><button onclick="declineTransfer('${d.id}','${t.fromId}',${t.amount})" class="h-8 px-4 bg-red-50 text-red-600 border rounded-full text-xs font-bold">Decline</button></div></div>`;});
-if(count===0)html='<div class="p-8 text-center text-gray-400 text-xs">No pending transfers - all cleared ✓</div>';
-document.getElementById('transferList').innerHTML=html;
-}
-window.approveTransfer=async(transferId,fromId,amount)=>{
-const fromSnap=await getDoc(doc(db,'cashflow_accounts',fromId));
-if(!fromSnap.exists()){showFine('Error','Account not found','error');return}
-const fromData=fromSnap.data();
-const newBalance=fromData.balance-amount;
-let hist=fromData.history||[];
-hist=hist.map(h=>{if(h.status==='PENDING'&&Math.abs(h.amount)===amount){return {...h,status:'APPROVED',balanceAfter:newBalance}}return h});
-await updateDoc(doc(db,'cashflow_accounts',fromId),{balance:newBalance,history:hist});
-await updateDoc(doc(db,'cashflow_transfers',transferId),{status:'APPROVED'});
-showFine('Transfer Approved ✓','$'+amount.toLocaleString()+' deducted from '+fromData.name+' • New balance $'+newBalance.toLocaleString(),'success');
-loadTransfers();loadData();
-};
-window.declineTransfer=async(transferId,fromId,amount)=>{
-const fromSnap=await getDoc(doc(db,'cashflow_accounts',fromId));
-if(fromSnap.exists()){
-const fromData=fromSnap.data();
-let hist=fromData.history||[];
-hist=hist.map(h=>{if(h.status==='PENDING'&&Math.abs(h.amount)===amount){return {...h,status:'DECLINED'}}return h});
-await updateDoc(doc(db,'cashflow_accounts',fromId),{history:hist});
-}
-await updateDoc(doc(db,'cashflow_transfers',transferId),{status:'DECLINED'});
-showFine('Declined','Transfer declined • Money not deducted','success');
-loadTransfers();loadData();
-};
-</script></body></html>
+</body>
+</html>
