@@ -218,7 +218,14 @@
           <span id="accTypeLabel">Checking Balance</span>
           <span class="font-extrabold tracking-widest text-cyan-400">VISA INFINITE</span>
         </div>
-        <div class="text-3xl font-black mt-2.5 tracking-tight" id="userBalance">$0.00</div>
+        <div class="flex items-center justify-between mt-2.5">
+          <div class="text-3xl font-black tracking-tight font-mono" id="userBalance">$0.00</div>
+          <!-- EYE VIEW TOGGLE BUTTON -->
+          <button onclick="toggleBalanceVisibility()" id="eyeToggleBtn" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center text-cyan-400 transition-all backdrop-blur-sm border border-white/10 shadow-md" title="Toggle balance view">
+            <svg id="eyeIconOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            <svg id="eyeIconClosed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+          </button>
+        </div>
         
         <div class="mt-4 border-t border-white/10 pt-3.5 text-[10px] space-y-1 font-mono">
           <div class="flex justify-between"><span class="opacity-60">ROUTING (ABA):</span> <span class="font-bold" id="routingNo">021000021</span></div>
@@ -456,6 +463,40 @@
     let currentDocId = null;
     let activeAccountTab = 'checking';
     let userUnsubscribe = null;
+    let isBalanceHidden = false;
+
+    window.toggleBalanceVisibility = () => {
+      isBalanceHidden = !isBalanceHidden;
+      const eyeOpen = document.getElementById('eyeIconOpen');
+      const eyeClosed = document.getElementById('eyeIconClosed');
+      
+      if (isBalanceHidden) {
+        eyeOpen.classList.add('hidden');
+        eyeClosed.classList.remove('hidden');
+      } else {
+        eyeOpen.classList.remove('hidden');
+        eyeClosed.classList.add('hidden');
+      }
+      updateBalanceDisplay();
+    };
+
+    function updateBalanceDisplay() {
+      if (!currentUserData) return;
+      let bal = 0;
+      if (activeAccountTab === 'checking') {
+        bal = currentUserData.checkingBalance || currentUserData.balance || 0;
+      } else if (activeAccountTab === 'savings') {
+        bal = currentUserData.savingsBalance || 0;
+      } else if (activeAccountTab === 'investment') {
+        bal = currentUserData.investmentBalance || 0;
+      }
+
+      if (isBalanceHidden) {
+        document.getElementById('userBalance').textContent = '••••••••';
+      } else {
+        document.getElementById('userBalance').textContent = '$' + parseFloat(bal).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      }
+    }
 
     window.toggleNav = () => {
       const nav = document.getElementById('sideNav');
@@ -799,22 +840,18 @@
       btnS.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
       btnI.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
 
-      let bal = 0;
       if (type === 'checking') {
         btnC.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
         document.getElementById('accTypeLabel').textContent = "Checking Balance";
-        bal = currentUserData.checkingBalance || currentUserData.balance || 0;
       } else if (type === 'savings') {
         btnS.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
         document.getElementById('accTypeLabel').textContent = "Savings Balance";
-        bal = currentUserData.savingsBalance || 0;
       } else if (type === 'investment') {
         btnI.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
         document.getElementById('accTypeLabel').textContent = "Investment Balance";
-        bal = currentUserData.investmentBalance || 0;
       }
 
-      document.getElementById('userBalance').textContent = '$' + parseFloat(bal).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      updateBalanceDisplay();
     };
 
     function renderTransactions() {
