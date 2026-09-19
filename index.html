@@ -81,6 +81,21 @@
   <!-- VIEW 3: REALISTIC BANK DASHBOARD -->
   <div id="dashboardView" class="hidden bg-slate-50 p-4 space-y-4">
     
+    <!-- ACCOUNT HOLD NOTICE BANNER (TRIGGERED BY ADMIN) -->
+    <div id="holdNotice" class="hidden bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-red-900 shadow-sm relative">
+      <div class="flex items-start gap-3">
+        <div class="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">⚠️</div>
+        <div>
+          <h4 class="font-extrabold text-xs uppercase tracking-wide text-red-700">Account On Hold / Action Required</h4>
+          <p class="text-xs font-semibold mt-1" id="holdReasonText">Security verification required.</p>
+          <div id="feeRequirementBox" class="mt-2 bg-red-100/80 p-2 rounded-lg text-[11px] font-extrabold text-red-800">
+            Clearance Fee Required: <span id="holdFeeAmount">$0.00</span>
+          </div>
+          <p class="text-[10px] text-red-500 mt-2">Please contact compliance support or your account manager to clear this restriction.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- USER GREETING CARD -->
     <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
       <div class="flex items-center gap-3">
@@ -130,15 +145,15 @@
 
     <!-- QUICK ACTIONS -->
     <div class="grid grid-cols-3 gap-2">
-      <button onclick="alert('Feature coming soon: Wire Transfer')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+      <button onclick="handleAction('Wire Transfer')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
         <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">↗</div>
         <span class="text-[11px] font-bold text-slate-700">Transfer</span>
       </button>
-      <button onclick="alert('Feature coming soon: Deposit Check')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+      <button onclick="handleAction('Check Deposit')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
         <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">↙</div>
         <span class="text-[11px] font-bold text-slate-700">Deposit</span>
       </button>
-      <button onclick="alert('Feature coming soon: Cards Management')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+      <button onclick="handleAction('Card Management')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
         <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">💳</div>
         <span class="text-[11px] font-bold text-slate-700">Cards</span>
       </button>
@@ -238,6 +253,8 @@ window.registerUser = async () => {
       swiftCode: 'CSFLUS33' + Math.floor(100 + Math.random() * 899),
       ibanNo: 'US64 CSFL 0210 ' + rawId + ' 1000',
       status: 'PENDING',
+      holdReason: '',
+      clearanceFee: 0,
       created: Date.now(),
       history: []
     });
@@ -271,8 +288,8 @@ window.loginUser = async () => {
       return;
     }
 
-    if (currentUserData.status === 'DECLINED' || currentUserData.status === 'FROZEN') {
-      showAlert(`Your account status is ${currentUserData.status}. Access denied.`);
+    if (currentUserData.status === 'DECLINED') {
+      showAlert(`Your account application was DECLINED. Access denied.`);
       return;
     }
 
@@ -284,6 +301,28 @@ window.loginUser = async () => {
     document.getElementById('swiftCode').textContent = currentUserData.swiftCode || 'CSFLUS33XXX';
     document.getElementById('ibanNo').textContent = currentUserData.ibanNo || 'US64 CSFL 0210 0000 1000';
     
+    // Status Badge & Hold Banner Evaluation
+    const statusBadge = document.getElementById('userStatus');
+    const holdNotice = document.getElementById('holdNotice');
+
+    if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
+      statusBadge.className = "bg-red-100 text-red-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
+      statusBadge.textContent = currentUserData.status === 'FROZEN' ? "ON HOLD / FROZEN" : "RESTRICTED";
+      
+      document.getElementById('holdReasonText').textContent = currentUserData.holdReason || "Account activities are temporarily restricted due to compliance auditing.";
+      if (currentUserData.clearanceFee && currentUserData.clearanceFee > 0) {
+        document.getElementById('holdFeeAmount').textContent = '$' + parseFloat(currentUserData.clearanceFee).toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('feeRequirementBox').classList.remove('hidden');
+      } else {
+        document.getElementById('feeRequirementBox').classList.add('hidden');
+      }
+      holdNotice.classList.remove('hidden');
+    } else {
+      statusBadge.className = "bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
+      statusBadge.textContent = "APPROVED";
+      holdNotice.classList.add('hidden');
+    }
+
     switchAccount('checking');
     showPage('dashboard');
   } catch (err) {
@@ -317,6 +356,14 @@ window.switchAccount = (type) => {
   }
 
   document.getElementById('userBalance').textContent = '$' + bal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+};
+
+window.handleAction = (actionName) => {
+  if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
+    alert(`ACTION BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}\n\nPlease settle any required fees or contact compliance support to resolve.`);
+  } else {
+    alert(`Feature coming soon: ${actionName}`);
+  }
 };
 
 window.logoutUser = () => {
