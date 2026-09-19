@@ -33,12 +33,12 @@
   <!-- VIEW 1: LOGIN FORM -->
   <div id="loginView" class="p-6 pt-2">
     <h2 class="font-extrabold text-xl text-slate-800 mb-1">Welcome Back</h2>
-    <p class="text-xs text-slate-500 mb-5">Sign in to manage your digital assets</p>
+    <p class="text-xs text-slate-500 mb-5">Sign in using your account details</p>
     
     <div class="space-y-4">
       <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
-        <input id="loginEmail" type="email" placeholder="name@example.com" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+        <label class="block text-xs font-bold text-slate-600 mb-1">Account Number</label>
+        <input id="loginAccNo" type="text" placeholder="e.g. 45812345" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50 font-mono">
       </div>
       <div>
         <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
@@ -232,24 +232,25 @@ window.registerUser = async () => {
       history: []
     });
 
+    document.getElementById('loginAccNo').value = accNo;
     showPage('login');
-    showAlert('Application received! Your account is PENDING administrator approval before login.', 'warning');
+    showAlert(`Account created! Your Account Number is ${accNo}. Status: PENDING approval before login.`, 'warning');
   } catch (err) {
     showAlert('Error: ' + err.message);
   }
 };
 
 window.loginUser = async () => {
-  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const accNo = document.getElementById('loginAccNo').value.trim();
   const pass = document.getElementById('loginPass').value;
 
-  if (!email || !pass) { showAlert('Enter both email and password.'); return; }
+  if (!accNo || !pass) { showAlert('Enter both Account Number and password.'); return; }
 
   try {
-    const q = query(collection(db, 'cashflow_accounts'), where('email', '==', email));
+    const q = query(collection(db, 'cashflow_accounts'), where('accNo', '==', accNo));
     const snap = await getDocs(q);
 
-    if (snap.empty) { showAlert('Account not found.'); return; }
+    if (snap.empty) { showAlert('Account number not found.'); return; }
 
     let userData = null;
     snap.forEach(d => userData = d.data());
@@ -279,7 +280,7 @@ window.loginUser = async () => {
 };
 
 window.logoutUser = () => {
-  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginAccNo').value = '';
   document.getElementById('loginPass').value = '';
   showPage('login');
 };
