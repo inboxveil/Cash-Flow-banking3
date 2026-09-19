@@ -11,18 +11,106 @@
     body { background: #0b1426; color: #1e293b; }
   </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col justify-center items-center p-3 md:p-6">
+<body class="antialiased min-h-screen flex flex-col justify-center items-center p-3 md:p-6 relative">
+
+<!-- SIDE NAVIGATION DRAWER (MAIN MENU) -->
+<div id="sideNavOverlay" onclick="toggleNav()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+
+<div id="sideNav" class="fixed top-0 left-0 h-full w-[280px] bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto flex flex-col">
+  <!-- NAV HEADER -->
+  <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center font-black text-white text-base">🏛</div>
+      <span class="font-extrabold text-slate-800 text-sm tracking-tight">CASH FLOW BANK</span>
+    </div>
+    <button onclick="toggleNav()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+  </div>
+
+  <!-- NAV LINKS LIST -->
+  <div class="p-4 space-y-6 text-xs text-slate-600 font-semibold flex-1">
+    
+    <!-- MAIN SECTION -->
+    <div>
+      <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">MAIN</p>
+      <div class="space-y-1">
+        <button onclick="navAction('Dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold">
+          <span class="text-base">🏠</span> Dashboard
+        </button>
+        <button onclick="navAction('Account Summary')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">🕒</span> Account Summary
+        </button>
+        <button onclick="toggleNav(); openTransferModal();" class="w-full flex justify-between items-center px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <div class="flex items-center gap-3">
+            <span class="text-base">💳</span> Transfer
+          </div>
+          <span class="text-slate-400 font-bold">></span>
+        </button>
+        <button onclick="navAction('Deposit Check')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">💸</span> Deposit Check
+        </button>
+        <button onclick="navAction('Deposit Crypto')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">₿</span> Deposit Crypto
+        </button>
+      </div>
+    </div>
+
+    <!-- SERVICES SECTION -->
+    <div>
+      <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">SERVICES</p>
+      <div class="space-y-1">
+        <button onclick="navAction('Loans')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">⚖️</span> Loans
+        </button>
+        <button onclick="navAction('Cards')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">💳</span> Cards
+        </button>
+      </div>
+    </div>
+
+    <!-- ACCOUNT SECTION -->
+    <div>
+      <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">ACCOUNT</p>
+      <div class="space-y-1">
+        <button onclick="navAction('KYC Verification')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">🪪</span> KYC Verification
+        </button>
+        <button onclick="navAction('Profile')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">👤</span> Profile
+        </button>
+        <button onclick="navAction('Settings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">⚙️</span> Settings
+        </button>
+        <button onclick="navAction('Account Status')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">📊</span> Account Status
+        </button>
+        <button onclick="navAction('Support')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <span class="text-base">🎧</span> Support
+        </button>
+        <button onclick="toggleNav(); logoutUser();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 transition-all font-bold">
+          <span class="text-base">↪</span> Sign Out
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <!-- CONTAINER -->
 <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 mb-12">
 
   <!-- TOP HEADER -->
-  <div class="bg-[#0a2540] p-6 text-white text-center relative">
-    <div class="flex items-center justify-center gap-2">
+  <div class="bg-[#0a2540] p-6 text-white text-center relative flex items-center justify-between">
+    <!-- MENU TRIGGER BUTTON -->
+    <button id="menuBtn" onclick="toggleNav()" class="hidden w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold text-lg text-white transition-all">
+      ☰
+    </button>
+    
+    <div class="flex items-center justify-center gap-2 mx-auto">
       <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white text-lg">CF</div>
       <h1 class="text-xl font-extrabold tracking-tight">CASH FLOW BANK</h1>
     </div>
-    <p class="text-[11px] text-slate-300 mt-1 uppercase tracking-widest font-semibold">Online Banking Portal</p>
+
+    <div class="w-10"></div> <!-- Spacer for centering -->
   </div>
 
   <!-- STATUS ALERT -->
@@ -189,7 +277,7 @@
       <button onclick="closeTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
     </div>
 
-    <div id="transferError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
+    <div id="trError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
 
     <div class="space-y-3">
       <div>
@@ -264,15 +352,38 @@ let currentUserData = null;
 let currentDocId = null;
 let activeAccountTab = 'checking';
 
+/* SIDE DRAWER TOGGLE */
+window.toggleNav = () => {
+  const nav = document.getElementById('sideNav');
+  const overlay = document.getElementById('sideNavOverlay');
+  
+  if (nav.classList.contains('-translate-x-full')) {
+    nav.classList.remove('-translate-x-full');
+    overlay.classList.remove('hidden');
+  } else {
+    nav.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+  }
+};
+
+window.navAction = (action) => {
+  toggleNav();
+  alert(`${action} section is active.`);
+};
+
 window.showPage = (viewName) => {
   document.getElementById('loginView').classList.add('hidden');
   document.getElementById('registerView').classList.add('hidden');
   document.getElementById('dashboardView').classList.add('hidden');
+  document.getElementById('menuBtn').classList.add('hidden');
   showAlert('');
 
   if (viewName === 'login') document.getElementById('loginView').classList.remove('hidden');
   if (viewName === 'register') document.getElementById('registerView').classList.remove('hidden');
-  if (viewName === 'dashboard') document.getElementById('dashboardView').classList.remove('hidden');
+  if (viewName === 'dashboard') {
+    document.getElementById('dashboardView').classList.remove('hidden');
+    document.getElementById('menuBtn').classList.remove('hidden');
+  }
 };
 
 function showAlert(msg, type = 'error') {
