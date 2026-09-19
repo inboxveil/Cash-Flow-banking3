@@ -3,200 +3,284 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - Cashflow Bank</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <title>Cash Flow Banking - Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>* { font-family: 'Inter', system-ui; } body { background: #f4f6f9; }</style>
+  <style>
+    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    body { background: #0b1426; color: #1e293b; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0b1426; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+  </style>
 </head>
-<body class="antialiased">
+<body class="antialiased min-h-screen flex flex-col justify-center items-center p-2 sm:p-4 md:p-6 relative">
 
-<header class="bg-[#0a2540] text-white h-[60px] flex items-center px-4 sticky top-0 z-20">
-  <div class="font-black">CASHFLOW BANK ADMIN</div>
-</header>
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 mb-12 relative">
 
-<!-- LOGIN VIEW -->
-<div id="loginView" class="max-w-[400px] mx-auto mt-20 bg-white rounded-[20px] p-6 shadow">
-  <h3 class="font-bold text-lg">Admin Login</h3>
-  <input id="adminPass" type="password" placeholder="Admin Password" class="w-full h-12 border rounded-xl px-4 mt-4 text-sm">
-  <button onclick="adminLogin()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold mt-3 text-sm">Access Control Panel</button>
-  <div id="loginMsg" class="text-xs mt-2 text-red-600"></div>
-</div>
-
-<!-- MAIN ADMIN PANEL -->
-<div id="adminView" style="display:none" class="max-w-[1000px] mx-auto p-4">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="font-black text-xl text-[#0a2540]">Accounts Management</h2>
-    <button onclick="loadAccounts()" class="bg-[#0a2540] text-white text-xs px-4 py-2 rounded-full font-bold">Refresh Data</button>
-  </div>
-  <div class="bg-white rounded-[16px] shadow overflow-hidden">
-    <div id="accList" class="divide-y"></div>
-  </div>
-</div>
-
-<!-- EDIT / FUND & BLOCK RULE MODAL -->
-<div id="fundModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
-  <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
-    <h3 class="font-black text-lg text-[#0a2540]">Fund & Hold Rule Controls</h3>
-    <p id="modalUser" class="text-xs text-gray-500 mt-1 mb-4"></p>
-    
-    <!-- BALANCES SECTION -->
-    <div class="border-t pt-3 mb-3">
-      <span class="block text-xs font-black text-[#0a2540] uppercase tracking-wider mb-2">1. Account Balances</span>
-      <div class="grid grid-cols-3 gap-2">
-        <div>
-          <label class="block text-[10px] font-bold text-gray-600 mb-1">Checking ($)</label>
-          <input id="modalChecking" type="number" step="any" class="w-full h-10 border rounded-xl px-3 text-xs focus:outline-none focus:border-[#0a2540]">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-600 mb-1">Savings ($)</label>
-          <input id="modalSavings" type="number" step="any" class="w-full h-10 border rounded-xl px-3 text-xs focus:outline-none focus:border-[#0a2540]">
-        </div>
-        <div>
-          <label class="block text-[10px] font-bold text-gray-600 mb-1">Investment ($)</label>
-          <input id="modalInvestment" type="number" step="any" class="w-full h-10 border rounded-xl px-3 text-xs focus:outline-none focus:border-[#0a2540]">
-        </div>
+    <!-- TOP HEADER -->
+    <div class="bg-[#0a2540] p-6 text-white text-center relative flex items-center justify-between">
+      <div class="flex items-center justify-center gap-2 mx-auto">
+        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-black text-slate-950 text-lg">🔒</div>
+        <h1 class="text-xl font-extrabold tracking-tight">ADMIN PORTAL</h1>
       </div>
     </div>
 
-    <!-- HOLD & BLOCK RULE SECTION -->
-    <div class="border-t pt-3 mb-4">
-      <span class="block text-xs font-black text-red-600 uppercase tracking-wider mb-2">2. Custom Block / Clearance Prompts</span>
+    <!-- GLOBAL STATUS ALERT -->
+    <div class="px-6 pt-4">
+      <div id="alertBox" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
+    </div>
+
+    <!-- VIEW 1: ADMIN LOGIN FORM -->
+    <div id="adminLoginView" class="p-6 pt-2">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">🔐</span>
+        <h2 class="font-extrabold text-xl text-slate-800">Admin Authentication</h2>
+      </div>
+      <p class="text-xs text-slate-500 mb-5">Sign in with administrator credentials (Default: <code class="bg-slate-100 px-1 py-0.5 rounded text-amber-700 font-bold">admin / admin123</code>)</p>
       
-      <label class="block text-xs font-bold text-gray-700 mb-1">Account Status</label>
-      <select id="modalStatus" class="w-full h-10 border rounded-xl px-3 text-xs mb-3 bg-white">
-        <option value="APPROVED">APPROVED</option>
-        <option value="PENDING">PENDING</option>
-        <option value="DECLINED">DECLINED</option>
-        <option value="FROZEN">FROZEN (Account On-Hold)</option>
-      </select>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Admin User</label>
+          <input id="adminUser" type="text" placeholder="admin" value="admin" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-amber-600 bg-slate-50 font-mono">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Admin Password</label>
+          <input id="adminPass" type="password" placeholder="admin123" value="admin123" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-amber-600 bg-slate-50">
+        </div>
+        <button onclick="loginAdmin()" class="w-full h-12 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-amber-600/20 active:scale-[0.98] transition-all">Access Admin Panel</button>
+      </div>
 
-      <label class="block text-xs font-bold text-gray-700 mb-1">Custom Hold Reason / Notice Message</label>
-      <textarea id="modalHoldReason" rows="2" placeholder="e.g. AML Anti-Money Laundering verification required. Settle Tax Clearance Fee to unfreeze." class="w-full border rounded-xl p-3 text-xs mb-3 focus:outline-none focus:border-[#0a2540]"></textarea>
-
-      <label class="block text-xs font-bold text-gray-700 mb-1">Required Clearance / Tax Fee ($)</label>
-      <input id="modalClearanceFee" type="number" step="any" placeholder="0.00" class="w-full h-10 border rounded-xl px-3 text-xs mb-4 focus:outline-none focus:border-[#0a2540]">
+      <p class="text-xs text-center text-slate-500 mt-6"><a href="index.html" class="text-slate-600 font-bold hover:underline">← Back to Client Portal</a></p>
     </div>
 
-    <div class="flex gap-2">
-      <button onclick="saveFunding()" class="flex-1 h-12 bg-green-600 text-white rounded-xl font-bold text-sm">Save Changes</button>
-      <button onclick="closeModal()" class="flex-1 h-12 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm">Cancel</button>
-    </div>
-  </div>
-</div>
+    <!-- VIEW 2: ADMIN PANEL -->
+    <div id="adminPanelView" class="hidden p-4 bg-slate-100 space-y-4 max-h-[85vh] overflow-y-auto">
+      <div class="bg-amber-500 text-slate-950 p-4 rounded-2xl flex justify-between items-center shadow-md">
+        <div>
+          <h3 class="font-extrabold text-sm tracking-tight">ADMIN CONTROL PANEL</h3>
+          <p class="text-[10px] font-bold opacity-80">User Limits, Holds & KYC Approvals</p>
+        </div>
+        <button onclick="logoutAdmin()" class="px-3 py-1.5 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-800">Log Out</button>
+      </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
-  authDomain: "cash-flow-banking3.firebaseapp.com",
-  databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
-  projectId: "cash-flow-banking3",
-  storageBucket: "cash-flow-banking3.firebasestorage.app",
-  messagingSenderId: "782707432276",
-  appId: "1:782707432276:web:680425b777d227179c86c1"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-let currentEditingId = null;
-
-window.adminLogin = () => {
-  const pass = document.getElementById('adminPass').value;
-  if (pass === 'admin123') {
-    document.getElementById('loginView').style.display = 'none';
-    document.getElementById('adminView').style.display = 'block';
-    loadAccounts();
-  } else {
-    document.getElementById('loginMsg').textContent = 'Incorrect password! (Default: admin123)';
-  }
-};
-
-async function loadAccounts() {
-  const snap = await getDocs(collection(db, 'cashflow_accounts'));
-  let html = '';
-  snap.forEach(d => {
-    const acc = d.data();
-    const id = d.id;
-    const badgeColor = acc.status === 'APPROVED' ? 'bg-green-100 text-green-700' : acc.status === 'PENDING' ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700';
-
-    const checkBal = acc.checkingBalance || acc.balance || 0;
-    const saveBal = acc.savingsBalance || 0;
-    const invBal = acc.investmentBalance || 0;
-
-    html += `<div class="p-4 flex flex-col md:flex-row justify-between md:items-center gap-3">
+      <!-- SEARCH FILTER -->
       <div>
-        <div class="flex items-center gap-2">
-          <span class="font-bold text-sm">${acc.name}</span>
-          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColor}">${acc.status}</span>
-        </div>
-        <div class="text-xs text-gray-500 mt-1">Acc No: <b class="text-[#0a2540] font-mono">${acc.accNo}</b> • Email: ${acc.email} • Pass: <b>${acc.pass}</b></div>
-        ${acc.holdReason ? `<div class="text-[11px] text-red-600 font-bold mt-1">⚠️ Notice: "${acc.holdReason}" ${acc.clearanceFee ? `(Fee: $${acc.clearanceFee})` : ''}</div>` : ''}
-        <div class="text-xs font-extrabold gap-3 flex mt-2">
-          <span class="text-green-700">Check: $${checkBal.toLocaleString()}</span>
-          <span class="text-indigo-700">Save: $${saveBal.toLocaleString()}</span>
-          <span class="text-amber-700">Invest: $${invBal.toLocaleString()}</span>
-        </div>
+        <input id="adminSearch" type="text" onkeyup="renderAdminUserList()" placeholder="🔍 Search user by Name, Account No or Email..." class="w-full h-11 border border-slate-300 rounded-xl px-4 text-xs bg-white focus:outline-none focus:border-amber-500">
       </div>
-      <div class="flex gap-2 flex-wrap">
-        <button onclick="openModal('${id}', '${acc.name}', ${checkBal}, ${saveBal}, ${invBal}, '${acc.status}', '${(acc.holdReason || '').replace(/'/g, "\\'")}', ${acc.clearanceFee || 0})" class="px-3 py-1.5 bg-[#0a2540] text-white rounded-lg text-xs font-bold">Fund / Hold Rules</button>
-        <button onclick="setStatus('${id}', 'APPROVED')" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold">Approve</button>
-        <button onclick="setStatus('${id}', 'DECLINED')" class="px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-bold">Decline</button>
+
+      <!-- USER LIST CONTAINER -->
+      <div id="adminUserList" class="space-y-3">
+        <p class="text-xs text-slate-400 text-center py-4">Loading client records...</p>
       </div>
-    </div>`;
-  });
-  document.getElementById('accList').innerHTML = html || '<div class="p-6 text-center text-xs text-gray-400">No registered accounts yet.</div>';
-}
 
-window.setStatus = async (id, status) => {
-  await updateDoc(doc(db, 'cashflow_accounts', id), { status });
-  loadAccounts();
-};
+      <div class="text-center pt-2">
+        <a href="index.html" class="text-xs text-slate-500 font-bold hover:underline">← Return to Main Bank Portal</a>
+      </div>
+    </div>
 
-window.openModal = (id, name, checkBal, saveBal, invBal, currentStatus, holdReason, clearanceFee) => {
-  currentEditingId = id;
-  document.getElementById('modalUser').textContent = `Account Holder: ${name}`;
-  document.getElementById('modalChecking').value = checkBal;
-  document.getElementById('modalSavings').value = saveBal;
-  document.getElementById('modalInvestment').value = invBal;
-  document.getElementById('modalStatus').value = currentStatus;
-  document.getElementById('modalHoldReason').value = holdReason || '';
-  document.getElementById('modalClearanceFee').value = clearanceFee || 0;
-  document.getElementById('fundModal').classList.remove('hidden');
-  document.getElementById('fundModal').classList.add('flex');
-};
+  </div>
 
-window.closeModal = () => {
-  currentEditingId = null;
-  document.getElementById('fundModal').classList.add('hidden');
-  document.getElementById('fundModal').classList.remove('flex');
-};
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-window.saveFunding = async () => {
-  if (!currentEditingId) return;
-  const cBal = parseFloat(document.getElementById('modalChecking').value) || 0;
-  const sBal = parseFloat(document.getElementById('modalSavings').value) || 0;
-  const iBal = parseFloat(document.getElementById('modalInvestment').value) || 0;
-  const newStatus = document.getElementById('modalStatus').value;
-  const holdReason = document.getElementById('modalHoldReason').value.trim();
-  const clearanceFee = parseFloat(document.getElementById('modalClearanceFee').value) || 0;
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
+      authDomain: "cash-flow-banking3.firebaseapp.com",
+      databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
+      projectId: "cash-flow-banking3",
+      storageBucket: "cash-flow-banking3.firebasestorage.app",
+      messagingSenderId: "782707432276",
+      appId: "1:782707432276:web:680425b777d227179c86c1"
+    };
 
-  await updateDoc(doc(db, 'cashflow_accounts', currentEditingId), {
-    checkingBalance: cBal,
-    savingsBalance: sBal,
-    investmentBalance: iBal,
-    balance: cBal,
-    status: newStatus,
-    holdReason: holdReason,
-    clearanceFee: clearanceFee
-  });
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  closeModal();
-  loadAccounts();
-};
+    let allAdminUsersList = [];
 
-window.loadAccounts = loadAccounts;
-</script>
+    function showAlert(msg, type = 'error') {
+      const box = document.getElementById('alertBox');
+      if (!msg) { box.classList.add('hidden'); return; }
+      box.className = `p-3 rounded-xl text-xs font-semibold mb-2 text-center ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}`;
+      box.textContent = msg;
+      box.classList.remove('hidden');
+    }
+
+    window.loginAdmin = () => {
+      const u = document.getElementById('adminUser').value.trim();
+      const p = document.getElementById('adminPass').value.trim();
+
+      if (u === 'admin' && p === 'admin123') {
+        document.getElementById('adminLoginView').classList.add('hidden');
+        document.getElementById('adminPanelView').classList.remove('hidden');
+        listenToAllUsers();
+      } else {
+        showAlert('Invalid administrator username or password.');
+      }
+    };
+
+    window.logoutAdmin = () => {
+      document.getElementById('adminPanelView').classList.add('hidden');
+      document.getElementById('adminLoginView').classList.remove('hidden');
+      showAlert('');
+    };
+
+    function listenToAllUsers() {
+      onSnapshot(collection(db, 'cashflow_accounts'), (snap) => {
+        allAdminUsersList = [];
+        snap.forEach(d => {
+          allAdminUsersList.push({ id: d.id, ...d.data() });
+        });
+        renderAdminUserList();
+      });
+    }
+
+    window.renderAdminUserList = () => {
+      const container = document.getElementById('adminUserList');
+      const search = (document.getElementById('adminSearch').value || '').toLowerCase();
+
+      const filtered = allAdminUsersList.filter(u => 
+        (u.name && u.name.toLowerCase().includes(search)) ||
+        (u.accNo && u.accNo.toLowerCase().includes(search)) ||
+        (u.email && u.email.toLowerCase().includes(search))
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-4 bg-white rounded-xl text-center text-xs text-slate-400">No client accounts match search.</div>`;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach(u => {
+        const limitVal = u.dailyLimit !== undefined ? u.dailyLimit : 10000;
+        const checking = u.checkingBalance !== undefined ? u.checkingBalance : (u.balance || 0);
+
+        html += `
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+          <div class="flex justify-between items-start border-b border-slate-100 pb-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="font-extrabold text-sm text-slate-800">${u.name}</h4>
+                <span class="text-[9px] px-2 py-0.5 rounded font-black uppercase ${u.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-800' : u.status === 'FROZEN' ? 'bg-red-100 text-red-800' : 'bg-amber-100 text-amber-800'}">${u.status}</span>
+              </div>
+              <p class="text-[10px] text-slate-400">Acc No: <span class="font-mono font-bold text-slate-600">${u.accNo}</span> | ${u.email}</p>
+            </div>
+            <div class="text-right">
+              <span class="text-[10px] font-bold text-slate-400">Checking Bal</span>
+              <p class="font-black text-xs text-slate-800">$${parseFloat(checking).toLocaleString(undefined,{minimumFractionDigits:2})}</p>
+            </div>
+          </div>
+
+          <!-- DAILY LIMIT EDITOR FORM -->
+          <div class="bg-amber-50/60 p-2.5 rounded-xl border border-amber-200/60 flex items-center justify-between gap-2">
+            <div>
+              <label class="block text-[10px] font-extrabold text-amber-900 uppercase">Daily Transfer Limit ($)</label>
+              <input id="limit_input_${u.id}" type="number" value="${limitVal}" class="w-28 h-8 border border-amber-300 rounded-lg px-2 text-xs font-mono font-bold bg-white focus:outline-none">
+            </div>
+            <button onclick="saveDailyLimit('${u.id}')" class="px-3 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold shadow-sm transition-all">Save Limit</button>
+          </div>
+
+          <!-- BALANCES & HOLD EDITORS -->
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div>
+              <label class="block font-bold text-slate-500 mb-0.5">Set Checking ($)</label>
+              <div class="flex gap-1">
+                <input id="chk_input_${u.id}" type="number" value="${checking}" class="w-full h-8 border rounded-lg px-2 text-xs bg-slate-50 font-mono">
+                <button onclick="saveBalance('${u.id}', 'checking')" class="px-2 bg-slate-800 text-white rounded-lg text-[10px] font-bold">Set</button>
+              </div>
+            </div>
+            <div>
+              <label class="block font-bold text-slate-500 mb-0.5">Set Status</label>
+              <select id="status_sel_${u.id}" onchange="updateAccountStatus('${u.id}', this.value)" class="w-full h-8 border rounded-lg px-2 text-xs font-bold bg-slate-50">
+                <option value="APPROVED" ${u.status === 'APPROVED' ? 'selected' : ''}>APPROVED</option>
+                <option value="PENDING" ${u.status === 'PENDING' ? 'selected' : ''}>PENDING</option>
+                <option value="FROZEN" ${u.status === 'FROZEN' ? 'selected' : ''}>FROZEN / HOLD</option>
+                <option value="DECLINED" ${u.status === 'DECLINED' ? 'selected' : ''}>DECLINED</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- HOLD REASON & CLEARANCE FEE -->
+          <div class="space-y-1.5 pt-1 border-t border-slate-100">
+            <div class="flex gap-2">
+              <input id="reason_${u.id}" type="text" placeholder="Hold Reason text..." value="${u.holdReason || ''}" class="flex-1 h-8 border rounded-lg px-2 text-[11px] bg-slate-50">
+              <input id="fee_${u.id}" type="number" placeholder="Fee ($)" value="${u.clearanceFee || 0}" class="w-20 h-8 border rounded-lg px-2 text-[11px] font-mono bg-slate-50">
+              <button onclick="saveHoldDetails('${u.id}')" class="px-2.5 bg-red-600 text-white rounded-lg text-[10px] font-bold">Apply Hold</button>
+            </div>
+          </div>
+
+          <!-- KYC AUDIT CONTROLS -->
+          <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex justify-between items-center text-[10px]">
+            <div>
+              <span class="font-bold text-slate-500">KYC Status: </span>
+              <span class="font-extrabold uppercase text-slate-800">${u.kycStatus || 'UNVERIFIED'}</span>
+              ${u.kycDocType ? `<p class="text-slate-400 mt-0.5">${u.kycDocType}: <span class="font-mono text-slate-600 font-bold">${u.kycDocNo}</span></p>` : ''}
+            </div>
+            <div class="flex gap-1">
+              <button onclick="setKycStatus('${u.id}', 'VERIFIED')" class="px-2 py-1 bg-emerald-600 text-white font-bold rounded">Approve KYC</button>
+              <button onclick="setKycStatus('${u.id}', 'UNVERIFIED')" class="px-2 py-1 bg-slate-300 text-slate-700 font-bold rounded">Reject</button>
+            </div>
+          </div>
+        </div>`;
+      });
+
+      container.innerHTML = html;
+    };
+
+    window.saveDailyLimit = async (docId) => {
+      const val = parseFloat(document.getElementById(`limit_input_${docId}`).value) || 0;
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', docId), { dailyLimit: val });
+        alert(`SUCCESS: Daily Transfer Limit set to $${val.toLocaleString()}`);
+      } catch (err) {
+        alert("Failed to update limit: " + err.message);
+      }
+    };
+
+    window.saveBalance = async (docId, accType) => {
+      const val = parseFloat(document.getElementById(`chk_input_${docId}`).value) || 0;
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', docId), { checkingBalance: val, balance: val });
+        alert(`SUCCESS: Checking balance set to $${val.toFixed(2)}`);
+      } catch (err) {
+        alert("Failed to update balance: " + err.message);
+      }
+    };
+
+    window.updateAccountStatus = async (docId, newStatus) => {
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', docId), { status: newStatus });
+        alert(`Account status updated to ${newStatus}`);
+      } catch (err) {
+        alert("Failed: " + err.message);
+      }
+    };
+
+    window.saveHoldDetails = async (docId) => {
+      const reason = document.getElementById(`reason_${docId}`).value.trim();
+      const fee = parseFloat(document.getElementById(`fee_${docId}`).value) || 0;
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', docId), {
+          holdReason: reason,
+          clearanceFee: fee,
+          status: 'FROZEN'
+        });
+        alert("Hold reason and clearance fee applied successfully.");
+      } catch (err) {
+        alert("Failed to apply hold: " + err.message);
+      }
+    };
+
+    window.setKycStatus = async (docId, status) => {
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', docId), { kycStatus: status });
+        alert(`KYC status set to ${status}`);
+      } catch (err) {
+        alert("Failed to update KYC: " + err.message);
+      }
+    };
+  </script>
 </body>
 </html>
