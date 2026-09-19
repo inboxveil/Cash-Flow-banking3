@@ -68,6 +68,10 @@
       </div>
 
       <div class="flex items-center gap-2">
+        <!-- Live Chat Trigger -->
+        <button onclick="if(window.Tawk_API) Tawk_API.toggle();" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition" title="Open Live Chat">
+          <i class="fa-solid fa-comments text-blue-400"></i>
+        </button>
         <!-- Dark/Light Mode Toggle -->
         <button id="theme-toggle" class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition">
           <i id="theme-icon" class="fa-solid fa-sun text-amber-400"></i>
@@ -785,5 +789,20 @@
       }
     }
   </script>
+
+  <!-- Start of Tawk.to Script -->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+      var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+      s1.async=true;
+      s1.src='https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default';
+      s1.charset='UTF-8';
+      s1.setAttribute('crossorigin','*');
+      s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
+  <!-- End of Tawk.to Script -->
+
 </body>
 </html>
