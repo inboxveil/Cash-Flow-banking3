@@ -81,7 +81,7 @@
   <!-- VIEW 3: REALISTIC BANK DASHBOARD -->
   <div id="dashboardView" class="hidden bg-slate-50 p-4 space-y-4">
     
-    <!-- ACCOUNT HOLD NOTICE BANNER (TRIGGERED BY ADMIN) -->
+    <!-- ACCOUNT HOLD NOTICE BANNER -->
     <div id="holdNotice" class="hidden bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-red-900 shadow-sm relative">
       <div class="flex items-start gap-3">
         <div class="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">⚠️</div>
@@ -145,7 +145,7 @@
 
     <!-- QUICK ACTIONS -->
     <div class="grid grid-cols-3 gap-2">
-      <button onclick="handleAction('Wire Transfer')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+      <button onclick="openTransferModal()" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
         <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">↗</div>
         <span class="text-[11px] font-bold text-slate-700">Transfer</span>
       </button>
@@ -162,7 +162,7 @@
     <!-- RECENT TRANSACTIONS -->
     <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
       <h4 class="font-extrabold text-xs text-slate-800 mb-3 uppercase tracking-wider">Recent Activity</h4>
-      <div class="space-y-3 text-xs">
+      <div id="activityList" class="space-y-3 text-xs">
         <div class="flex justify-between items-center border-b border-slate-50 pb-2">
           <div class="flex items-center gap-2">
             <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</div>
@@ -173,16 +173,6 @@
           </div>
           <span class="font-bold text-emerald-600">+$0.00</span>
         </div>
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-black">🛡</div>
-            <div>
-              <p class="font-bold text-slate-800">Security Verification</p>
-              <p class="text-[10px] text-slate-400">System Check</p>
-            </div>
-          </div>
-          <span class="font-bold text-slate-400">Completed</span>
-        </div>
       </div>
     </div>
 
@@ -191,9 +181,72 @@
 
 </div>
 
+<!-- TRANSFER MODAL -->
+<div id="transferModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+    <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+      <h3 class="font-extrabold text-base text-slate-800">Initiate Transfer</h3>
+      <button onclick="closeTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
+    </div>
+
+    <div id="transferError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
+
+    <div class="space-y-3">
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Transfer Type</label>
+        <select id="trType" onchange="toggleSwiftField()" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+          <option value="LOCAL">Local Bank Transfer</option>
+          <option value="WIRE">International Wire Transfer</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Debit From Account</label>
+        <select id="trSourceAcc" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+          <option value="checking">Checking Account</option>
+          <option value="savings">Savings Account</option>
+          <option value="investment">Investment Account</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Recipient Full Name</label>
+        <input id="trRecipient" type="text" placeholder="e.g. Sarah Jenkins" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Bank Name</label>
+        <input id="trBank" type="text" placeholder="e.g. Chase Bank / Barclays" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Account Number / IBAN</label>
+        <input id="trAccountNo" type="text" placeholder="e.g. 0098765432" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+      </div>
+
+      <div id="swiftBox" class="hidden">
+        <label class="block text-xs font-bold text-slate-600 mb-1">SWIFT / BIC Code</label>
+        <input id="trSwift" type="text" placeholder="e.g. CHASUS33" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Transfer Amount ($)</label>
+        <input id="trAmount" type="number" step="any" placeholder="0.00" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-bold">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Enter 4-Digit Security PIN</label>
+        <input id="trPin" type="password" maxlength="4" placeholder="••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+      </div>
+
+      <button id="trSubmitBtn" onclick="processTransfer()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all mt-2">Authorize & Send Payment</button>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
@@ -208,6 +261,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 let currentUserData = null;
+let currentDocId = null;
+let activeAccountTab = 'checking';
 
 window.showPage = (viewName) => {
   document.getElementById('loginView').classList.add('hidden');
@@ -279,7 +334,10 @@ window.loginUser = async () => {
 
     if (snap.empty) { showAlert('Account number not found.'); return; }
 
-    snap.forEach(d => currentUserData = d.data());
+    snap.forEach(d => {
+      currentUserData = d.data();
+      currentDocId = d.id;
+    });
 
     if (currentUserData.pass !== pass) { showAlert('Incorrect password.'); return; }
 
@@ -323,6 +381,7 @@ window.loginUser = async () => {
       holdNotice.classList.add('hidden');
     }
 
+    renderTransactions();
     switchAccount('checking');
     showPage('dashboard');
   } catch (err) {
@@ -332,6 +391,7 @@ window.loginUser = async () => {
 
 window.switchAccount = (type) => {
   if (!currentUserData) return;
+  activeAccountTab = type;
   const btnC = document.getElementById('tabChecking');
   const btnS = document.getElementById('tabSavings');
   const btnI = document.getElementById('tabInvestment');
@@ -358,6 +418,149 @@ window.switchAccount = (type) => {
   document.getElementById('userBalance').textContent = '$' + bal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 };
 
+function renderTransactions() {
+  const list = document.getElementById('activityList');
+  const history = currentUserData.history || [];
+
+  let html = `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
+    <div class="flex items-center gap-2">
+      <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</div>
+      <div>
+        <p class="font-bold text-slate-800">Account Opening Bonus</p>
+        <p class="text-[10px] text-slate-400">System Credit</p>
+      </div>
+    </div>
+    <span class="font-bold text-emerald-600">+$0.00</span>
+  </div>`;
+
+  history.slice().reverse().forEach(t => {
+    html += `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-black">↗</div>
+        <div>
+          <p class="font-bold text-slate-800">${t.title}</p>
+          <p class="text-[10px] text-slate-400">${t.date}</p>
+        </div>
+      </div>
+      <span class="font-bold text-red-600">-$${t.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+    </div>`;
+  });
+
+  list.innerHTML = html;
+}
+
+/* TRANSFER LOGIC */
+window.openTransferModal = () => {
+  if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
+    alert(`TRANSFER BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}\n\nPlease settle any required fees or contact compliance support via live chat.`);
+    return;
+  }
+
+  document.getElementById('trError').textContent = '';
+  document.getElementById('trError').classList.add('hidden');
+  document.getElementById('transferModal').classList.remove('hidden');
+  document.getElementById('transferModal').classList.add('flex');
+};
+
+window.closeTransferModal = () => {
+  document.getElementById('transferModal').classList.add('hidden');
+  document.getElementById('transferModal').classList.remove('flex');
+};
+
+window.toggleSwiftField = () => {
+  const type = document.getElementById('trType').value;
+  const box = document.getElementById('swiftBox');
+  if (type === 'WIRE') box.classList.remove('hidden');
+  else box.classList.add('hidden');
+};
+
+window.processTransfer = async () => {
+  const errBox = document.getElementById('trError');
+  errBox.classList.add('hidden');
+
+  const trType = document.getElementById('trType').value;
+  const sourceAcc = document.getElementById('trSourceAcc').value;
+  const recipient = document.getElementById('trRecipient').value.trim();
+  const bank = document.getElementById('trBank').value.trim();
+  const accNo = document.getElementById('trAccountNo').value.trim();
+  const swift = document.getElementById('trSwift').value.trim();
+  const amount = parseFloat(document.getElementById('trAmount').value) || 0;
+  const pin = document.getElementById('trPin').value.trim();
+
+  if (!recipient || !bank || !accNo || amount <= 0 || !pin) {
+    errBox.textContent = 'Please fill out all required transfer details accurately.';
+    errBox.classList.remove('hidden');
+    return;
+  }
+
+  if (trType === 'WIRE' && !swift) {
+    errBox.textContent = 'SWIFT / BIC code is required for International Wire Transfers.';
+    errBox.classList.remove('hidden');
+    return;
+  }
+
+  if (pin !== currentUserData.pin) {
+    errBox.textContent = 'Incorrect 4-Digit Security PIN.';
+    errBox.classList.remove('hidden');
+    return;
+  }
+
+  let currentBal = sourceAcc === 'savings' ? (currentUserData.savingsBalance || 0) : sourceAcc === 'investment' ? (currentUserData.investmentBalance || 0) : (currentUserData.checkingBalance || currentUserData.balance || 0);
+
+  if (amount > currentBal) {
+    errBox.textContent = `Insufficient funds in selected ${sourceAcc} account. Current balance: $${currentBal.toFixed(2)}`;
+    errBox.classList.remove('hidden');
+    return;
+  }
+
+  const btn = document.getElementById('trSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Processing Transfer...';
+
+  try {
+    const updatedBal = currentBal - amount;
+    const historyItem = {
+      title: `${trType === 'WIRE' ? 'Wire' : 'Transfer'} to ${recipient} (${bank})`,
+      amount: amount,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    };
+
+    const updatedHistory = [...(currentUserData.history || []), historyItem];
+    
+    let updateData = { history: updatedHistory };
+    if (sourceAcc === 'checking') {
+      updateData.checkingBalance = updatedBal;
+      updateData.balance = updatedBal;
+      currentUserData.checkingBalance = updatedBal;
+      currentUserData.balance = updatedBal;
+    } else if (sourceAcc === 'savings') {
+      updateData.savingsBalance = updatedBal;
+      currentUserData.savingsBalance = updatedBal;
+    } else if (sourceAcc === 'investment') {
+      updateData.investmentBalance = updatedBal;
+      currentUserData.investmentBalance = updatedBal;
+    }
+
+    currentUserData.history = updatedHistory;
+
+    await updateDoc(doc(db, 'cashflow_accounts', currentDocId), updateData);
+
+    btn.disabled = false;
+    btn.textContent = 'Authorize & Send Payment';
+    closeTransferModal();
+
+    switchAccount(activeAccountTab);
+    renderTransactions();
+
+    alert(`SUCCESS: Transfer of $${amount.toFixed(2)} to ${recipient} was completed successfully.`);
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Authorize & Send Payment';
+    errBox.textContent = 'Transfer failed: ' + err.message;
+    errBox.classList.remove('hidden');
+  }
+};
+
 window.handleAction = (actionName) => {
   if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
     alert(`ACTION BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}\n\nPlease settle any required fees or contact compliance support via live chat.`);
@@ -370,6 +573,7 @@ window.logoutUser = () => {
   document.getElementById('loginAccNo').value = '';
   document.getElementById('loginPass').value = '';
   currentUserData = null;
+  currentDocId = null;
   showPage('login');
 };
 </script>
@@ -386,7 +590,6 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!-- End of Tawk.to Live Chat Script -->
 
 </body>
 </html>
