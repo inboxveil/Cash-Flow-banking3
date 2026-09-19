@@ -1,331 +1,253 @@
-<!DOCTYPE html>
-<html lang="en" class="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cash Flow — Admin Portal</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#eff6ff',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-            }
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased">
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cash Flow Banking</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script><style>*{font-family:'Inter',system-ui}body{background:#f4f6f9}</style></head><body>
+<svg style="display:none">
+<symbol id="i-bank" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L2 7v2h20V7L12 2zm-8 8v10h3v-3h2v3h2v-3h2v3h2v-3h2v3h3V10H4zm2 2h2v2H6v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2z"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M1 12s4-7 11-7s11 7 11 7s-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M3 3l18 18M10.6 10.6A2 2 0 0 0 12 15a2 2 0 0 0 2.4-2.4"/></symbol>
+<symbol id="i-transfer" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6v6M20 4l-9 9"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M7 2h8l4 4v16H7zM15 2v4h4M9 12h6M9 16h6"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 2L4 5v6c0 5 3.5 8.5 8 11c4.5-2.5 8-6 8-11V5l-8-3z"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path fill="none" stroke="currentColor" stroke-width="1.7" d="M7 10V7a5 5 0 0 1 10 0v3"/></symbol>
+<symbol id="i-domestic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/><path d="M3 10h18"/></g></symbol>
+<symbol id="i-ach" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20"/></g></symbol>
+<symbol id="i-internal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 7v10H7"/><path d="M7 17l5-5M17 7l-5 5"/></g></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><line x1="2" y1="10" x2="22" y2="10" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.5" d="M3 12h18M3 6h18M3 18h18"/></symbol>
+</svg>
 
-  <div class="max-w-4xl mx-auto min-h-screen p-4 pb-12 flex flex-col justify-between">
+<div id="loader" class="fixed inset-0 z-[9999] bg-[#0a2540] flex flex-col items-center justify-center"><div class="flex items-center gap-2 text-white font-black text-2xl"><svg class="w-7 h-7"><use href="#i-bank"/></svg>CASH FLOW</div><div class="w-8 h-8 border-2 border-white/20 border-t-[#00ff94] rounded-full animate-spin mt-4"></div></div>
 
-    <!-- HEADER -->
-    <header class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-red-600 flex items-center justify-center text-white font-bold shadow-lg shadow-red-600/30">
-          <i class="fa-solid fa-user-shield text-lg"></i>
-        </div>
-        <div>
-          <h1 class="font-black text-lg tracking-wider text-white uppercase">Admin Console</h1>
-          <p class="text-xs text-slate-400">Cash Flow Management System</p>
-        </div>
+<header class="sticky top-0 z-20 bg-white border-b border-gray-100">
+  <div class="max-w-[560px] mx-auto px-4 h-[64px] flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 bg-[#b91c1c] rounded-xl flex items-center justify-center text-white shadow-sm">
+        <svg class="w-6 h-6"><use href="#i-bank"/></svg>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-2">
+      <button class="w-9 h-9 flex items-center justify-center text-gray-700">
+        <svg class="w-6 h-6"><use href="#i-menu"/></svg>
+      </button>
+      <button class="w-9 h-9 flex items-center justify-center text-gray-700 relative">
+        <svg class="w-5 h-5"><use href="#i-bell"/></svg>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+      </button>
+      
+      <div class="flex items-center bg-gray-100 p-1 rounded-full gap-1 ml-1">
+        <span class="w-6 h-6 bg-amber-500 rounded-full flex items-center justify-center text-white text-[10px]">⚙️</span>
+        <span class="w-6 h-6 flex items-center justify-center text-gray-500 text-[10px]">🌙</span>
+        <span class="w-6 h-6 flex items-center justify-center text-gray-500 text-[10px]">🎨</span>
       </div>
 
-      <div id="admin-session-controls" class="hidden">
-        <button onclick="handleAdminLogout()" class="px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-slate-800 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Logout</span>
-        </button>
+      <div class="flex items-center gap-1 ml-1 cursor-pointer" onclick="logout()">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" class="w-9 h-9 rounded-full object-cover border" alt="Profile">
+        <span class="text-xs text-gray-400">▼</span>
       </div>
-    </header>
+    </div>
+  </div>
+</header>
 
-    <!-- MAIN CONTAINER -->
-    <main class="flex-1">
+<div id="homeView" class="max-w-[720px] mx-auto"><div class="bg-[#0a2540] text-white px-6 py-10"><div class="inline-flex items-center gap-1 bg-white/10 border border-white/10 px-3 py-1 rounded-full text-[10px]"><svg class="w-3 h-3"><use href="#i-shield"/></svg>FDIC INSURED</div><h1 class="text-[32px] font-black leading-[1.05] mt-4">Banking That Moves With Your<br><span class="text-blue-200">Cash Flow.</span></h1><button onclick="goBanking()" class="mt-5 bg-white text-[#0a2540] px-5 py-3 rounded-xl font-extrabold text-sm">Open Account →</button></div></div>
 
-      <!-- ADMIN LOGIN VIEW -->
-      <div id="admin-login-view" class="max-w-md mx-auto my-12 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5">
-        <div class="text-center">
-          <div class="w-12 h-12 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center justify-center mx-auto mb-3 text-xl">
-            <i class="fa-solid fa-lock"></i>
-          </div>
-          <h2 class="text-xl font-bold text-white">Administrator Access</h2>
-          <p class="text-xs text-slate-400 mt-1">Sign in to manage pending user approvals.</p>
-        </div>
+<div id="bankView" style="display:none" class="max-w-[520px] mx-auto p-4"><div class="flex justify-center gap-2 mt-2"><button id="t1" onclick="showAuth('create')" class="px-4 py-2 rounded-full text-xs font-bold bg-[#0a2540] text-white">Create Account</button><button id="t2" onclick="showAuth('login')" class="px-4 py-2 rounded-full text-xs font-bold border bg-white">Login</button></div><div id="createCard" class="bg-white shadow rounded-[20px] p-5 mt-4"><h3 class="font-bold">Open a New Account</h3><input id="fullname" placeholder="Full Legal Name" class="w-full h-[48px] border rounded-xl px-4 mt-4 text-sm"><input id="email" placeholder="Email Address" class="w-full h-[48px] border rounded-xl px-4 mt-2 text-sm"><input id="pass" type="password" placeholder="Password (min 6)" class="w-full h-[48px] border rounded-xl px-4 mt-2 text-sm"><input id="tpin" type="password" maxlength="4" inputmode="numeric" placeholder="Create 4-digit Transfer PIN" class="w-full h-[48px] border border-amber-200 bg-amber-50/50 rounded-xl px-4 mt-2 text-sm"><button id="createBtn" onclick="createAcc()" class="w-full h-[48px] bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">Create Account</button><div id="msg" class="text-xs mt-3"></div></div><div id="loginCard" style="display:none" class="bg-white shadow rounded-[20px] p-5 mt-4"><h3 class="font-bold">Welcome Back</h3><input id="lacc" placeholder="Account Number" class="w-full h-[48px] border rounded-xl px-4 mt-4 text-sm"><input id="lpass" type="password" placeholder="Password" class="w-full h-[48px] border rounded-xl px-4 mt-2 text-sm"><button id="loginBtn" onclick="login()" class="w-full h-[48px] bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm flex items-center justify-center gap-2"><svg class="w-4 h-4"><use href="#i-lock"/></svg>Login Securely</button><div class="flex justify-between mt-3"><button class="text-[11px] font-bold text-[#1e4bd8] underline" onclick="openForgot('password')">Forgot Password?</button><button class="text-[11px] font-bold text-[#1e4bd8] underline" onclick="openForgot('pin')">Forgot PIN?</button></div></div></div>
 
-        <form onsubmit="handleAdminLogin(event)" class="space-y-4">
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Admin Email</label>
-            <input type="email" id="admin-email" required value="admin@cashflow.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Password</label>
-            <input type="password" id="admin-password" required value="admin123" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-2.5 px-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-red-500 transition">
-          </div>
-
-          <button type="submit" class="w-full py-3 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-xl shadow-lg shadow-red-600/30 transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-key text-xs"></i>
-            <span>Authenticate Admin</span>
-          </button>
-        </form>
-      </div>
-
-      <!-- ADMIN DASHBOARD VIEW -->
-      <div id="admin-dashboard-view" class="space-y-6 hidden">
-
-        <!-- STATS CARDS -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Pending Approvals</span>
-              <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-              </div>
-            </div>
-            <p id="stat-pending" class="text-2xl font-black text-white mt-2">0</p>
-          </div>
-
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Active Users</span>
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm">
-                <i class="fa-solid fa-user-check"></i>
-              </div>
-            </div>
-            <p id="stat-active" class="text-2xl font-black text-white mt-2">0</p>
-          </div>
-
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Total Accounts</span>
-              <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm">
-                <i class="fa-solid fa-users"></i>
-              </div>
-            </div>
-            <p id="stat-total" class="text-2xl font-black text-white mt-2">0</p>
-          </div>
-        </div>
-
-        <!-- SECTION: PENDING USER REQUESTS -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-user-clock text-amber-400"></i>
-              <span>Pending Account Requests</span>
-            </h2>
-            <span id="pending-count-badge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">0 Pending</span>
-          </div>
-
-          <div id="pending-users-list" class="space-y-3">
-            <!-- Dynamic pending users inserted here -->
-          </div>
-        </div>
-
-        <!-- SECTION: ALL USER ACCOUNTS -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
-          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h2 class="text-base font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-users-gear text-blue-400"></i>
-              <span>All Registered Accounts</span>
-            </h2>
-          </div>
-
-          <div id="all-users-list" class="space-y-3">
-            <!-- Dynamic active users inserted here -->
-          </div>
-        </div>
-
-      </div>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="mt-8 text-center text-xs text-slate-600 border-t border-slate-900 pt-4">
-      Cash Flow Financial Systems — Admin Portal
-    </footer>
-
+<!-- DASHBOARD VIEW -->
+<div id="dashView" style="display:none" class="max-w-[560px] mx-auto p-4">
+  <div class="mb-5">
+    <h1 class="text-2xl font-black text-gray-900 tracking-tight">Dashboard</h1>
+    <p class="text-sm text-gray-600 font-medium mt-0.5" id="greetingText">Good Evening, Lorenzo Parker</p>
   </div>
 
-  <!-- JS LOGIC -->
-  <script>
-    const ADMIN_EMAIL = "admin@cashflow.com";
-    const ADMIN_PASS = "admin123";
+  <!-- Primary Gradient Card -->
+  <div class="relative bg-gradient-to-br from-[#0c1f38] via-[#102a4d] to-[#0a1829] rounded-[24px] p-6 text-white shadow-xl overflow-hidden">
+    <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-blue-500/10 rounded-full blur-2xl"></div>
+    
+    <div class="flex justify-between items-start">
+      <div>
+        <div class="text-[13px] text-gray-300 font-medium">Total Balance</div>
+        <div class="flex items-center gap-3 mt-2">
+          <div id="balAmount" class="text-[32px] font-extrabold tracking-tight">$<span id="dbal">1,514,000.00</span></div>
+          <button onclick="toggleBal()" id="eyeBtn" class="w-6 h-6 border border-white/30 rounded-full flex items-center justify-center text-white/80 hover:bg-white/10">
+            <svg class="w-3.5 h-3.5"><use href="#i-eye"/></svg>
+          </button>
+        </div>
+      </div>
 
-    document.addEventListener('DOMContentLoaded', () => {
-      checkAdminSession();
-    });
+      <button onclick="openTransfer()" class="bg-[#2d3a4e]/80 hover:bg-[#3d4d67] border border-white/10 text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 shadow-sm backdrop-blur">
+        <svg class="w-3.5 h-3.5"><use href="#i-transfer"/></svg>
+        Transfer
+      </button>
+    </div>
 
-    function getUsersDB() {
-      return JSON.parse(localStorage.getItem('cf_users_db') || '{}');
-    }
+    <div class="mt-8 pt-6 border-t border-white/10 space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white/80">
+          <svg class="w-4 h-4"><use href="#i-card"/></svg>
+        </div>
+        <div>
+          <div class="text-[11px] text-gray-400">Linked Cards</div>
+          <div class="text-xs font-bold mt-0.5">0 Cards</div>
+        </div>
+      </div>
 
-    function saveUsersDB(db) {
-      localStorage.setItem('cf_users_db', JSON.stringify(db));
-    }
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white/80">
+          <svg class="w-4 h-4"><use href="#i-user"/></svg>
+        </div>
+        <div>
+          <div class="text-[11px] text-gray-400">Account Holder</div>
+          <div class="text-xs font-bold mt-0.5" id="dname">Lorenzo Parker</div>
+        </div>
+      </div>
 
-    function checkAdminSession() {
-      const isAdminLoggedIn = sessionStorage.getItem('cf_admin_auth') === 'true';
-      if (isAdminLoggedIn) {
-        showAdminDashboard();
-      } else {
-        showAdminLogin();
-      }
-    }
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white/80">
+          <span class="text-xs">🌐</span>
+        </div>
+        <div>
+          <div class="text-[11px] text-gray-400">IP Address</div>
+          <div class="text-xs font-bold mt-0.5 font-mono">10.30.162.149</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function handleAdminLogin(e) {
-      e.preventDefault();
-      const email = document.getElementById('admin-email').value.trim();
-      const password = document.getElementById('admin-password').value;
+  <!-- Account Details Card -->
+  <div class="bg-white shadow-sm rounded-[24px] p-6 mt-4 border border-gray-100">
+    <div class="flex items-center justify-between pb-4">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white">
+          <svg class="w-4 h-4"><use href="#i-card"/></svg>
+        </div>
+        <span class="font-bold text-gray-900 text-sm">Current Account</span>
+      </div>
+      <span class="bg-gray-100 text-gray-500 text-[11px] font-semibold px-3 py-1 rounded-full">Primary</span>
+    </div>
 
-      if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
-        sessionStorage.setItem('cf_admin_auth', 'true');
-        showAdminDashboard();
-      } else {
-        alert('Invalid Admin Credentials!');
-      }
-    }
+    <div class="space-y-4 pt-2">
+      <div>
+        <div class="text-[11px] text-gray-400 font-medium">Account Number</div>
+        <div class="text-base font-bold text-gray-900 mt-1 font-mono tracking-wide" id="dacc">2015961076</div>
+      </div>
 
-    function handleAdminLogout() {
-      sessionStorage.removeItem('cf_admin_auth');
-      showAdminLogin();
-    }
+      <div>
+        <div class="text-[11px] text-gray-400 font-medium">Available Balance</div>
+        <div class="text-base font-bold text-gray-900 mt-1">$<span id="dbal2">1,514,000.00</span></div>
+      </div>
 
-    function showAdminLogin() {
-      document.getElementById('admin-login-view').classList.remove('hidden');
-      document.getElementById('admin-dashboard-view').classList.add('hidden');
-      document.getElementById('admin-session-controls').classList.add('hidden');
-    }
+      <div class="flex justify-between items-end pt-1">
+        <div>
+          <div class="text-[11px] text-gray-400 font-medium">Account Type</div>
+          <div class="text-xs font-bold text-gray-800 mt-1">Current Account</div>
+        </div>
+        <div>
+          <div class="text-[11px] text-gray-400 font-medium text-right mb-1">Status</div>
+          <span class="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-100 flex items-center gap-1" id="dstatus">
+            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Active
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    function showAdminDashboard() {
-      document.getElementById('admin-login-view').classList.add('hidden');
-      document.getElementById('admin-dashboard-view').classList.remove('hidden');
-      document.getElementById('admin-session-controls').classList.remove('hidden');
+  <!-- Transaction History Container -->
+  <div class="bg-white shadow-sm rounded-[24px] mt-4 border border-gray-100 overflow-hidden">
+    <div class="p-4 flex items-center justify-between border-b">
+      <div class="flex items-center gap-2 font-bold text-sm text-gray-900">
+        <div class="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-[#1e4bd8]"><svg class="w-4 h-4"><use href="#i-transfer"/></svg></div>
+        Recent Transactions
+      </div>
+    </div>
+    <div id="txList" class="divide-y"></div>
+  </div>
+</div>
 
-      renderAdminData();
-    }
+<div id="forgotModal" class="fixed inset-0 z-50 hidden bg-black/60 p-4 flex items-center justify-center"><div class="bg-white rounded-[20px] p-5 w-full max-w-[380px]"><h3 id="forgotTitle" class="font-bold">Reset</h3><input id="fAcc" placeholder="Account Number" class="w-full h-12 border rounded-xl px-4 mt-4 text-sm"><input id="fEmail" placeholder="Registered Email" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"><div id="fPassArea"><input id="fNewPass" type="password" placeholder="New Password" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"></div><div id="fPinArea"><input id="fNewPin" type="password" maxlength="4" placeholder="New 4-digit PIN" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"></div><button id="fBtn" onclick="doForgot()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">Reset Now</button><button onclick="closeForgot()" class="w-full h-12 bg-gray-100 rounded-xl font-bold mt-2 text-sm">Cancel</button></div></div>
 
-    function renderAdminData() {
-      const users = getUsersDB();
-      const userArray = Object.values(users);
+<div id="transferModal" class="fixed inset-0 z-40 hidden bg-black/60 p-3 flex items-center justify-center"><div class="bg-white rounded-[20px] w-full max-w-[460px] max-h-[90vh] overflow-auto"><div class="p-5"><h3 class="font-bold flex items-center gap-2"><svg class="w-5 h-5 text-[#0a2540]"><use href="#i-transfer"/></svg>Choose Transfer Type</h3><div id="typeSelector" class="mt-4 space-y-2.5">
+<div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('Domestic Wire')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-blue-50 rounded-full flex items-center justify-center text-[#1e4bd8]"><svg class="w-6 h-6"><use href="#i-domestic"/></svg></div><div><div class="font-bold text-[14px]">Domestic Wire</div><div class="text-[11px] text-gray-500">Same day • $15 fee</div></div></div><span id="check-Domestic Wire" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
+<div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('ACH Transfer')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-amber-50 rounded-full flex items-center justify-center text-amber-600"><svg class="w-6 h-6"><use href="#i-ach"/></svg></div><div><div class="font-bold text-[14px]">ACH Transfer</div><div class="text-[11px] text-gray-500">1-3 days • Free</div></div></div><span id="check-ACH Transfer" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
+<div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('International Wire')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-violet-50 rounded-full flex items-center justify-center text-violet-600"><svg class="w-6 h-6"><use href="#i-globe"/></svg></div><div><div class="font-bold text-[14px]">International Wire</div><div class="text-[11px] text-gray-500">SWIFT • $45 fee</div></div></div><span id="check-International Wire" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
+<div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('Internal Transfer')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-green-50 rounded-full flex items-center justify-center text-green-600"><svg class="w-6 h-6"><use href="#i-internal"/></svg></div><div><div class="font-bold text-[14px]">Internal Transfer</div><div class="text-[11px] text-gray-500">Instant • Free</div></div></div><span id="check-Internal Transfer" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
+</div><div id="transferForm" style="display:none" class="mt-4 border-t pt-4"><div class="bg-blue-50 text-[12px] p-2 rounded-lg">Selected: <b id="selectedType"></b></div><input id="toName" placeholder="Recipient Full Name" class="w-full h-12 border rounded-xl px-4 mt-3 text-sm"><input id="toBank" placeholder="Recipient Bank" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"><input id="toAcc" placeholder="Recipient Account" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"><input id="toAmount" type="number" placeholder="Amount USD" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"><input id="toDesc" placeholder="Description" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"><div class="bg-amber-50 border border-amber-200 p-3 rounded-xl mt-3"><label class="text-[10px] font-bold text-amber-800">TRANSFER PIN • REQUIRED</label><input id="confirmPin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full h-12 border rounded-xl px-4 mt-1 text-sm"><div class="text-right mt-1"><button class="text-[10px] font-bold text-blue-700 underline" onclick="closeTransfer();openForgot('pin')">Forgot PIN?</button></div></div><button id="sendBtn" onclick="sendTransfer()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">Confirm & Send</button></div><button onclick="closeTransfer()" class="w-full h-11 bg-gray-100 rounded-xl font-bold mt-2 text-sm">Cancel</button></div></div></div>
 
-      const pendingUsers = userArray.filter(u => u.status === 'pending');
-      const activeUsers = userArray.filter(u => u.status === 'approved' || !u.status);
+<div id="receiptModal" class="fixed inset-0 z-50 hidden bg-black/70 p-3 flex items-center justify-center"><div class="bg-white w-full max-w-[400px] rounded-[16px] overflow-hidden"><div class="bg-[#0a2540] text-white p-5 text-center"><div class="font-black">CASH FLOW BANKING USA</div><div class="text-[10px] opacity-70">FDIC Insured • Official Receipt</div><div class="mt-3"><span id="rStamp" class="inline-block border-2 border-green-400 text-green-400 px-3 py-1 rounded-lg font-black text-[11px]">PENDING</span></div></div><div class="p-4 text-[12px] space-y-2"><div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Transaction ID</span><b id="rId"></b></div><div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Date</span><b id="rDate"></b></div><div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Type</span><b id="rType"></b></div><div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Status</span><b id="rStatus"></b></div><div class="pt-2 text-[10px] font-bold text-gray-400">FROM</div><div class="flex justify-between"><span id="rFromName"></span><span id="rFromAcc" class="font-mono"></span></div><div class="pt-2 text-[10px] font-bold text-gray-400">TO</div><div class="flex justify-between"><span>Recipient</span><b id="rToName"></b></div><div class="flex justify-between"><span>Bank</span><b id="rToBank"></b></div><div class="flex justify-between"><span>Account</span><b id="rToAcc"></b></div><div class="flex justify-between"><span>Description</span><b id="rDesc"></b></div><div class="bg-gray-50 -mx-4 -mb-4 mt-3 p-4 flex justify-between font-black text-[14px]"><span>Amount</span><span class="text-red-600">$<span id="rAmt"></span></span></div></div><div class="p-3 flex gap-2 bg-gray-50"><button onclick="downloadReceipt()" class="flex-1 h-11 bg-[#0a2540] text-white rounded-xl font-bold text-xs">Download PDF</button><button onclick="closeReceipt()" class="flex-1 h-11 bg-gray-200 rounded-xl font-bold text-xs">Close</button></div></div></div>
 
-      // Render Counters
-      document.getElementById('stat-pending').innerText = pendingUsers.length;
-      document.getElementById('stat-active').innerText = activeUsers.length;
-      document.getElementById('stat-total').innerText = userArray.length;
-      document.getElementById('pending-count-badge').innerText = `${pendingUsers.length} Pending`;
+<div id="fineAlert" class="fixed inset-0 z-[100] hidden bg-black/50 p-6 flex items-center justify-center"><div class="bg-white rounded-[20px] p-6 w-full max-w-[340px] text-center shadow-2xl"><div id="fineIcon" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl bg-red-100">❌</div><div id="fineTitle" class="font-black mt-3">Error</div><div id="fineMsg" class="text-[13px] text-gray-600 mt-1 whitespace-pre-line"></div><button onclick="closeFineAlert()" class="w-full h-11 bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">OK</button></div></div>
 
-      // Render Pending List
-      const pendingContainer = document.getElementById('pending-users-list');
-      pendingContainer.innerHTML = '';
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";import{getFirestore,collection,addDoc,getDocs,query,where,doc,getDoc,updateDoc}from"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",authDomain:"cash-flow-banking3.firebaseapp.com",projectId:"cash-flow-banking3",storageBucket:"cash-flow-banking3.firebasestorage.app",messagingSenderId:"782707432276",appId:"1:782707432276:web:680425b777d227179c86c1"};
+const app=initializeApp(firebaseConfig);const db=getFirestore(app);
+let cur=null,curId=null,selectedTransferType='',currentReceipt=null,forgotMode='password',balHidden=false,realBal=0;
+const $=id=>document.getElementById(id);
 
-      if (pendingUsers.length === 0) {
-        pendingContainer.innerHTML = `
-          <div class="p-6 text-center text-slate-500 text-xs">
-            <i class="fa-solid fa-circle-check text-emerald-500 text-xl mb-2 block"></i>
-            No pending account requests found. All clear!
-          </div>
-        `;
-      } else {
-        pendingUsers.forEach(user => {
-          const card = document.createElement('div');
-          card.className = "p-4 bg-slate-950 border border-slate-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3";
-          card.innerHTML = `
-            <div>
-              <div class="flex items-center gap-2">
-                <h3 class="font-bold text-white text-sm">${user.name}</h3>
-                <span class="text-[10px] font-semibold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">${user.accountType || 'Savings'}</span>
-              </div>
-              <p class="text-xs text-slate-400 mt-0.5">${user.email}</p>
-              <p class="text-[10px] text-slate-500 font-mono mt-1">ACC NUM: ${user.accountNumber || 'Pending'}</p>
-            </div>
+window.showFineAlert=(t,m,type='error')=>{ $('fineTitle').textContent=t;$('fineMsg').textContent=m;$('fineIcon').className='w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl '+(type=='error'?'bg-red-100':type=='success'?'bg-green-100':'bg-blue-100');$('fineIcon').textContent=type=='error'?'✕':type=='success'?'✓':'i';$('fineAlert').style.display='flex';$('fineAlert').classList.remove('hidden');};
+window.closeFineAlert=()=>{$('fineAlert').style.display='none';$('fineAlert').classList.add('hidden');};
+window.addEventListener('load',()=>{setTimeout(()=>{const l=$('loader');if(l){l.style.opacity='0';setTimeout(()=>l.remove(),700)}},1000);const id=localStorage.getItem('cfb_id');if(id)loadDashboard(id);});
+window.goHome=()=>{ $('homeView').style.display='block';$('bankView').style.display='none';$('dashView').style.display='none'; };
+window.goBanking=()=>{ $('homeView').style.display='none';$('bankView').style.display='block';$('dashView').style.display='none'; };
+window.goDashboard=()=>{ if(!curId){showFineAlert('Login Required','Login first','info');return} $('homeView').style.display='none';$('bankView').style.display='none';$('dashView').style.display='block'; };
+window.showAuth=t=>{ $('createCard').style.display=t=='create'?'block':'none'; $('loginCard').style.display=t=='login'?'block':'none';$('t1').className=t=='create'?'px-4 py-2 rounded-full text-xs font-bold bg-[#0a2540] text-white':'px-4 py-2 rounded-full text-xs font-bold border bg-white'; $('t2').className=t=='login'?'px-4 py-2 rounded-full text-xs font-bold bg-[#0a2540] text-white':'px-4 py-2 rounded-full text-xs font-bold border bg-white'; };
 
-            <div class="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-900">
-              <button onclick="approveUser('${user.email}')" class="flex-1 sm:flex-initial px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg text-xs transition flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-check"></i>
-                <span>Approve</span>
-              </button>
-              <button onclick="rejectUser('${user.email}')" class="flex-1 sm:flex-initial px-4 py-2 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white font-semibold rounded-lg text-xs transition flex items-center justify-center gap-1.5">
-                <i class="fa-solid fa-xmark"></i>
-                <span>Reject</span>
-              </button>
-            </div>
-          `;
-          pendingContainer.appendChild(card);
-        });
-      }
+window.toggleBal=()=>{ 
+  balHidden=!balHidden; 
+  const el=$('balAmount'); 
+  const el2=$('dbal2'); 
+  const btn=$('eyeBtn'); 
+  if(balHidden){ 
+    el.innerHTML='••••••••'; 
+    if(el2) el2.innerHTML='••••••••';
+    btn.innerHTML='<svg class="w-3.5 h-3.5"><use href="#i-eye-off"/></svg>'; 
+  }else{ 
+    el.innerHTML='$<span id="dbal">'+realBal.toLocaleString(undefined,{minimumFractionDigits:2})+'</span>'; 
+    if(el2) el2.innerHTML=realBal.toLocaleString(undefined,{minimumFractionDigits:2});
+    btn.innerHTML='<svg class="w-3.5 h-3.5"><use href="#i-eye"/></svg>'; 
+  } 
+};
 
-      // Render Active Users List
-      const allUsersContainer = document.getElementById('all-users-list');
-      allUsersContainer.innerHTML = '';
+window.openTransfer=()=>{ $('transferModal').style.display='flex'; $('transferModal').classList.remove('hidden'); selectedTransferType='';$('transferForm').style.display='none'; document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('border-[#0a2540]','bg-blue-50/30')); document.querySelectorAll('[id^="check-"]').forEach(el=>{el.innerHTML='';el.className='w-6 h-6 border-2 border-gray-300 rounded-full';}); };
+window.closeTransfer=()=>{ $('transferModal').style.display='none';$('transferModal').classList.add('hidden'); };
+window.selectType=type=>{ selectedTransferType=type; document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('border-[#0a2540]','bg-blue-50/30')); document.querySelectorAll('[id^="check-"]').forEach(el=>{el.innerHTML='';el.className='w-6 h-6 border-2 border-gray-300 rounded-full';}); const el=document.getElementById('check-'+type); el.innerHTML='<div class="w-3 h-3 bg-[#0a2540] rounded-full"></div>'; el.className='w-6 h-6 border-2 border-[#0a2540] rounded-full flex items-center justify-center'; [...document.querySelectorAll('.typeOpt')].find(e=>e.innerHTML.includes(type))?.classList.add('border-[#0a2540]','bg-blue-50/30'); $('selectedType').textContent=type; $('transferForm').style.display='block'; if(type=='Internal Transfer')$('toBank').value='Cash Flow Banking USA'; else$('toBank').value=''; };
+window.openForgot=mode=>{ forgotMode=mode; if(mode=='password'){ $('forgotTitle').textContent='Reset Password';$('fPassArea').style.display='block'; $('fPinArea').style.display='none'; }else{$('forgotTitle').textContent='Reset Transfer PIN'; $('fPassArea').style.display='none';$('fPinArea').style.display='block'; } $('fAcc').value=$('lacc').value||''; $('forgotModal').style.display='flex';$('forgotModal').classList.remove('hidden'); };
+window.closeForgot=()=>{ $('forgotModal').style.display='none';$('forgotModal').classList.add('hidden'); };
+window.doForgot=async()=>{ const acc=$('fAcc').value.trim(),email=$('fEmail').value.toLowerCase().trim(),newPass=$('fNewPass').value.trim(),newPin=$('fNewPin').value.trim(); if(!acc||!email){showFineAlert('Missing','Enter Account No and Email','error');return} if(forgotMode=='password'&&(!newPass||newPass.length<6)){showFineAlert('Invalid','New Password min 6','error');return} if(forgotMode=='pin'&&(!newPin||newPin.length!=4||isNaN(newPin))){showFineAlert('Invalid','New PIN must be 4 digits','error');return} const btn=$('fBtn'); btn.textContent='Verifying...'; btn.disabled=true; try{ const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc)); const s=await getDocs(q); if(s.empty){showFineAlert('Not Found','Account '+acc+' does not exist','error');return} const d=s.docs[0]; const data=d.data(); if(data.email.toLowerCase()!==email){showFineAlert('Email Mismatch','Email does not match','error');return} let upd={}; if(forgotMode=='password')upd.pass=newPass; else upd.pin=newPin; await updateDoc(doc(db,'cashflow_accounts',d.id),upd); showFineAlert('Success ✓',forgotMode=='password'?'Password changed!':'PIN changed to '+newPin+'!','success'); closeForgot(); }catch(e){showFineAlert('Error',e.message,'error')} finally{ btn.textContent='Reset Now'; btn.disabled=false; } };
+window.createAcc=async()=>{ const n=$('fullname').value.trim(),e=$('email').value.toLowerCase().trim(),p=$('pass').value,pin=$('tpin').value.trim(); if(!n||!e||!p||!pin){showFineAlert('Missing','Fill all','error');return} if(p.length<6||pin.length!=4||isNaN(pin)){showFineAlert('Invalid','Password min6, PIN 4 digits','error');return} const ac=Math.floor(1000000000+Math.random()*9000000000).toString(); const btn=$('createBtn'); btn.textContent='Creating...'; btn.disabled=true; try{ await addDoc(collection(db,'cashflow_accounts'),{name:n,email:e,pass:p,pin:pin,accNo:ac,status:'Active',balance:0,created:Date.now(),history:[]});$('msg').innerHTML='<span class="text-green-600 font-bold">✅ Account '+ac+' created | PIN '+pin+'</span>'; $('fullname').value=$('email').value=$('pass').value=$('tpin').value=''; showFineAlert('Created ✓','Account '+ac,'success'); }catch(err){showFineAlert('Error',err.message,'error')} finally{ btn.textContent='Create Account'; btn.disabled=false; } };
+window.login=async()=>{ const acc=$('lacc').value.trim(),p=$('lpass').value; if(!acc\vert{}\vert{}!p){showFineAlert('Missing','Enter account and password','error');return} const btn=$('loginBtn'); btn.textContent='Checking...'; btn.disabled=true; try{ const q=query(collection(db,'cashflow_accounts'),where('accNo','==',acc)); const s=await getDocs(q); if(s.empty){showFineAlert('Not Found','Account not exist','error');return} const d=s.docs[0]; const data=d.data(); if(data.pass!==p){showFineAlert('Wrong Password','Incorrect','error');return} localStorage.setItem('cfb_id',d.id); showFineAlert('Welcome ✓','Hello '+data.name,'success'); setTimeout(()=>loadDashboard(d.id),800); }catch(err){showFineAlert('Error',err.message,'error')} finally{ btn.textContent='Login Securely'; btn.disabled=false; } };
 
-      if (userArray.length === 0) {
-        allUsersContainer.innerHTML = `<div class="p-4 text-center text-slate-500 text-xs">No registered accounts present in database.</div>`;
-      } else {
-        userArray.forEach(user => {
-          const isPending = user.status === 'pending';
-          const card = document.createElement('div');
-          card.className = "p-3.5 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-between";
-          card.innerHTML = `
-            <div>
-              <div class="flex items-center gap-2">
-                <p class="font-bold text-xs text-white">${user.name}</p>
-                <span class="text-[9px] font-bold uppercase px-2 py-0.5 rounded ${isPending ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}">
-                  ${isPending ? 'Pending' : 'Active'}
-                </span>
-              </div>
-              <p class="text-[11px] text-slate-400">${user.email}</p>
-            </div>
+async function loadDashboard(id){ 
+  curId=id; 
+  const snap=await getDoc(doc(db,'cashflow_accounts',id)); 
+  if(!snap.exists()){logout();return} 
+  cur=snap.data(); 
+  realBal=cur.balance; 
+  
+  const hrs = new Date().getHours();
+  const timeStr = hrs < 12 ? 'Good Morning' : hrs < 18 ? 'Good Afternoon' : 'Good Evening';
+  $('greetingText').textContent = `${timeStr}, ${cur.name}`;
+  
+  $('dname').textContent=cur.name; 
+  $('dacc').textContent=cur.accNo; 
+  $('dbal').textContent=cur.balance.toLocaleString(undefined,{minimumFractionDigits:2}); 
+  if($('dbal2')) $('dbal2').textContent=cur.balance.toLocaleString(undefined,{minimumFractionDigits:2});$('dstatus').innerHTML=`<span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> ${cur.status||'Active'}`; 
+  renderHistory(); 
+  $('homeView').style.display='none'; 
+  $('bankView').style.display='none';$('dashView').style.display='block'; 
+}
 
-            <div class="text-right">
-              <p class="text-xs font-black text-white">$${(user.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
-              <button onclick="deleteAccount('${user.email}')" class="text-[10px] text-red-400 hover:underline mt-0.5">Delete User</button>
-            </div>
-          `;
-          allUsersContainer.appendChild(card);
-        });
-      }
-    }
+function renderHistory(){ const hist=cur.history||[]; let html=''; let filtered = hist.filter(h=> { if(!h) return false; if(h.amount===0) return false; if(h.desc && h.desc.toLowerCase().includes('account created')) return false; if(h.desc && h.desc.toLowerCase().includes('admin adjustment')) return false; return true; }); if(filtered.length===0 && hist.length>0){ filtered = hist.filter(h=> h && h.amount!==0).map(h=>{ if(h.desc && h.desc.toLowerCase().includes('admin')){ return {...h, desc:'Wire transfer • Payment received', transferType:'Wire transfer', toName:'External Deposit'} } return h; }).filter(h=> h.amount!==0 &&!h.desc.toLowerCase().includes('account created')); } filtered.slice().reverse().forEach((h,idx)=>{ const oi=hist.length-1-idx; const isCredit=h.type=='credit'; const status=h.status||'APPROVED'; let badge='bg-green-50 text-green-700'; if(status=='PENDING')badge='bg-amber-50 text-amber-700'; if(status=='DECLINED')badge='bg-red-50 text-red-700'; let displayDesc = h.desc; if(isCredit && h.amount>0){ if(displayDesc.toLowerCase().includes('admin') || displayDesc.toLowerCase().includes('adjustment')){ displayDesc = 'Wire transfer • Payment received'; } } const typeTag=h.transferType?`<span class="text-[9px] font-bold bg-[#0a2540] text-white px-2 py-0.5 rounded-full mr-1">${h.transferType}</span>`:'';
+html+=`<div class="p-4 flex justify-between items-center"><div class="flex-1"><div class="font-semibold text-[13px]">${typeTag}${displayDesc}</div><div class="text-[11px] text-gray-500">${new Date(h.date).toLocaleDateString()} • ${h.toName||'System'} • <span class="border px-2 py-0 rounded-full text-[9px] font-bold ${badge}">${status}</span></div></div><div class="text-right ml-3"><div class="font-bold text-[13px] ${isCredit?'text-green-600':'text-red-600'}">${isCredit?'+':'-'}$${Math.abs(h.amount).toLocaleString()}</div><button onclick="viewReceipt(${oi})" class="mt-1 h-7 px-3 bg-[#0a2540] text-white rounded-full text-[10px] font-bold">Receipt</button></div></div>`; }); $('txList').innerHTML=html||'<div class="p-8 text-center text-gray-400 text-xs">No transactions yet</div>'; }
 
-    function approveUser(email) {
-      const users = getUsersDB();
-      if (users[email]) {
-        users[email].status = 'approved';
-        saveUsersDB(users);
-        renderAdminData();
-        alert(`Account for ${users[email].name} has been approved.`);
-      }
-    }
+window.viewReceipt=idx=>{ const h=cur.history[idx]; if(!h)return; currentReceipt=h; const txId='CFB-'+cur.accNo.slice(-4)+'-'+h.date.toString().slice(-6); $('rId').textContent=txId; $('rDate').textContent=new Date(h.date).toLocaleString();$('rType').textContent=h.transferType||'Wire transfer'; $('rStatus').textContent=h.status; $('rFromName').textContent=cur.name; $('rFromAcc').textContent=cur.accNo; $('rToName').textContent=h.toName||'External Deposit'; $('rToBank').textContent=h.desc.split('•')[1]?.trim()\vert{}\vert{}'Citi Bank';$('rToAcc').textContent=h.desc.split('•')[2]?.split('-')[0]?.trim()||'--'; $('rDesc').textContent='Payment received';$('rAmt').textContent=Math.abs(h.amount).toLocaleString(); $('rStamp').textContent=h.status; $('rStamp').className='inline-block border-2 px-3 py-1 rounded-lg font-black text-[11px] '+(h.status=='APPROVED'?'border-green-400 text-green-400':'border-amber-400 text-amber-400'); $('receiptModal').style.display='flex';$('receiptModal').classList.remove('hidden'); };
+window.closeReceipt=()=>{ $('receiptModal').style.display='none';$('receiptModal').classList.add('hidden'); };
+window.downloadReceipt=()=>{ if(!currentReceipt)return; const {jsPDF}=window.jspdf; const doc=new jsPDF(); const h=currentReceipt; const txId=$('rId').textContent; const dt=new Date(h.date).toLocaleString(); doc.setFillColor(10,37,64); doc.rect(0,0,210,35,'F'); doc.setTextColor(255,255,255); doc.setFontSize(16); doc.setFont('helvetica','bold'); doc.text('CASH FLOW BANKING USA',105,15,{align:'center'}); doc.setFontSize(9); doc.text('FDIC Insured • Official Receipt',105,22,{align:'center'}); doc.setFontSize(11); doc.text('Status: '+h.status,105,30,{align:'center'}); doc.setTextColor(0,0,0); let y=45; doc.setFontSize(10); doc.text('Transaction ID: '+txId,14,y); y+=7; doc.text('Date: '+dt,14,y); y+=7; doc.text('Type: Wire transfer',14,y); y+=7; doc.text('From: External Deposit',14,y); y+=7; doc.text('To: '+cur.name+' ('+cur.accNo+')',14,y); y+=10; doc.text('Amount: $'+Math.abs(h.amount).toLocaleString(),14,y); doc.save('Receipt-'+txId+'.pdf'); showFineAlert('Downloaded ✓','PDF saved','success'); };
+window.sendTransfer=async()=>{ if(!selectedTransferType){showFineAlert('Select Type','Choose type','info');return} const name=$('toName').value.trim(),bank=$('toBank').value.trim(),acc=$('toAcc').value.trim(),amt=parseFloat($('toAmount').value),desc=$('toDesc').value.trim()\vert{}\vert{}'Transfer',pin=$('confirmPin').value.trim(); if(!name||!bank||!acc||!amt||!pin){showFineAlert('Missing','Fill all','error');return} if(amt>cur.balance){showFineAlert('Insufficient','Balance $'+cur.balance.toLocaleString(),'error');return} if(cur.pin&&pin!=cur.pin){showFineAlert('Wrong PIN ✕','Your PIN is: '+cur.pin,'error');return} const btn=$('sendBtn'); btn.textContent='Processing...'; btn.disabled=true; try{ const td={fromId:curId,fromAcc:cur.accNo,fromName:cur.name,toName:name,toBank:bank,toAcc:acc,amount:amt,desc:desc,transferType:selectedTransferType,status:'PENDING',created:Date.now()}; await addDoc(collection(db,'cashflow_transfers'),td); const ne={date:Date.now(),desc:`${selectedTransferType} to ${name} • ${bank} • ${acc} - ${desc}`,amount:amt,type:'debit',status:'PENDING',transferType:selectedTransferType,toName:name,balanceAfter:cur.balance}; const nh=[...(cur.history||[]),ne]; await updateDoc(doc(db,'cashflow_accounts',curId),{history:nh}); cur.history=nh; renderHistory(); closeTransfer(); $('toName').value=$('toBank').value=$('toAcc').value=$('toAmount').value=$('toDesc').value=$('confirmPin').value=''; setTimeout(()=>viewReceipt(nh.length-1),600); showFineAlert('Sent ✓',selectedTransferType+' $'+amt.toLocaleString()+' PENDING','success'); }catch(e){showFineAlert('Error',e.message,'error')} finally{ btn.textContent='Confirm & Send'; btn.disabled=false; } }; 
 
-    function rejectUser(email) {
-      if (confirm(`Are you sure you want to reject and remove this account application?`)) {
-        deleteAccount(email);
-      }
-    }
-
-    function deleteAccount(email) {
-      const users = getUsersDB();
-      if (users[email]) {
-        delete users[email];
-        saveUsersDB(users);
-        renderAdminData();
-      }
-    }
-  </script>
+window.logout=()=>{ localStorage.clear(); cur=null; curId=null; goHome(); location.reload(); };
+</script>
 </body>
 </html>
