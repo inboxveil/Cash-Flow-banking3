@@ -101,7 +101,7 @@ async function loadAccounts() {
           <span class="font-bold text-sm">${acc.name}</span>
           <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${badgeColor}">${acc.status}</span>
         </div>
-        <div class="text-xs text-gray-500 mt-1">Acc: <b>${acc.accNo}</b> • Email: ${acc.email}</div>
+        <div class="text-xs text-gray-500 mt-1">Acc No (Login ID): <b class="text-[#0a2540] font-mono">${acc.accNo}</b> • Email: ${acc.email} • Pass: <b>${acc.pass}</b></div>
         <div class="text-xs text-green-600 font-black mt-1">Balance: $${(acc.balance || 0).toLocaleString()}</div>
       </div>
       <div class="flex gap-2 flex-wrap">
