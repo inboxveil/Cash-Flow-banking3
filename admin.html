@@ -21,7 +21,9 @@
     <!-- TOP HEADER -->
     <div class="bg-[#0a2540] p-6 text-white text-center relative flex items-center justify-between">
       <div class="flex items-center justify-center gap-2 mx-auto">
-        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center font-black text-slate-950 text-lg">🔒</div>
+        <div class="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center text-slate-950">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
         <h1 class="text-xl font-extrabold tracking-tight">ADMIN PORTAL</h1>
       </div>
     </div>
@@ -34,7 +36,7 @@
     <!-- VIEW 1: ADMIN LOGIN FORM -->
     <div id="adminLoginView" class="p-6 pt-2">
       <div class="flex items-center gap-2 mb-2">
-        <span class="text-xl">🔐</span>
+        <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
         <h2 class="font-extrabold text-xl text-slate-800">Admin Authentication</h2>
       </div>
       <p class="text-xs text-slate-500 mb-5">Sign in with administrator credentials (Default: <code class="bg-slate-100 px-1 py-0.5 rounded text-amber-700 font-bold">admin / admin123</code>)</p>
@@ -66,7 +68,12 @@
 
       <!-- SEARCH FILTER -->
       <div>
-        <input id="adminSearch" type="text" onkeyup="renderAdminUserList()" placeholder="🔍 Search user by Name, Account No or Email..." class="w-full h-11 border border-slate-300 rounded-xl px-4 text-xs bg-white focus:outline-none focus:border-amber-500">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none text-slate-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </span>
+          <input id="adminSearch" type="text" onkeyup="renderAdminUserList()" placeholder="Search user by Name, Account No or Email..." class="w-full h-11 border border-slate-300 rounded-xl pl-10 pr-4 text-xs bg-white focus:outline-none focus:border-amber-500">
+        </div>
       </div>
 
       <!-- USER LIST CONTAINER -->
