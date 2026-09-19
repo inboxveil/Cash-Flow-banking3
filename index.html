@@ -22,28 +22,28 @@
   <!-- STATUS ALERT -->
   <div id="alertBox" class="hidden p-3 rounded-xl text-xs font-semibold mb-4 text-center"></div>
 
-  <!-- LOGIN FORM -->
-  <div id="loginForm">
+  <!-- VIEW 1: LOGIN FORM -->
+  <div id="loginView">
     <h2 class="font-bold text-lg mb-3">Sign In</h2>
     <input id="loginEmail" type="email" placeholder="Email Address" class="w-full h-12 border rounded-xl px-4 text-sm mb-3 focus:outline-none focus:border-[#0a2540]">
     <input id="loginPass" type="password" placeholder="Password" class="w-full h-12 border rounded-xl px-4 text-sm mb-4 focus:outline-none focus:border-[#0a2540]">
     <button onclick="loginUser()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-sm">Login</button>
-    <p class="text-xs text-center text-gray-500 mt-4">Don't have an account? <a href="#" onclick="toggleAuth(true)" class="text-[#0a2540] font-bold">Register here</a></p>
+    <p class="text-xs text-center text-gray-500 mt-4">Don't have an account? <a href="#" onclick="showPage('register')" class="text-[#0a2540] font-bold">Register here</a></p>
   </div>
 
-  <!-- REGISTER FORM -->
-  <div id="registerForm" class="hidden">
+  <!-- VIEW 2: REGISTER FORM -->
+  <div id="registerView" class="hidden">
     <h2 class="font-bold text-lg mb-3">Create Account</h2>
     <input id="regName" type="text" placeholder="Full Name" class="w-full h-12 border rounded-xl px-4 text-sm mb-3">
     <input id="regEmail" type="email" placeholder="Email Address" class="w-full h-12 border rounded-xl px-4 text-sm mb-3">
     <input id="regPass" type="password" placeholder="Password" class="w-full h-12 border rounded-xl px-4 text-sm mb-3">
     <input id="regPin" type="password" maxlength="4" placeholder="4-Digit Security PIN" class="w-full h-12 border rounded-xl px-4 text-sm mb-4">
     <button onclick="registerUser()" class="w-full h-12 bg-green-600 text-white rounded-xl font-bold text-sm">Create Account</button>
-    <p class="text-xs text-center text-gray-500 mt-4">Already registered? <a href="#" onclick="toggleAuth(false)" class="text-[#0a2540] font-bold">Sign In</a></p>
+    <p class="text-xs text-center text-gray-500 mt-4">Already registered? <a href="#" onclick="showPage('login')" class="text-[#0a2540] font-bold">Sign In</a></p>
   </div>
 
-  <!-- USER DASHBOARD -->
-  <div id="dashboard" class="hidden text-center">
+  <!-- VIEW 3: USER DASHBOARD -->
+  <div id="dashboardView" class="hidden text-center">
     <div class="bg-gray-50 p-4 rounded-xl border mb-4">
       <span class="text-xs text-gray-500">Available Balance</span>
       <div class="text-3xl font-black text-green-600 mt-1" id="userBalance">$0.00</div>
@@ -53,7 +53,7 @@
       <p><b>Account Number:</b> <span id="userAcc">---</span></p>
       <p><b>Status:</b> <span id="userStatus" class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">APPROVED</span></p>
     </div>
-    <button onclick="location.reload()" class="w-full h-11 bg-gray-200 text-gray-800 rounded-xl font-bold text-xs">Log Out</button>
+    <button onclick="logoutUser()" class="w-full h-11 bg-gray-200 text-gray-800 rounded-xl font-bold text-xs">Log Out</button>
   </div>
 </div>
 
@@ -74,10 +74,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-window.toggleAuth = (isRegister) => {
-  document.getElementById('loginForm').style.display = isRegister ? 'none' : 'block';
-  document.getElementById('registerForm').style.display = isRegister ? 'block' : 'none';
+window.showPage = (viewName) => {
+  document.getElementById('loginView').classList.add('hidden');
+  document.getElementById('registerView').classList.add('hidden');
+  document.getElementById('dashboardView').classList.add('hidden');
   showAlert('');
+
+  if (viewName === 'login') document.getElementById('loginView').classList.remove('hidden');
+  if (viewName === 'register') document.getElementById('registerView').classList.remove('hidden');
+  if (viewName === 'dashboard') document.getElementById('dashboardView').classList.remove('hidden');
 };
 
 function showAlert(msg, type = 'error') {
@@ -101,7 +106,7 @@ window.registerUser = async () => {
     const existing = await getDocs(q);
     if (!existing.empty) { showAlert('Email is already registered.'); return; }
 
-    const accNo = '33' + Math.floor(10000000 + Math.random() * 90000000);
+    const accNo = '458' + Math.floor(100000 + Math.random() * 900000);
     await addDoc(collection(db, 'cashflow_accounts'), {
       name, email, pass, pin, accNo,
       balance: 0,
@@ -110,8 +115,8 @@ window.registerUser = async () => {
       history: []
     });
 
+    showPage('login');
     showAlert('Registration successful! Your account is PENDING approval from the administrator before you can log in.', 'warning');
-    toggleAuth(false);
   } catch (err) {
     showAlert('Error: ' + err.message);
   }
@@ -144,15 +149,19 @@ window.loginUser = async () => {
       return;
     }
 
-    document.getElementById('loginForm').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
     document.getElementById('userName').textContent = userData.name;
     document.getElementById('userAcc').textContent = userData.accNo;
     document.getElementById('userBalance').textContent = '$' + (userData.balance || 0).toLocaleString();
-    showAlert('');
+    showPage('dashboard');
   } catch (err) {
     showAlert('Error: ' + err.message);
   }
+};
+
+window.logoutUser = () => {
+  document.getElementById('loginEmail').value = '';
+  document.getElementById('loginPass').value = '';
+  showPage('login');
 };
 </script>
 </body>
