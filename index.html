@@ -3,89 +3,89 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cash Flow Banking - Portal</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <title>Apex Trust Bank - Secure Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
-    body { background: #0b1426; color: #1e293b; }
+    * { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+    body { background: #060e1e; color: #1e293b; }
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0b1426; }
+    ::-webkit-scrollbar-track { background: #060e1e; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
   </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col justify-center items-center p-2 sm:p-4 md:p-6 relative">
 
   <!-- SIDE NAVIGATION DRAWER (MAIN MENU) -->
-  <div id="sideNavOverlay" onclick="toggleNav()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+  <div id="sideNavOverlay" onclick="toggleNav()" class="fixed inset-0 bg-black/70 backdrop-blur-md z-40 hidden transition-opacity"></div>
 
-  <div id="sideNav" class="fixed top-0 left-0 h-full w-[280px] bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto flex flex-col">
-    <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white text-base">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+  <div id="sideNav" class="fixed top-0 left-0 h-full w-[280px] bg-slate-900 text-slate-100 z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto flex flex-col border-r border-slate-800">
+    <div class="p-5 border-b border-slate-800 flex justify-between items-center bg-slate-950/60">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 bg-gradient-to-tr from-cyan-600 to-blue-500 rounded-lg flex items-center justify-center text-white text-base shadow-md shadow-cyan-500/20">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
         </div>
-        <span class="font-extrabold text-slate-800 text-sm tracking-tight">CASH FLOW BANK</span>
+        <span class="font-extrabold text-white text-sm tracking-wide">APEX TRUST</span>
       </div>
-      <button onclick="toggleNav()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+      <button onclick="toggleNav()" class="text-slate-400 hover:text-white font-bold text-lg w-8 h-8 rounded-lg bg-slate-800/50 flex items-center justify-center transition-colors">✕</button>
     </div>
 
-    <div class="p-4 space-y-6 text-xs text-slate-600 font-semibold flex-1">
+    <div class="p-4 space-y-6 text-xs text-slate-300 font-semibold flex-1">
       <div>
-        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">MAIN</p>
+        <p class="text-[10px] font-extrabold text-cyan-400 uppercase tracking-wider mb-2">MAIN NAVIGATION</p>
         <div class="space-y-1">
-          <button onclick="navAction('Dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold">
+          <button onclick="navAction('Dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 font-bold border border-cyan-500/20">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg> Dashboard
           </button>
-          <button onclick="openMenuModal('summary')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <button onclick="openMenuModal('summary')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Account Summary
           </button>
-          <button onclick="openMenuModal('transactions')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <button onclick="openMenuModal('transactions')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg> Transaction History
           </button>
-          <button onclick="toggleNav(); openTransferModal();" class="w-full flex justify-between items-center px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+          <button onclick="toggleNav(); openTransferModal();" class="w-full flex justify-between items-center px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
             <div class="flex items-center gap-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg> Transfer
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg> Fund Transfer
             </div>
-            <span class="text-slate-400 font-bold">></span>
+            <span class="text-slate-500 font-bold">›</span>
           </button>
-          <button onclick="openMenuModal('depositCheck')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg> Deposit Check
+          <button onclick="openMenuModal('depositCheck')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg> Mobile Deposit
           </button>
-          <button onclick="openMenuModal('depositCrypto')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8h6m-5 0a3 3 0 110 6H9m3 0v3m0-3h3m-3-9V5m0 3h3m-3 9v3m-3-3h3"/></svg> Deposit Crypto
-          </button>
-        </div>
-      </div>
-
-      <div>
-        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">SERVICES</p>
-        <div class="space-y-1">
-          <button onclick="openMenuModal('loans')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006 00m0 0l3-9M6 7l3 9m3-9l6 1m0 0l-3 9a5.002 5.002 0 006 0m0 0l3-9m-9 9l3-9"/></svg> Loans
-          </button>
-          <button onclick="openMenuModal('cards')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg> Cards
+          <button onclick="openMenuModal('depositCrypto')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Crypto Gateway
           </button>
         </div>
       </div>
 
       <div>
-        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">ACCOUNT</p>
+        <p class="text-[10px] font-extrabold text-cyan-400 uppercase tracking-wider mb-2">BANKING PRODUCTS</p>
         <div class="space-y-1">
-          <button onclick="openMenuModal('profile')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Profile
+          <button onclick="openMenuModal('loans')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg> Credit & Loans
           </button>
-          <button onclick="openMenuModal('settings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg> Settings
+          <button onclick="openMenuModal('cards')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg> Debit & Credit Cards
           </button>
-          <button onclick="openMenuModal('status')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg> Account Status
+        </div>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-extrabold text-cyan-400 uppercase tracking-wider mb-2">SECURITY & PREFERENCES</p>
+        <div class="space-y-1">
+          <button onclick="openMenuModal('profile')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Profile Settings
           </button>
-          <button onclick="openMenuModal('support')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636l3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg> Support
+          <button onclick="openMenuModal('settings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg> Security Settings
           </button>
-          <button onclick="toggleNav(); logoutUser();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 transition-all font-bold mt-2">
+          <button onclick="openMenuModal('status')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg> Compliance & Status
+          </button>
+          <button onclick="openMenuModal('support')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-800/80 text-slate-300 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636l3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg> 24/7 Help Desk
+          </button>
+          <button onclick="toggleNav(); logoutUser();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-rose-400 hover:bg-rose-500/10 transition-all font-bold mt-3 border border-rose-500/20">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Sign Out
           </button>
         </div>
@@ -94,17 +94,17 @@
   </div>
 
   <!-- MAIN CONTAINER -->
-  <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 mb-12 relative">
+  <div class="w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200/60 mb-12 relative">
 
     <!-- TOP HEADER -->
-    <div class="bg-[#0a2540] p-6 text-white text-center relative flex items-center justify-between">
-      <button id="menuBtn" onclick="toggleNav()" class="hidden w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold text-lg text-white transition-all">
+    <div class="bg-gradient-to-r from-slate-900 via-[#0b1b36] to-slate-900 p-6 text-white text-center relative flex items-center justify-between border-b border-slate-800">
+      <button id="menuBtn" onclick="toggleNav()" class="hidden w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold text-lg text-white transition-all backdrop-blur-sm border border-white/10">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
       
-      <div class="flex items-center justify-center gap-2 mx-auto">
-        <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white text-lg">CF</div>
-        <h1 class="text-xl font-extrabold tracking-tight">CASH FLOW BANK</h1>
+      <div class="flex items-center justify-center gap-2.5 mx-auto">
+        <div class="w-8 h-8 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center font-black text-white text-base shadow-lg shadow-cyan-500/30">AT</div>
+        <h1 class="text-base font-extrabold tracking-tight">APEX TRUST BANK</h1>
       </div>
 
       <div class="w-10"></div>
@@ -112,141 +112,189 @@
 
     <!-- GLOBAL STATUS ALERT -->
     <div class="px-6 pt-4">
-      <div id="alertBox" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
+      <div id="alertBox" class="hidden p-3.5 rounded-2xl text-xs font-semibold text-center border shadow-sm"></div>
     </div>
 
     <!-- VIEW 1: CLIENT LOGIN FORM -->
-    <div id="loginView" class="p-6 pt-2">
-      <h2 class="font-extrabold text-xl text-slate-800 mb-1">Welcome Back</h2>
-      <p class="text-xs text-slate-500 mb-5">Sign in using your account details</p>
+    <div id="loginView" class="p-6 pt-3">
+      <div class="mb-5">
+        <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Client Portal Sign In</h2>
+        <p class="text-xs text-slate-500 mt-1">Access your secure accounts and financial dashboards</p>
+      </div>
       
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Account Number</label>
-          <input id="loginAccNo" type="text" placeholder="e.g. 45812345" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50 font-mono">
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Account Number</label>
+          <input id="loginAccNo" type="text" placeholder="e.g. 45812345" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 bg-slate-50 font-mono text-slate-800 font-bold transition-all">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
-          <input id="loginPass" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Portal Password</label>
+          <input id="loginPass" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-cyan-600 focus:ring-2 focus:ring-cyan-600/20 bg-slate-50 text-slate-800 transition-all">
         </div>
-        <button onclick="loginUser()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-sm shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all">Sign In</button>
+        <button onclick="loginUser()" class="w-full h-12 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm shadow-xl shadow-slate-900/15 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+          <span>Secure Sign In</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
       </div>
 
-      <div class="flex justify-center items-center mt-6 text-xs text-slate-500">
-        <p>Don't have an account? <a href="#" onclick="showPage('register')" class="text-[#0a2540] font-extrabold hover:underline">Create Account</a></p>
+      <div class="flex justify-center items-center mt-6 text-xs text-slate-500 pt-4 border-t border-slate-100">
+        <p>New customer? <a href="#" onclick="showPage('register')" class="text-cyan-600 font-extrabold hover:underline">Open an Account</a></p>
       </div>
     </div>
 
     <!-- VIEW 2: REGISTER FORM -->
-    <div id="registerView" class="hidden p-6 pt-2">
-      <h2 class="font-extrabold text-xl text-slate-800 mb-1">Open an Account</h2>
-      <p class="text-xs text-slate-500 mb-5">Join Cash Flow Banking today</p>
+    <div id="registerView" class="hidden p-6 pt-3">
+      <div class="mb-5">
+        <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Open New Account</h2>
+        <p class="text-xs text-slate-500 mt-1">Join Apex Trust Bank for institutional-grade banking</p>
+      </div>
       
-      <div class="space-y-3">
+      <div class="space-y-3.5">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Full Name</label>
-          <input id="regName" type="text" placeholder="John Doe" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Full Legal Name</label>
+          <input id="regName" type="text" placeholder="John Doe" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs font-semibold focus:outline-none focus:border-cyan-600 bg-slate-50 text-slate-800">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
-          <input id="regEmail" type="email" placeholder="john@example.com" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Email Address</label>
+          <input id="regEmail" type="email" placeholder="john@example.com" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs font-semibold focus:outline-none focus:border-cyan-600 bg-slate-50 text-slate-800">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
-          <input id="regPass" type="password" placeholder="••••••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Secure Password</label>
+          <input id="regPass" type="password" placeholder="••••••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs font-semibold focus:outline-none focus:border-cyan-600 bg-slate-50 text-slate-800">
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">4-Digit Security PIN</label>
-          <input id="regPin" type="password" maxlength="4" placeholder="1234" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50 font-mono">
+          <label class="block text-xs font-bold text-slate-700 mb-1">4-Digit Authorization PIN</label>
+          <input id="regPin" type="password" maxlength="4" placeholder="1234" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs font-mono font-bold focus:outline-none focus:border-cyan-600 bg-slate-50 text-slate-800">
         </div>
-        <button onclick="registerUser()" class="w-full h-12 bg-emerald-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/10 active:scale-[0.98] transition-all mt-2">Submit Application</button>
+        <button onclick="registerUser()" class="w-full h-12 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white rounded-xl font-bold text-xs shadow-lg shadow-cyan-600/20 active:scale-[0.98] transition-all mt-2">Submit Account Application</button>
       </div>
 
-      <p class="text-xs text-center text-slate-500 mt-5">Already registered? <a href="#" onclick="showPage('login')" class="text-[#0a2540] font-extrabold hover:underline">Sign In</a></p>
+      <p class="text-xs text-center text-slate-500 mt-5 pt-4 border-t border-slate-100">Already have an account? <a href="#" onclick="showPage('login')" class="text-cyan-600 font-extrabold hover:underline">Sign In</a></p>
     </div>
 
     <!-- VIEW 3: CLIENT DASHBOARD -->
-    <div id="dashboardView" class="hidden bg-slate-50 p-4 space-y-4">
+    <div id="dashboardView" class="hidden bg-slate-50/80 p-4 space-y-4">
       
       <!-- ACCOUNT HOLD NOTICE BANNER -->
-      <div id="holdNotice" class="hidden bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-red-900 shadow-sm relative">
+      <div id="holdNotice" class="hidden bg-rose-50 border-2 border-rose-200 rounded-2xl p-4 text-rose-900 shadow-sm relative">
         <div class="flex items-start gap-3">
-          <div class="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center shrink-0 mt-0.5">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+          <div class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-md shadow-rose-600/20">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
           </div>
           <div>
-            <h4 class="font-extrabold text-xs uppercase tracking-wide text-red-700">Account On Hold / Action Required</h4>
-            <p class="text-xs font-semibold mt-1" id="holdReasonText">Security verification required.</p>
-            <div id="feeRequirementBox" class="mt-2 bg-red-100/80 p-2 rounded-lg text-[11px] font-extrabold text-red-800">
+            <h4 class="font-extrabold text-xs uppercase tracking-wider text-rose-800">Account Security Hold Active</h4>
+            <p class="text-xs font-semibold mt-1 text-rose-700" id="holdReasonText">Security verification required.</p>
+            <div id="feeRequirementBox" class="mt-2.5 bg-rose-100/90 p-2.5 rounded-xl text-[11px] font-extrabold text-rose-900 border border-rose-200">
               Clearance Fee Required: <span id="holdFeeAmount">$0.00</span>
             </div>
-            <p class="text-[10px] text-red-500 mt-2">Please contact compliance support using the live chat widget to clear this restriction.</p>
+            <p class="text-[10px] text-rose-600 mt-2 font-medium">Please contact compliance support through our 24/7 help desk to resolve this restriction.</p>
           </div>
         </div>
       </div>
 
       <!-- USER GREETING CARD -->
-      <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-[#0a2540] text-white flex items-center justify-center font-black text-sm" id="userAvatar">JD</div>
+          <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-slate-900 to-slate-800 text-white flex items-center justify-center font-black text-sm shadow-md" id="userAvatar">JD</div>
           <div>
-            <h3 class="font-bold text-sm text-slate-800" id="userName">User Name</h3>
-            <p class="text-[11px] text-slate-400">Primary ID: <span id="userAcc" class="font-mono font-bold text-slate-600">330000000</span></p>
+            <h3 class="font-bold text-sm text-slate-900" id="userName">User Name</h3>
+            <p class="text-[11px] text-slate-400 font-medium">Account ID: <span id="userAcc" class="font-mono font-bold text-slate-700">330000000</span></p>
           </div>
         </div>
-        <span id="userStatus" class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">Active</span>
+        <span id="userStatus" class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">Active</span>
       </div>
 
       <!-- ACCOUNT TYPE TAB SELECTOR -->
-      <div class="flex bg-slate-200/80 p-1 rounded-xl text-xs font-bold gap-1">
-        <button id="tabChecking" onclick="switchAccount('checking')" class="flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all">Checking</button>
-        <button id="tabSavings" onclick="switchAccount('savings')" class="flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all">Savings</button>
-        <button id="tabInvestment" onclick="switchAccount('investment')" class="flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all">Investment</button>
+      <div class="flex bg-slate-200/70 p-1 rounded-xl text-xs font-bold gap-1">
+        <button id="tabChecking" onclick="switchAccount('checking')" class="flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all font-extrabold">Checking</button>
+        <button id="tabSavings" onclick="switchAccount('savings')" class="flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">Savings</button>
+        <button id="tabInvestment" onclick="switchAccount('investment')" class="flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all">Investment</button>
       </div>
 
       <!-- VIRTUAL CARD / BALANCE BOARD -->
-      <div class="bg-gradient-to-tr from-[#0a2540] via-[#11385f] to-[#1e4e80] rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
-        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-        <div class="flex justify-between items-center text-xs opacity-80">
+      <div class="bg-gradient-to-tr from-slate-900 via-[#0e223f] to-[#12315c] rounded-2xl p-5 text-white shadow-xl relative overflow-hidden border border-slate-800">
+        <div class="absolute -right-8 -bottom-8 w-36 h-36 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div class="flex justify-between items-center text-xs opacity-75 font-semibold">
           <span id="accTypeLabel">Checking Balance</span>
-          <span class="font-bold tracking-widest">DEBIT CARD</span>
+          <span class="font-extrabold tracking-widest text-cyan-400">VISA INFINITE</span>
         </div>
-        <div class="text-3xl font-black mt-2 tracking-tight" id="userBalance">$0.00</div>
+        <div class="text-3xl font-black mt-2.5 tracking-tight" id="userBalance">$0.00</div>
         
-        <div class="mt-4 border-t border-white/10 pt-3 text-[10px] space-y-1 font-mono">
+        <div class="mt-4 border-t border-white/10 pt-3.5 text-[10px] space-y-1 font-mono">
           <div class="flex justify-between"><span class="opacity-60">ROUTING (ABA):</span> <span class="font-bold" id="routingNo">021000021</span></div>
-          <div class="flex justify-between"><span class="opacity-60">SWIFT / BIC:</span> <span class="font-bold" id="swiftCode">CSFLUS33XXX</span></div>
-          <div class="flex justify-between"><span class="opacity-60">IBAN:</span> <span class="font-bold text-[9px]" id="ibanNo">US64 CSFL 0210 0002 1000</span></div>
-          <div class="flex justify-between pt-1 border-t border-white/5 text-amber-300"><span class="opacity-80 font-mono">DAILY TRANSFER LIMIT:</span> <span class="font-bold font-mono" id="dailyLimitText">$10,000.00</span></div>
+          <div class="flex justify-between"><span class="opacity-60">SWIFT / BIC:</span> <span class="font-bold" id="swiftCode">APEXUS33XXX</span></div>
+          <div class="flex justify-between"><span class="opacity-60">IBAN:</span> <span class="font-bold text-[9px]" id="ibanNo">US64 APEX 0210 0002 1000</span></div>
+          <div class="flex justify-between pt-1.5 border-t border-white/10 text-cyan-300"><span class="opacity-90 font-mono">DAILY TRANSFER LIMIT:</span> <span class="font-bold font-mono" id="dailyLimitText">$10,000.00</span></div>
+        </div>
+      </div>
+
+      <!-- KYC VERIFICATION STATUS BADGE -->
+      <div class="bg-emerald-50/80 border border-emerald-200 rounded-2xl p-3.5 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-emerald-600/20">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h4 class="font-extrabold text-xs text-slate-900 tracking-tight">KYC Verification</h4>
+              <span class="bg-emerald-200/80 text-emerald-800 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">Tier 2</span>
+            </div>
+            <p class="text-[11px] text-emerald-700 font-semibold mt-0.5">Identity fully verified & approved</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 text-emerald-700 font-bold text-xs bg-emerald-100 px-2.5 py-1 rounded-xl">
+          <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          <span>Verified</span>
+        </div>
+      </div>
+
+      <!-- CREDIT SCORE WIDGET (CLICKABLE) -->
+      <div onclick="openMenuModal('creditScore')" class="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200/70 rounded-2xl p-3.5 flex items-center justify-between shadow-sm cursor-pointer hover:shadow-md hover:border-cyan-300 transition-all group">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-cyan-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-cyan-600/20 group-hover:scale-105 transition-transform">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-1.5">
+              <h4 class="font-extrabold text-xs text-slate-900 tracking-tight">Credit Rating (FICO®)</h4>
+              <span class="bg-cyan-200/80 text-cyan-900 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">Prime</span>
+            </div>
+            <p class="text-[11px] text-cyan-800 font-semibold mt-0.5">Tap to view full credit report</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5 bg-cyan-600 text-white font-black text-xs px-3 py-1.5 rounded-xl shadow-sm group-hover:bg-cyan-700 transition-colors">
+          <span id="mainCreditScoreVal">785</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </div>
       </div>
 
       <!-- QUICK ACTIONS -->
       <div class="grid grid-cols-3 gap-2">
-        <button onclick="openTransferModal()" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
-          <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">
+        <button onclick="openTransferModal()" class="bg-white border border-slate-200/70 p-3 rounded-2xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-50 transition-all group">
+          <div class="w-8 h-8 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center font-bold text-sm group-hover:bg-cyan-600 group-hover:text-white transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7m10 0v10"/></svg>
           </div>
           <span class="text-[11px] font-bold text-slate-700">Transfer</span>
         </button>
-        <button onclick="openMenuModal('depositCheck')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
-          <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
+        <button onclick="openMenuModal('depositCheck')" class="bg-white border border-slate-200/70 p-3 rounded-2xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-50 transition-all group">
+          <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm group-hover:bg-emerald-600 group-hover:text-white transition-colors">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 7L7 17M7 17h10M7 7v10"/></svg>
           </div>
           <span class="text-[11px] font-bold text-slate-700">Deposit</span>
         </button>
-        <button onclick="openMenuModal('transactions')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
-          <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg></div>
+        <button onclick="openMenuModal('transactions')" class="bg-white border border-slate-200/70 p-3 rounded-2xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-50 transition-all group">
+          <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm group-hover:bg-blue-600 group-hover:text-white transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          </div>
           <span class="text-[11px] font-bold text-slate-700">History</span>
         </button>
       </div>
 
       <!-- RECENT TRANSACTIONS -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
         <div class="flex justify-between items-center mb-3">
-          <h4 class="font-extrabold text-xs text-slate-800 uppercase tracking-wider">Recent Activity</h4>
-          <button onclick="openMenuModal('transactions')" class="text-[11px] font-bold text-[#0a2540] hover:underline">View All</button>
+          <h4 class="font-extrabold text-xs text-slate-900 uppercase tracking-wider">Recent Activity</h4>
+          <button onclick="openMenuModal('transactions')" class="text-[11px] font-bold text-cyan-600 hover:underline">View All</button>
         </div>
         <div id="activityList" class="space-y-3 text-xs">
           <div class="flex justify-between items-center border-b border-slate-50 pb-2">
@@ -269,38 +317,38 @@
   </div>
 
   <!-- GENERIC MENU ACTION MODAL -->
-  <div id="menuModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+  <div id="menuModal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-[2rem] p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto border border-slate-100">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
-        <h3 id="menuModalTitle" class="font-extrabold text-base text-slate-800">Feature Panel</h3>
-        <button onclick="closeMenuModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
+        <h3 id="menuModalTitle" class="font-extrabold text-base text-slate-900">Feature Panel</h3>
+        <button onclick="closeMenuModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200 flex items-center justify-center">✕</button>
       </div>
       <div id="menuModalBody" class="space-y-3 text-xs text-slate-600"></div>
     </div>
   </div>
 
   <!-- TRANSFER MODAL -->
-  <div id="transferModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+  <div id="transferModal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-[2rem] p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto border border-slate-100">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
-        <h3 class="font-extrabold text-base text-slate-800">Initiate Transfer</h3>
-        <button onclick="closeTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
+        <h3 class="font-extrabold text-base text-slate-900">Secure Fund Transfer</h3>
+        <button onclick="closeTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200 flex items-center justify-center">✕</button>
       </div>
 
-      <div id="trError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
+      <div id="trError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-rose-50 text-rose-700 border border-rose-200"></div>
 
-      <div class="space-y-3">
+      <div class="space-y-3.5">
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Transfer Type</label>
-          <select id="trType" onchange="toggleSwiftField()" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
-            <option value="LOCAL">Local Bank Transfer</option>
-            <option value="WIRE">International Wire Transfer</option>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Transfer Network</label>
+          <select id="trType" onchange="toggleSwiftField()" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600">
+            <option value="LOCAL">Local Domestic Transfer (ACH / Wire)</option>
+            <option value="WIRE">International SWIFT Wire Transfer</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Debit From Account</label>
-          <select id="trSourceAcc" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Source Account</label>
+          <select id="trSourceAcc" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600">
             <option value="checking">Checking Account</option>
             <option value="savings">Savings Account</option>
             <option value="investment">Investment Account</option>
@@ -308,80 +356,80 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Recipient Full Name</label>
-          <input id="trRecipient" type="text" placeholder="e.g. Sarah Jenkins" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Beneficiary Full Name</label>
+          <input id="trRecipient" type="text" placeholder="e.g. Sarah Jenkins" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs font-semibold bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Bank Name</label>
-          <input id="trBank" type="text" placeholder="e.g. Chase Bank / Barclays" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Recipient Bank Name</label>
+          <input id="trBank" type="text" placeholder="e.g. Chase Bank / Barclays" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs font-semibold bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Account Number / IBAN</label>
-          <input id="trAccountNo" type="text" placeholder="e.g. 0098765432" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Account Number / IBAN</label>
+          <input id="trAccountNo" type="text" placeholder="e.g. 0098765432" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600 font-mono font-bold">
         </div>
 
         <div id="swiftBox" class="hidden">
-          <label class="block text-xs font-bold text-slate-600 mb-1">SWIFT / BIC Code</label>
-          <input id="trSwift" type="text" placeholder="e.g. CHASUS33" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+          <label class="block text-xs font-bold text-slate-700 mb-1">SWIFT / BIC Routing Code</label>
+          <input id="trSwift" type="text" placeholder="e.g. CHASUS33" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600 font-mono font-bold">
         </div>
 
         <div>
           <div class="flex justify-between items-center mb-1">
-            <label class="block text-xs font-bold text-slate-600">Transfer Amount ($)</label>
-            <span class="text-[10px] text-amber-700 font-bold">Max Limit: <span id="modalLimitText">$10,000.00</span></span>
+            <label class="block text-xs font-bold text-slate-700">Transfer Amount ($)</label>
+            <span class="text-[10px] text-cyan-700 font-extrabold">Limit: <span id="modalLimitText">$10,000.00</span></span>
           </div>
-          <input id="trAmount" type="number" step="any" placeholder="0.00" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-bold">
+          <input id="trAmount" type="number" step="any" placeholder="0.00" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600 font-bold font-mono">
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-600 mb-1">Enter 4-Digit Security PIN</label>
-          <input id="trPin" type="password" maxlength="4" placeholder="••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+          <label class="block text-xs font-bold text-slate-700 mb-1">4-Digit Security PIN</label>
+          <input id="trPin" type="password" maxlength="4" placeholder="••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 text-slate-800 focus:outline-none focus:border-cyan-600 font-mono font-bold">
         </div>
 
-        <button id="trSubmitBtn" onclick="processTransfer()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all mt-2">Authorize & Send Payment</button>
+        <button id="trSubmitBtn" onclick="processTransfer()" class="w-full h-12 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/15 active:scale-[0.98] transition-all mt-2">Authorize & Send Payment</button>
       </div>
     </div>
   </div>
 
   <!-- TRANSACTION RECEIPT MODAL -->
-  <div id="receiptModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto text-slate-800">
+  <div id="receiptModal" class="fixed inset-0 bg-black/75 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-[2rem] p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto text-slate-900 border border-slate-100">
       
       <!-- Receipt Header -->
       <div class="text-center pb-4 border-b border-dashed border-slate-200">
-        <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2 shadow-lg shadow-emerald-500/20">
+        <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-emerald-500/30">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
         </div>
         <h3 class="font-black text-lg text-slate-900 tracking-tight">Transfer Successful</h3>
-        <p class="text-xs text-slate-400 mt-0.5">Cash Flow Bank Official Receipt</p>
+        <p class="text-xs text-slate-400 mt-0.5">Apex Trust Bank Official Transaction Receipt</p>
       </div>
 
       <!-- Amount Banner -->
       <div class="py-4 text-center bg-slate-50 rounded-2xl my-4 border border-slate-100">
-        <p class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Total Sent Amount</p>
-        <p class="text-3xl font-black text-slate-900 mt-1" id="recAmount">$0.00</p>
-        <span class="inline-block mt-2 bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Completed</span>
+        <p class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Total Transferred Amount</p>
+        <p class="text-3xl font-black text-slate-900 mt-1 font-mono" id="recAmount">$0.00</p>
+        <span class="inline-block mt-2 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Completed</span>
       </div>
 
       <!-- Detailed Breakdown -->
-      <div class="space-y-2.5 text-xs font-mono bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
-        <div class="flex justify-between"><span class="text-slate-400">Reference No:</span> <span class="font-bold text-slate-700" id="recRef">CFB-8941239</span></div>
-        <div class="flex justify-between"><span class="text-slate-400">Date & Time:</span> <span class="font-bold text-slate-700" id="recDate">Oct 24, 2026, 4:12 PM</span></div>
-        <div class="flex justify-between"><span class="text-slate-400">Transfer Type:</span> <span class="font-bold text-slate-700" id="recType">Local Bank Transfer</span></div>
-        <div class="flex justify-between"><span class="text-slate-400">Source Account:</span> <span class="font-bold text-slate-700" id="recSource">Checking Account</span></div>
-        <div class="flex justify-between"><span class="text-slate-400">Recipient Name:</span> <span class="font-bold text-slate-700" id="recRecipient">Sarah Jenkins</span></div>
-        <div class="flex justify-between"><span class="text-slate-400">Recipient Bank:</span> <span class="font-bold text-slate-700" id="recBank">Chase Bank</span></div>
-        <div class="flex justify-between"><span class="text-slate-400">Destination Account:</span> <span class="font-bold text-slate-700" id="recAccNo">•••• 5432</span></div>
+      <div class="space-y-2.5 text-xs font-mono bg-slate-50/70 p-4 rounded-2xl border border-slate-100 text-slate-700">
+        <div class="flex justify-between"><span class="text-slate-400">Transaction Ref:</span> <span class="font-bold text-slate-800" id="recRef">ATB-8941239</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Date & Time:</span> <span class="font-bold text-slate-800" id="recDate">Sep 19, 2026, 4:14 PM</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Transfer Type:</span> <span class="font-bold text-slate-800" id="recType">Local Domestic Transfer</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Source Account:</span> <span class="font-bold text-slate-800" id="recSource">Checking Account</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Beneficiary Name:</span> <span class="font-bold text-slate-800" id="recRecipient">Sarah Jenkins</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Recipient Bank:</span> <span class="font-bold text-slate-800" id="recBank">Chase Bank</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Account Number:</span> <span class="font-bold text-slate-800" id="recAccNo">•••• 5432</span></div>
       </div>
 
       <!-- Action Buttons -->
-      <div class="mt-6 space-y-2">
+      <div class="mt-6 space-y-2.5">
         <button onclick="window.print()" class="w-full h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> Save / Print Receipt
         </button>
-        <button onclick="closeReceiptModal()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all">Done</button>
+        <button onclick="closeReceiptModal()" class="w-full h-12 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/15 active:scale-[0.98] transition-all">Done</button>
       </div>
 
     </div>
@@ -435,32 +483,49 @@
       if (type === 'summary') {
         title.textContent = "Account Financial Summary";
         body.innerHTML = `
-          <div class="space-y-2 font-mono">
-            <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-500">Checking Balance:</span> <span class="font-bold">$${(currentUserData?.checkingBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
-            <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-500">Savings Balance:</span> <span class="font-bold">$${(currentUserData?.savingsBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
-            <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-500">Investment Balance:</span> <span class="font-bold">$${(currentUserData?.investmentBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
-            <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-500">Routing Number:</span> <span class="font-bold">${currentUserData?.routingNo || 'N/A'}</span></div>
+          <div class="space-y-2.5 font-mono text-xs">
+            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">Checking Balance:</span> <span class="font-bold text-slate-900">$${(currentUserData?.checkingBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
+            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">Savings Balance:</span> <span class="font-bold text-slate-900">$${(currentUserData?.savingsBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
+            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">Investment Balance:</span> <span class="font-bold text-slate-900">$${(currentUserData?.investmentBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
+            <div class="flex justify-between bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-500">ABA Routing Number:</span> <span class="font-bold text-slate-900">${currentUserData?.routingNo || 'N/A'}</span></div>
+          </div>`;
+      } else if (type === 'creditScore') {
+        title.textContent = "FICO® Credit Score Breakdown";
+        const score = currentUserData?.creditScore || 785;
+        body.innerHTML = `
+          <div class="space-y-4 text-center">
+            <div class="bg-gradient-to-br from-cyan-600 to-blue-700 text-white p-6 rounded-2xl shadow-lg">
+              <span class="text-[10px] font-extrabold uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full">Prime Rating</span>
+              <div class="text-5xl font-black tracking-tight mt-3 font-mono">${score}</div>
+              <p class="text-xs text-cyan-100 mt-2 font-medium">Scale 300 - 850 • Verified Today</p>
+            </div>
+            <div class="space-y-2 text-left bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs font-semibold text-slate-700">
+              <div class="flex justify-between py-1 border-b border-slate-100"><span>Payment History:</span> <span class="text-emerald-600 font-bold">100% On-Time</span></div>
+              <div class="flex justify-between py-1 border-b border-slate-100"><span>Credit Utilization:</span> <span class="text-emerald-600 font-bold">3.1% (Optimal)</span></div>
+              <div class="flex justify-between py-1"><span>Adverse Marks:</span> <span class="text-emerald-600 font-bold">None Recorded</span></div>
+            </div>
+            <p class="text-[11px] text-slate-400 font-medium">Your score qualifies you for maximum credit limits and premium banking tiers.</p>
           </div>`;
       } else if (type === 'transactions') {
         title.textContent = "Complete Transaction History";
         const history = currentUserData?.history || [];
         if (history.length === 0) {
-          body.innerHTML = `<p class="text-center text-slate-400 py-6">No past transactions found.</p>`;
+          body.innerHTML = `<p class="text-center text-slate-400 py-8 font-medium">No prior transactions on record.</p>`;
         } else {
-          let listHtml = `<div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">`;
+          let listHtml = `<div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">`;
           history.slice().reverse().forEach(t => {
             listHtml += `
               <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                  <div class="w-8 h-8 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7m10 0v10"/></svg>
                   </div>
                   <div>
-                    <p class="font-bold text-slate-800">${t.title}</p>
-                    <p class="text-[10px] text-slate-400">${t.date}</p>
+                    <p class="font-bold text-slate-900 text-xs">${t.title}</p>
+                    <p class="text-[10px] text-slate-400 font-medium">${t.date}</p>
                   </div>
                 </div>
-                <span class="font-bold font-mono text-red-600">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+                <span class="font-bold font-mono text-rose-600 text-xs">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
               </div>`;
           });
           listHtml += `</div>`;
@@ -469,68 +534,70 @@
       } else if (type === 'depositCheck') {
         title.textContent = "Mobile Check Deposit";
         body.innerHTML = `
-          <div class="space-y-3">
-            <div><label class="block font-bold text-slate-600 mb-1">Check Amount ($)</label><input id="chkAmt" type="number" placeholder="0.00" class="w-full h-11 border rounded-xl px-3 font-bold bg-slate-50"></div>
-            <div><label class="block font-bold text-slate-600 mb-1">Front Image</label><input type="file" accept="image/*" class="w-full text-xs"></div>
-            <div><label class="block font-bold text-slate-600 mb-1">Back Image (Signed)</label><input type="file" accept="image/*" class="w-full text-xs"></div>
-            <button onclick="alert('Check deposit submitted for manual clearance!'); closeMenuModal();" class="w-full h-11 bg-emerald-600 text-white rounded-xl font-bold mt-2">Submit Check Deposit</button>
+          <div class="space-y-3.5 text-xs">
+            <div><label class="block font-bold text-slate-700 mb-1">Check Amount ($)</label><input id="chkAmt" type="number" placeholder="0.00" class="w-full h-11 border border-slate-200 rounded-xl px-3 font-bold bg-slate-50 text-slate-800"></div>
+            <div><label class="block font-bold text-slate-700 mb-1">Front Image Capture</label><input type="file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-50 file:text-cyan-700"></div>
+            <div><label class="block font-bold text-slate-700 mb-1">Back Image (Signed)</label><input type="file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-50 file:text-cyan-700"></div>
+            <button onclick="alert('Check deposit submitted for manual clearing & verification.'); closeMenuModal();" class="w-full h-11 bg-slate-900 text-white rounded-xl font-bold mt-2 shadow-md">Submit Check Deposit</button>
           </div>`;
       } else if (type === 'depositCrypto') {
-        title.textContent = "Crypto Deposit Vault";
+        title.textContent = "Crypto Vault Gateway";
         body.innerHTML = `
-          <div class="space-y-3 text-center">
-            <p class="text-slate-500">Send USDT (ERC20 / TRC20) to your dedicated deposit address below:</p>
-            <div class="bg-slate-100 p-3 rounded-xl font-mono text-[11px] font-bold break-all">0x71C839aE2948b8091B0a811d04b86fB1</div>
-            <button onclick="alert('Deposit address copied to clipboard!'); closeMenuModal();" class="w-full h-10 bg-[#0a2540] text-white rounded-xl font-bold">Copy Address</button>
+          <div class="space-y-3.5 text-center text-xs">
+            <p class="text-slate-500 font-medium">Send supported digital assets (USDT ERC20 / TRC20) to your dedicated secure vault address:</p>
+            <div class="bg-slate-100 p-3.5 rounded-xl font-mono text-[11px] font-bold text-slate-800 break-all border border-slate-200">0x71C839aE2948b8091B0a811d04b86fB1</div>
+            <button onclick="alert('Vault address copied to clipboard.'); closeMenuModal();" class="w-full h-11 bg-slate-900 text-white rounded-xl font-bold shadow-md">Copy Address</button>
           </div>`;
       } else if (type === 'loans') {
-        title.textContent = "Loan Application & Lines";
+        title.textContent = "Credit Lines & Loan Facility";
         body.innerHTML = `
-          <div class="space-y-3">
-            <p class="text-slate-500">You are pre-qualified for personal lines up to $50,000 based on your profile history.</p>
-            <div><label class="block font-bold text-slate-600 mb-1">Requested Amount ($)</label><input type="number" placeholder="5000" class="w-full h-11 border rounded-xl px-3 font-bold bg-slate-50"></div>
-            <button onclick="alert('Loan application submitted for underwriting review.'); closeMenuModal();" class="w-full h-11 bg-[#0a2540] text-white rounded-xl font-bold mt-2">Apply Now</button>
+          <div class="space-y-3.5 text-xs">
+            <p class="text-slate-500 font-medium">You are pre-approved for personal credit lines up to $100,000 based on your Tier 2 status.</p>
+            <div><label class="block font-bold text-slate-700 mb-1">Requested Facility Amount ($)</label><input type="number" placeholder="10000" class="w-full h-11 border border-slate-200 rounded-xl px-3 font-bold bg-slate-50 text-slate-800 font-mono"></div>
+            <button onclick="alert('Loan application submitted for underwriting review.'); closeMenuModal();" class="w-full h-11 bg-slate-900 text-white rounded-xl font-bold mt-2 shadow-md">Apply For Facility</button>
           </div>`;
       } else if (type === 'cards') {
-        title.textContent = "Virtual & Physical Cards";
+        title.textContent = "Visa Infinite Cards";
         body.innerHTML = `
-          <div class="space-y-3">
-            <div class="bg-gradient-to-r from-purple-900 to-indigo-900 p-4 rounded-2xl text-white">
-              <p class="text-[10px] opacity-70">Virtual Debit Card</p>
-              <p class="font-mono tracking-widest text-sm mt-1">•••• •••• •••• 8821</p>
-              <div class="flex justify-between mt-3 text-[10px]"><span>Exp: 09/28</span><span>CVV: ***</span></div>
+          <div class="space-y-3.5 text-xs">
+            <div class="bg-gradient-to-r from-slate-900 to-blue-950 p-4 rounded-2xl text-white shadow-lg border border-slate-800">
+              <p class="text-[10px] opacity-75 font-semibold">Virtual Debit Card</p>
+              <p class="font-mono tracking-widest text-sm mt-1 font-bold">•••• •••• •••• 9042</p>
+              <div class="flex justify-between mt-3 text-[10px] opacity-90"><span>Exp: 11/29</span><span>CVV: ***</span></div>
             </div>
-            <button onclick="alert('New physical card ordered successfully!'); closeMenuModal();" class="w-full h-11 bg-[#0a2540] text-white rounded-xl font-bold">Request Physical Replacement</button>
+            <button onclick="alert('Physical card replacement ordered successfully.'); closeMenuModal();" class="w-full h-11 bg-slate-900 text-white rounded-xl font-bold shadow-md">Request Physical Replacement</button>
           </div>`;
       } else if (type === 'profile') {
         title.textContent = "User Profile Information";
         body.innerHTML = `
-          <div class="space-y-2 font-mono">
-            <div class="bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-400 block text-[10px]">FULL NAME</span><span class="font-bold text-slate-800">${currentUserData?.name}</span></div>
-            <div class="bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-400 block text-[10px]">EMAIL ADDRESS</span><span class="font-bold text-slate-800">${currentUserData?.email}</span></div>
-            <div class="bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-400 block text-[10px]">ACCOUNT NUMBER</span><span class="font-bold text-slate-800">${currentUserData?.accNo}</span></div>
+          <div class="space-y-2.5 font-mono text-xs">
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">FULL LEGAL NAME</span><span class="font-bold text-slate-900">${currentUserData?.name}</span></div>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">EMAIL ADDRESS</span><span class="font-bold text-slate-900">${currentUserData?.email}</span></div>
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100"><span class="text-slate-400 block text-[9px] font-bold">ACCOUNT NUMBER</span><span class="font-bold text-slate-900">${currentUserData?.accNo}</span></div>
+            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 flex justify-between items-center"><span class="text-emerald-800 font-bold text-[10px]">VERIFICATION STATUS</span><span class="bg-emerald-200 text-emerald-900 text-[10px] font-black px-2 py-0.5 rounded uppercase">VERIFIED</span></div>
           </div>`;
       } else if (type === 'settings') {
-        title.textContent = "Account Settings & Security";
+        title.textContent = "Security & Access Settings";
         body.innerHTML = `
-          <div class="space-y-3">
-            <div><label class="block font-bold text-slate-600 mb-1">New Password</label><input type="password" placeholder="••••••••" class="w-full h-10 border rounded-xl px-3 bg-slate-50"></div>
-            <div><label class="block font-bold text-slate-600 mb-1">New 4-Digit PIN</label><input type="password" maxlength="4" placeholder="••••" class="w-full h-10 border rounded-xl px-3 bg-slate-50 font-mono"></div>
-            <button onclick="alert('Security settings updated successfully.'); closeMenuModal();" class="w-full h-10 bg-[#0a2540] text-white rounded-xl font-bold">Save Changes</button>
+          <div class="space-y-3.5 text-xs">
+            <div><label class="block font-bold text-slate-700 mb-1">New Portal Password</label><input type="password" placeholder="••••••••" class="w-full h-11 border border-slate-200 rounded-xl px-3 bg-slate-50 text-slate-800"></div>
+            <div><label class="block font-bold text-slate-700 mb-1">New 4-Digit Security PIN</label><input type="password" maxlength="4" placeholder="••••" class="w-full h-11 border border-slate-200 rounded-xl px-3 bg-slate-50 text-slate-800 font-mono font-bold"></div>
+            <button onclick="alert('Security parameters updated successfully.'); closeMenuModal();" class="w-full h-11 bg-slate-900 text-white rounded-xl font-bold shadow-md">Save Changes</button>
           </div>`;
       } else if (type === 'status') {
-        title.textContent = "Account Compliance Status";
+        title.textContent = "Compliance & Status Audit";
         body.innerHTML = `
-          <div class="space-y-2">
-            <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl font-bold"><span>Status:</span> <span class="text-emerald-600">${currentUserData?.status}</span></div>
+          <div class="space-y-2.5 text-xs">
+            <div class="flex justify-between bg-slate-50 p-3 rounded-xl font-bold border border-slate-100"><span class="text-slate-500">Account Status:</span> <span class="text-emerald-600">${currentUserData?.status}</span></div>
+            <div class="flex justify-between bg-emerald-50 p-3 rounded-xl font-bold text-emerald-900 border border-emerald-200"><span>Compliance Audit:</span> <span>Passed Tier 2</span></div>
           </div>`;
       } else if (type === 'support') {
-        title.textContent = "Customer Support & Helpdesk";
+        title.textContent = "24/7 Client Help Desk";
         body.innerHTML = `
-          <div class="space-y-3 text-center">
-            <p class="text-slate-500">Need immediate help? Reach out to our 24/7 priority customer support team or use the live chat widget on your dashboard.</p>
-            <div class="bg-slate-50 p-3 rounded-xl font-bold text-slate-800">support@cashflowbanking3.com</div>
-            <button onclick="alert('Support ticket dispatched.'); closeMenuModal();" class="w-full h-10 bg-[#0a2540] text-white rounded-xl font-bold">Open Support Ticket</button>
+          <div class="space-y-3.5 text-center text-xs">
+            <p class="text-slate-500 font-medium">Require assistance? Contact our private relationship managers or use the live chat widget on your dashboard.</p>
+            <div class="bg-slate-50 p-3 rounded-xl font-bold text-slate-800 border border-slate-100">support@apextrustbank.com</div>
+            <button onclick="alert('Support ticket created.'); closeMenuModal();" class="w-full h-11 bg-slate-900 text-white rounded-xl font-bold shadow-md">Open Support Ticket</button>
           </div>`;
       }
     };
@@ -558,7 +625,11 @@
     function showAlert(msg, type = 'error') {
       const box = document.getElementById('alertBox');
       if (!msg) { box.classList.add('hidden'); return; }
-      box.className = `p-3 rounded-xl text-xs font-semibold mb-2 text-center ${type === 'error' ? 'bg-red-100 text-red-700' : type === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-700'}`;
+      box.className = `p-3.5 rounded-2xl text-xs font-semibold mb-2 text-center border shadow-sm ${
+        type === 'error' ? 'bg-rose-50 text-rose-700 border-rose-200' : 
+        type === 'warning' ? 'bg-amber-50 text-amber-800 border-amber-200' : 
+        'bg-emerald-50 text-emerald-700 border-emerald-200'
+      }`;
       box.textContent = msg;
       box.classList.remove('hidden');
     }
@@ -574,7 +645,7 @@
       try {
         const q = query(collection(db, 'cashflow_accounts'), where('email', '==', email));
         const existing = await getDocs(q);
-        if (!existing.empty) { showAlert('Email is already registered.'); return; }
+        if (!existing.empty) { showAlert('Email address is already registered.'); return; }
 
         const rawId = Math.floor(100000 + Math.random() * 900000);
         const accNo = '458' + rawId;
@@ -585,9 +656,10 @@
           savingsBalance: 0,
           investmentBalance: 0,
           dailyLimit: 10000,
+          creditScore: 785,
           routingNo: '021000' + (100 + Math.floor(Math.random() * 899)),
-          swiftCode: 'CSFLUS33' + Math.floor(100 + Math.floor(Math.random() * 899)),
-          ibanNo: 'US64 CSFL 0210 ' + rawId + ' 1000',
+          swiftCode: 'APEXUS33' + Math.floor(100 + Math.floor(Math.random() * 899)),
+          ibanNo: 'US64 APEX 0210 ' + rawId + ' 1000',
           status: 'PENDING',
           holdReason: '',
           clearanceFee: 0,
@@ -597,7 +669,7 @@
 
         document.getElementById('loginAccNo').value = accNo;
         showPage('login');
-        showAlert(`Account created! Your Account Number is ${accNo}. Status: PENDING approval.`, 'warning');
+        showAlert(`Application submitted successfully! Your Account Number is ${accNo}. Status: PENDING approval.`, 'warning');
       } catch (err) {
         showAlert('Error: ' + err.message);
       }
@@ -607,23 +679,23 @@
       const accNo = document.getElementById('loginAccNo').value.trim();
       const pass = document.getElementById('loginPass').value;
 
-      if (!accNo || !pass) { showAlert('Enter both Account Number and password.'); return; }
+      if (!accNo || !pass) { showAlert('Enter both Account Number and portal password.'); return; }
 
       try {
         const q = query(collection(db, 'cashflow_accounts'), where('accNo', '==', accNo));
         const snap = await getDocs(q);
 
-        if (snap.empty) { showAlert('Account number not found.'); return; }
+        if (snap.empty) { showAlert('Account number not recognized.'); return; }
 
         snap.forEach(d => {
           currentUserData = d.data();
           currentDocId = d.id;
         });
 
-        if (currentUserData.pass !== pass) { showAlert('Incorrect password.'); return; }
+        if (currentUserData.pass !== pass) { showAlert('Incorrect password entered.'); return; }
 
         if (currentUserData.status === 'PENDING') {
-          showAlert('Your account registration is still PENDING administrator approval.', 'warning');
+          showAlert('Your account registration is currently PENDING administrative review.', 'warning');
           return;
         }
 
@@ -641,12 +713,13 @@
 
     function updateDashboardUI() {
       const initials = currentUserData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-      document.getElementById('userAvatar').textContent = initials || 'CF';
+      document.getElementById('userAvatar').textContent = initials || 'AT';
       document.getElementById('userName').textContent = currentUserData.name;
       document.getElementById('userAcc').textContent = currentUserData.accNo;
       document.getElementById('routingNo').textContent = currentUserData.routingNo || '021000021';
-      document.getElementById('swiftCode').textContent = currentUserData.swiftCode || 'CSFLUS33XXX';
-      document.getElementById('ibanNo').textContent = currentUserData.ibanNo || 'US64 CSFL 0210 0000 1000';
+      document.getElementById('swiftCode').textContent = currentUserData.swiftCode || 'APEXUS33XXX';
+      document.getElementById('ibanNo').textContent = currentUserData.ibanNo || 'US64 APEX 0210 0000 1000';
+      document.getElementById('mainCreditScoreVal').textContent = currentUserData.creditScore || 785;
       
       const limitVal = currentUserData.dailyLimit !== undefined ? parseFloat(currentUserData.dailyLimit) : 10000;
       const formattedLimit = '$' + limitVal.toLocaleString(undefined, {minimumFractionDigits: 2});
@@ -657,8 +730,8 @@
       const holdNotice = document.getElementById('holdNotice');
 
       if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
-        statusBadge.className = "bg-red-100 text-red-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
-        statusBadge.textContent = currentUserData.status === 'FROZEN' ? "ON HOLD / FROZEN" : "RESTRICTED";
+        statusBadge.className = "bg-rose-100 text-rose-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider";
+        statusBadge.textContent = currentUserData.status === 'FROZEN' ? "ON HOLD" : "RESTRICTED";
         
         document.getElementById('holdReasonText').textContent = currentUserData.holdReason || "Account activities are temporarily restricted due to compliance auditing.";
         if (currentUserData.clearanceFee && currentUserData.clearanceFee > 0) {
@@ -669,8 +742,8 @@
         }
         holdNotice.classList.remove('hidden');
       } else {
-        statusBadge.className = "bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
-        statusBadge.textContent = "APPROVED";
+        statusBadge.className = "bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider";
+        statusBadge.textContent = "ACTIVE";
         holdNotice.classList.add('hidden');
       }
 
@@ -685,21 +758,21 @@
       const btnS = document.getElementById('tabSavings');
       const btnI = document.getElementById('tabInvestment');
 
-      btnC.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
-      btnS.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
-      btnI.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+      btnC.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
+      btnS.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
+      btnI.className = "flex-1 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-xs font-semibold";
 
       let bal = 0;
       if (type === 'checking') {
-        btnC.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
+        btnC.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
         document.getElementById('accTypeLabel').textContent = "Checking Balance";
         bal = currentUserData.checkingBalance || currentUserData.balance || 0;
       } else if (type === 'savings') {
-        btnS.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
+        btnS.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
         document.getElementById('accTypeLabel').textContent = "Savings Balance";
         bal = currentUserData.savingsBalance || 0;
       } else if (type === 'investment') {
-        btnI.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
+        btnI.className = "flex-1 py-2 rounded-lg bg-white text-slate-900 shadow-sm transition-all text-xs font-extrabold";
         document.getElementById('accTypeLabel').textContent = "Investment Balance";
         bal = currentUserData.investmentBalance || 0;
       }
@@ -717,7 +790,7 @@
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
           </div>
           <div>
-            <p class="font-bold text-slate-800">Account Opening Bonus</p>
+            <p class="font-bold text-slate-900">Account Opening Bonus</p>
             <p class="text-[10px] text-slate-400">System Credit</p>
           </div>
         </div>
@@ -727,15 +800,15 @@
       history.slice(-3).reverse().forEach(t => {
         html += `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
           <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center">
+            <div class="w-7 h-7 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7m10 0v10"/></svg>
             </div>
             <div>
-              <p class="font-bold text-slate-800">${t.title}</p>
+              <p class="font-bold text-slate-900">${t.title}</p>
               <p class="text-[10px] text-slate-400">${t.date}</p>
             </div>
           </div>
-          <span class="font-bold text-red-600">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+          <span class="font-bold text-rose-600 font-mono">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
         </div>`;
       });
 
@@ -784,7 +857,7 @@
       const pin = document.getElementById('trPin').value.trim();
 
       if (!recipient || !bank || !accNo || amount <= 0 || !pin) {
-        errBox.textContent = 'Please fill out all required transfer details accurately.';
+        errBox.textContent = 'Please fill out all required transfer fields accurately.';
         errBox.classList.remove('hidden');
         return;
       }
@@ -797,7 +870,7 @@
       }
 
       if (trType === 'WIRE' && !swift) {
-        errBox.textContent = 'SWIFT / BIC code is required for International Wire Transfers.';
+        errBox.textContent = 'SWIFT / BIC code is mandatory for International SWIFT Wire Transfers.';
         errBox.classList.remove('hidden');
         return;
       }
@@ -818,7 +891,7 @@
 
       const btn = document.getElementById('trSubmitBtn');
       btn.disabled = true;
-      btn.textContent = 'Processing Transfer...';
+      btn.textContent = 'Processing Payment...';
 
       try {
         const updatedBal = currentBal - amount;
@@ -853,15 +926,14 @@
         switchAccount(activeAccountTab);
         renderTransactions();
 
-        // Populate and display receipt modal instead of native alert
-        const refNo = 'CFB-' + Math.floor(1000000 + Math.random() * 9000000);
+        const refNo = 'ATB-' + Math.floor(1000000 + Math.random() * 9000000);
         const maskedAcc = '•••• ' + accNo.slice(-4);
         const sourceLabel = sourceAcc.charAt(0).toUpperCase() + sourceAcc.slice(1) + ' Account';
 
         document.getElementById('recAmount').textContent = '$' + amount.toLocaleString(undefined, {minimumFractionDigits: 2});
         document.getElementById('recRef').textContent = refNo;
         document.getElementById('recDate').textContent = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-        document.getElementById('recType').textContent = trType === 'WIRE' ? 'International Wire Transfer' : 'Local Bank Transfer';
+        document.getElementById('recType').textContent = trType === 'WIRE' ? 'International SWIFT Wire Transfer' : 'Local Domestic Transfer';
         document.getElementById('recSource').textContent = sourceLabel;
         document.getElementById('recRecipient').textContent = recipient;
         document.getElementById('recBank').textContent = bank;
