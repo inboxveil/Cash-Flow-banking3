@@ -32,7 +32,7 @@
 </svg>
 
 <!-- INITIAL APP LOADER -->
-<div id="loader" class="fixed inset-0 z-[9999] bg-[#0a2540] flex flex-col items-center justify-center transition-opacity duration-500">
+<div id="loader" class="fixed inset-0 z-[9999] bg-[#0a2540] flex flex-col items-center justify-center transition-opacity duration-500 pointer-events-none">
   <div class="flex items-center gap-2 text-white font-black text-2xl"><svg class="w-7 h-7"><use href="#i-bank"/></svg>CASH FLOW</div>
   <div class="w-8 h-8 border-2 border-white/20 border-t-[#00ff94] rounded-full animate-spin mt-4"></div>
 </div>
@@ -359,6 +359,24 @@ const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 let cur=null,curId=null,selectedTransferType='',currentReceipt=null,forgotMode='password',balHidden=false,realBal=0;
 const $=id=>document.getElementById(id);
 
+// Reliable Initial Loader Dismissal
+const dismissInitialLoader = () => {
+  const l = $('loader');
+  if (l) {
+    l.style.opacity = '0';
+    setTimeout(() => {
+      l.style.display = 'none';
+    }, 500);
+  }
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', dismissInitialLoader);
+} else {
+  dismissInitialLoader();
+}
+setTimeout(dismissInitialLoader, 1500);
+
 window.showActionLoader=(msg='Processing...')=>{
   $('actionLoaderMsg').textContent=msg;
   $('actionLoader').style.display='flex';
@@ -374,13 +392,6 @@ window.showFineAlert=(t,m,type='error')=>{ $('fineTitle').textContent=t;$('fineM
 window.closeFineAlert=()=>{$('fineAlert').style.display='none';$('fineAlert').classList.add('hidden');};
 
 window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    const l=$('loader');
-    if(l){
-      l.style.opacity='0';
-      setTimeout(()=>l.remove(),500);
-    }
-  },800);
   const id=localStorage.getItem('cfb_id');
   if(id){
     loadDashboard(id);
