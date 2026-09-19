@@ -122,7 +122,7 @@
           <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Client Portal Sign In</h2>
           <p class="text-xs text-slate-500 mt-1">Access your secure accounts and dashboards</p>
         </div>
-        <button onclick="showAdminLogin()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-xl transition-all border border-slate-200">Admin Portal</button>
+        <a href="admin.html" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-xl transition-all border border-slate-200 text-center">Admin Portal</a>
       </div>
       
       <div class="space-y-4">
@@ -142,52 +142,6 @@
 
       <div class="flex justify-center items-center mt-6 text-xs text-slate-500 pt-4 border-t border-slate-100">
         <p>New customer? <a href="#" onclick="showPage('register')" class="text-cyan-600 font-extrabold hover:underline">Open an Account</a></p>
-      </div>
-    </div>
-
-    <!-- VIEW 1B: ADMIN LOGIN MODAL / VIEW -->
-    <div id="adminLoginView" class="hidden p-6 pt-3">
-      <div class="mb-5 flex justify-between items-center">
-        <div>
-          <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Admin Portal Sign In</h2>
-          <p class="text-xs text-slate-500 mt-1">Manage user accounts, balances, and transfer approvals</p>
-        </div>
-        <button onclick="showPage('login')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-xl transition-all border border-slate-200">Client Portal</button>
-      </div>
-      
-      <div class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">Admin Passcode</label>
-          <input id="adminPassInput" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-cyan-600 bg-slate-50 text-slate-800">
-        </div>
-        <button onclick="loginAdmin()" class="w-full h-12 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-cyan-600/20 active:scale-[0.98] transition-all">Access Admin Control Panel</button>
-      </div>
-    </div>
-
-    <!-- VIEW 1C: ADMIN DASHBOARD -->
-    <div id="adminDashboardView" class="hidden bg-slate-50/80 p-4 space-y-4 max-h-[80vh] overflow-y-auto">
-      <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
-        <div>
-          <h3 class="font-black text-sm text-slate-900">Admin Control Center</h3>
-          <p class="text-[10px] text-slate-400 font-medium">Pending Transfer Requests & User Accounts</p>
-        </div>
-        <button onclick="showPage('login')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] font-extrabold rounded-xl transition-all">Sign Out</button>
-      </div>
-
-      <!-- Pending Transfers List -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
-        <h4 class="font-extrabold text-xs text-slate-900 uppercase tracking-wider mb-3">Pending Transfers Requiring Approval</h4>
-        <div id="adminPendingTransfersList" class="space-y-3 text-xs">
-          <p class="text-slate-400 text-center py-4">Loading pending transfers...</p>
-        </div>
-      </div>
-
-      <!-- All Users Management List -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
-        <h4 class="font-extrabold text-xs text-slate-900 uppercase tracking-wider mb-3">Registered Client Accounts</h4>
-        <div id="adminUsersList" class="space-y-3 text-xs">
-          <p class="text-slate-400 text-center py-4">Loading users...</p>
-        </div>
       </div>
     </div>
 
@@ -297,7 +251,7 @@
         </div>
       </div>
 
-      <!-- CREDIT SCORE WIDGET (CLICKABLE) -->
+      <!-- CREDIT SCORE WIDGET -->
       <div onclick="openMenuModal('creditScore')" class="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200/70 rounded-2xl p-3.5 flex items-center justify-between shadow-sm cursor-pointer hover:shadow-md hover:border-cyan-300 transition-all group">
         <div class="flex items-center gap-3">
           <div class="w-9 h-9 rounded-xl bg-cyan-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-cyan-600/20 group-hover:scale-105 transition-transform">
@@ -684,196 +638,16 @@
       if (userUnsubscribe) { userUnsubscribe(); userUnsubscribe = null; }
 
       document.getElementById('loginView').classList.add('hidden');
-      document.getElementById('adminLoginView').classList.add('hidden');
-      document.getElementById('adminDashboardView').classList.add('hidden');
       document.getElementById('registerView').classList.add('hidden');
       document.getElementById('dashboardView').classList.add('hidden');
       document.getElementById('menuBtn').classList.add('hidden');
       showAlert('');
 
       if (viewName === 'login') document.getElementById('loginView').classList.remove('hidden');
-      if (viewName === 'adminLogin') document.getElementById('adminLoginView').classList.remove('hidden');
-      if (viewName === 'adminDashboard') {
-        document.getElementById('adminDashboardView').classList.remove('hidden');
-        loadAdminPanel();
-      }
       if (viewName === 'register') document.getElementById('registerView').classList.remove('hidden');
       if (viewName === 'dashboard') {
         document.getElementById('dashboardView').classList.remove('hidden');
         document.getElementById('menuBtn').classList.remove('hidden');
-      }
-    };
-
-    window.showAdminLogin = () => {
-      showPage('adminLogin');
-    };
-
-    window.loginAdmin = () => {
-      const pass = document.getElementById('adminPassInput').value;
-      if (pass === 'admin123' || pass === 'ApexAdmin2026') {
-        showPage('adminDashboard');
-      } else {
-        showAlert('Incorrect Admin Passcode (Try admin123)');
-      }
-    };
-
-    window.loadAdminPanel = async () => {
-      const transListEl = document.getElementById('adminPendingTransfersList');
-      const usersListEl = document.getElementById('adminUsersList');
-      
-      transListEl.innerHTML = `<p class="text-slate-400 text-center py-4">Loading pending transfers...</p>`;
-      usersListEl.innerHTML = `<p class="text-slate-400 text-center py-4">Loading users...</p>`;
-
-      try {
-        const snap = await getDocs(collection(db, 'cashflow_accounts'));
-        let allPending = [];
-        let allUsers = [];
-
-        snap.forEach(d => {
-          const u = d.id;
-          const data = d.data();
-          allUsers.push({ id: u, ...data });
-          if (data.pendingTransfers && data.pendingTransfers.length > 0) {
-            data.pendingTransfers.forEach((p, idx) => {
-              allPending.push({ userId: u, userAcc: data.accNo, userName: data.name, ...p, pendingIndex: idx });
-            });
-          }
-        });
-
-        // Render pending transfers
-        if (allPending.length === 0) {
-          transListEl.innerHTML = `<p class="text-slate-400 text-center py-4">No pending transfers awaiting approval.</p>`;
-        } else {
-          let html = '';
-          allPending.forEach(item => {
-            html += `
-              <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex flex-col gap-2">
-                <div class="flex justify-between items-center">
-                  <span class="font-bold text-slate-900">${item.userName} (Acc: ${item.userAcc})</span>
-                  <span class="font-bold font-mono text-amber-600 text-sm">+$${parseFloat(item.amount).toLocaleString(undefined,{minimumFractionDigits:2})}</span>
-                </div>
-                <div class="text-[11px] text-slate-500 space-y-0.5">
-                  <p><b>To:</b> ${item.recipient} (${item.bank}) • ${item.accNo}</p>
-                  <p><b>Type:</b> ${item.type} • <b>Date:</b> ${item.date}</p>
-                </div>
-                <div class="flex gap-2 pt-1">
-                  <button onclick="adminApproveTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm">Approve & Send</button>
-                  <button onclick="adminRejectTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-xs shadow-sm">Reject / Refund</button>
-                </div>
-              </div>`;
-          });
-          transListEl.innerHTML = html;
-        }
-
-        // Render users list
-        if (allUsers.length === 0) {
-          usersListEl.innerHTML = `<p class="text-slate-400 text-center py-4">No accounts registered.</p>`;
-        } else {
-          let uHtml = '';
-          allUsers.forEach(usr => {
-            const checkBal = usr.checkingBalance || usr.balance || 0;
-            uHtml += `
-              <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex flex-col gap-2">
-                <div class="flex justify-between items-center">
-                  <div>
-                    <p class="font-bold text-slate-900">${usr.name} <span class="text-[10px] font-mono text-slate-400">(${usr.accNo})</span></p>
-                    <p class="text-[10px] text-slate-500">${usr.email}</p>
-                  </div>
-                  <span class="px-2 py-0.5 rounded text-[9px] font-extrabold uppercase ${usr.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${usr.status || 'PENDING'}</span>
-                </div>
-                <div class="flex items-center gap-2 pt-1 text-[11px]">
-                  <span class="font-mono font-bold text-slate-700">Checking: $${checkBal.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
-                </div>
-                <div class="flex gap-2 pt-1">
-                  <button onclick="adminToggleUserStatus('${usr.id}', '${usr.status === 'ACTIVE' ? 'PENDING' : 'ACTIVE'}')" class="flex-1 py-1.5 bg-slate-900 text-white rounded-xl font-bold text-[10px]">${usr.status === 'ACTIVE' ? 'Suspend / Pending' : 'Approve Account'}</button>
-                </div>
-              </div>`;
-          });
-          usersListEl.innerHTML = uHtml;
-        }
-
-      } catch (err) {
-        transListEl.innerHTML = `<p class="text-rose-500 text-center py-4">Error: ${err.message}</p>`;
-      }
-    };
-
-    window.adminApproveTransfer = async (userId, pIndex) => {
-      try {
-        const userRef = doc(db, 'cashflow_accounts', userId);
-        const snap = await getDocs(query(collection(db, 'cashflow_accounts'), where('__name__', '==', userId)));
-        // Get user data
-        let uData = null;
-        snap.forEach(d => uData = d.data());
-        if (!uData) return;
-
-        let pendingList = [...(uData.pendingTransfers || [])];
-        const transferToApprove = pendingList.splice(pIndex, 1)[0];
-        if (!transferToApprove) return;
-
-        // Deduct from balance
-        let checkingBal = uData.checkingBalance || uData.balance || 0;
-        let savingsBal = uData.savingsBalance || 0;
-        let investBal = uData.investmentBalance || 0;
-
-        if (transferToApprove.sourceAcc === 'savings') savingsBal -= transferToApprove.amount;
-        else if (transferToApprove.sourceAcc === 'investment') investBal -= transferToApprove.amount;
-        else {
-          checkingBal -= transferToApprove.amount;
-        }
-
-        const historyItem = {
-          title: `${transferToApprove.type === 'WIRE' ? 'Wire' : 'Transfer'} to ${transferToApprove.recipient} (${transferToApprove.bank})`,
-          amount: transferToApprove.amount,
-          date: transferToApprove.date
-        };
-
-        const updatedHistory = [...(uData.history || []), historyItem];
-
-        await updateDoc(userRef, {
-          pendingTransfers: pendingList,
-          history: updatedHistory,
-          checkingBalance: checkingBal,
-          balance: checkingBal,
-          savingsBalance: savingsBal,
-          investmentBalance: investBal
-        });
-
-        alert('Transfer approved successfully! Funds deducted and moved to completed history.');
-        loadAdminPanel();
-      } catch (err) {
-        alert('Error approving transfer: ' + err.message);
-      }
-    };
-
-    window.adminRejectTransfer = async (userId, pIndex) => {
-      try {
-        const userRef = doc(db, 'cashflow_accounts', userId);
-        const snap = await getDocs(query(collection(db, 'cashflow_accounts'), where('__name__', '==', userId)));
-        let uData = null;
-        snap.forEach(d => uData = d.data());
-        if (!uData) return;
-
-        let pendingList = [...(uData.pendingTransfers || [])];
-        pendingList.splice(pIndex, 1)[0];
-
-        await updateDoc(userRef, {
-          pendingTransfers: pendingList
-        });
-
-        alert('Transfer rejected and cleared.');
-        loadAdminPanel();
-      } catch (err) {
-        alert('Error rejecting transfer: ' + err.message);
-      }
-    };
-
-    window.adminToggleUserStatus = async (userId, newStatus) => {
-      try {
-        await updateDoc(doc(db, 'cashflow_accounts', userId), { status: newStatus });
-        alert('Account status updated to ' + newStatus);
-        loadAdminPanel();
-      } catch (err) {
-        alert('Error: ' + err.message);
       }
     };
 
@@ -963,7 +737,6 @@
         updateDashboardUI();
         showPage('dashboard');
 
-        // Realtime listener for client updates (auto update when admin approves!)
         if (userUnsubscribe) userUnsubscribe();
         userUnsubscribe = onSnapshot(doc(db, 'cashflow_accounts', currentDocId), (docSnap) => {
           if (docSnap.exists()) {
@@ -1244,6 +1017,9 @@
       currentDocId = null;
       showPage('login');
     };
+
+    // Initialize default view
+    showPage('login');
   </script>
 
   <!-- Live Chat Widget -->
