@@ -516,9 +516,9 @@
         
         if (pendingList.length > 0) {
           listHtml += `<p class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">Pending Approvals</p>`;
-          pendingList.slice().reverse().forEach(p => {
+          pendingList.slice().reverse().forEach((p, idx) => {
             listHtml += `
-              <div class="flex justify-between items-center bg-amber-50/70 p-3 rounded-xl border border-amber-200">
+              <div onclick="viewTransactionDetails('pending', ${idx})" class="flex justify-between items-center bg-amber-50/70 p-3 rounded-xl border border-amber-200 cursor-pointer hover:bg-amber-100/70 transition-all">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -537,9 +537,9 @@
           listHtml += `<p class="text-center text-slate-400 py-8 font-medium">No prior transactions on record.</p>`;
         } else if (history.length > 0) {
           listHtml += `<p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mt-3">Completed History</p>`;
-          history.slice().reverse().forEach(t => {
+          history.slice().reverse().forEach((t, idx) => {
             listHtml += `
-              <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+              <div onclick="viewTransactionDetails('completed', ${idx})" class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100 cursor-pointer hover:bg-slate-100 transition-all">
                 <div class="flex items-center gap-3">
                   <div class="w-8 h-8 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center font-bold">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7m10 0v10"/></svg>
@@ -825,8 +825,9 @@
       let html = '';
 
       if (pendingList.length > 0) {
-        pendingList.slice(-2).reverse().forEach(p => {
-          html += `<div class="flex justify-between items-center border-b border-amber-100 pb-2 bg-amber-50/50 p-1 rounded-xl">
+        pendingList.slice(-2).reverse().forEach((p, idx) => {
+          const originalIdx = pendingList.length - 1 - idx;
+          html += `<div onclick="viewTransactionDetails('pending', ${originalIdx})" class="flex justify-between items-center border-b border-amber-100 pb-2 bg-amber-50/50 p-1.5 rounded-xl cursor-pointer hover:bg-amber-100 transition-all">
             <div class="flex items-center gap-2">
               <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -841,8 +842,9 @@
         });
       }
 
-      history.slice(-3).reverse().forEach(t => {
-        html += `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
+      history.slice(-3).reverse().forEach((t, idx) => {
+        const originalIdx = history.length - 1 - idx;
+        html += `<div onclick="viewTransactionDetails('completed', ${originalIdx})" class="flex justify-between items-center border-b border-slate-50 pb-2 p-1 rounded-xl cursor-pointer hover:bg-slate-50 transition-all">
           <div class="flex items-center gap-2">
             <div class="w-7 h-7 rounded-full bg-cyan-100 text-cyan-700 flex items-center justify-center">
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7m10 0v10"/></svg>
@@ -873,6 +875,48 @@
 
       list.innerHTML = html;
     }
+
+    window.viewTransactionDetails = (category, index) => {
+      closeMenuModal();
+      let tx = null;
+      let isPending = (category === 'pending');
+
+      if (isPending) {
+        tx = currentUserData.pendingTransfers[index];
+      } else {
+        tx = currentUserData.history[index];
+      }
+
+      if (!tx) return;
+
+      const maskedAcc = tx.accNo ? '•••• ' + tx.accNo.slice(-4) : '•••• 0000';
+      const sourceLabel = tx.sourceAcc ? (tx.sourceAcc.charAt(0).toUpperCase() + tx.sourceAcc.slice(1) + ' Account') : 'Checking Account';
+
+      document.getElementById('recAmount').textContent = '$' + parseFloat(tx.amount || 0).toLocaleString(undefined, {minimumFractionDigits: 2});
+      document.getElementById('recRef').textContent = tx.ref || ('ATB-' + Math.floor(1000000 + Math.random() * 9000000));
+      document.getElementById('recDate').textContent = tx.date || new Date().toLocaleDateString();
+      document.getElementById('recType').textContent = tx.type || 'Local Domestic Transfer';
+      document.getElementById('recSource').textContent = sourceLabel;
+      document.getElementById('recRecipient').textContent = tx.recipient || 'N/A';
+      document.getElementById('recBank').textContent = tx.bank || 'N/A';
+      document.getElementById('recAccNo').textContent = maskedAcc;
+
+      if (isPending) {
+        document.getElementById('recHeaderTitle').textContent = "Transfer Pending Approval";
+        document.getElementById('recBadge').textContent = "Pending Admin Approval";
+        document.getElementById('recBadge').className = "inline-block mt-2 bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider";
+        document.getElementById('recHeaderIcon').className = "w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-amber-500/30";
+      } else {
+        document.getElementById('recHeaderTitle').textContent = "Transaction Completed";
+        document.getElementById('recBadge').textContent = "Successful";
+        document.getElementById('recBadge').className = "inline-block mt-2 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider";
+        document.getElementById('recHeaderIcon').className = "w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-emerald-600/30";
+      }
+
+      const receiptModal = document.getElementById('receiptModal');
+      receiptModal.classList.remove('hidden');
+      receiptModal.classList.add('flex');
+    };
 
     window.openTransferModal = () => {
       if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
@@ -954,6 +998,7 @@
 
       try {
         const formattedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const refNo = 'ATB-' + Math.floor(1000000 + Math.random() * 9000000);
         const pendingItem = {
           title: `${trType === 'WIRE' ? 'Wire' : 'Transfer'} to ${recipient} (${bank})`,
           amount: amount,
@@ -962,7 +1007,8 @@
           bank,
           accNo,
           type: trType === 'WIRE' ? 'International SWIFT Wire' : 'Local Domestic Transfer',
-          sourceAcc
+          sourceAcc,
+          ref: refNo
         };
 
         const updatedPending = [...(currentUserData.pendingTransfers || []), pendingItem];
@@ -979,7 +1025,6 @@
         switchAccount(activeAccountTab);
         renderTransactions();
 
-        const refNo = 'ATB-' + Math.floor(1000000 + Math.random() * 9000000);
         const maskedAcc = '•••• ' + accNo.slice(-4);
         const sourceLabel = sourceAcc.charAt(0).toUpperCase() + sourceAcc.slice(1) + ' Account';
 
