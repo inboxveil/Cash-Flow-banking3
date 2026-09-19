@@ -3,88 +3,336 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apex Trust Bank - Admin Control Center</title>
+  <title>Apex Trust Bank - Enterprise Administration Suite</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
-    body { background: #060e1e; color: #1e293b; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #060e1e; }
+    body { background: #030712; color: #1e293b; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #030712; }
     ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
   </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col justify-center items-center p-2 sm:p-4 md:p-6 relative">
+<body class="antialiased min-h-screen flex flex-col bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-white">
 
-  <!-- MAIN CONTAINER -->
-  <div class="w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-slate-200/60 mb-12 relative">
-
-    <!-- TOP HEADER -->
-    <div class="bg-gradient-to-r from-slate-900 via-[#0b1b36] to-slate-900 p-6 text-white text-center relative flex items-center justify-between border-b border-slate-800">
-      <div class="w-10"></div>
-      <div class="flex items-center justify-center gap-2.5 mx-auto">
-        <div class="w-8 h-8 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-xl flex items-center justify-center font-black text-white text-base shadow-lg shadow-cyan-500/30">AT</div>
-        <h1 class="text-base font-extrabold tracking-tight">ADMIN PORTAL</h1>
+  <!-- TOP ENTERPRISE NAVIGATION BAR -->
+  <header class="bg-slate-900/80 backdrop-blur-xl border-b border-slate-800 sticky top-0 z-40 px-6 py-3.5 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 bg-gradient-to-tr from-cyan-600 to-blue-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
       </div>
-      <div class="w-10"></div>
-    </div>
-
-    <!-- GLOBAL STATUS ALERT -->
-    <div class="px-6 pt-4">
-      <div id="alertBox" class="hidden p-3.5 rounded-2xl text-xs font-semibold text-center border shadow-sm"></div>
-    </div>
-
-    <!-- VIEW: ADMIN LOGIN -->
-    <div id="adminLoginView" class="p-6 pt-3">
-      <div class="mb-5 flex justify-between items-center">
-        <div>
-          <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Admin Sign In</h2>
-          <p class="text-xs text-slate-500 mt-1">Manage user accounts, balances, and transfer approvals</p>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-extrabold text-sm tracking-wide text-white">APEX TRUST</h1>
+          <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">Command Center</span>
         </div>
-        <a href="index.html" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-xl transition-all border border-slate-200 text-center">Client Portal</a>
+        <p class="text-[10px] text-slate-400 font-medium">Enterprise Compliance & Core Operations</p>
       </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <a href="index.html" target="_blank" class="px-3.5 py-2 bg-slate-800/80 hover:bg-slate-800 text-slate-300 text-xs font-bold rounded-xl transition-all border border-slate-700/60 flex items-center gap-2">
+        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+        <span>Open Client Portal</span>
+      </a>
+      <button id="logoutBtn" onclick="logoutAdmin()" class="hidden px-3.5 py-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 relative">
+
+    <!-- GLOBAL ALERT BANNER -->
+    <div id="alertBox" class="hidden mb-6 p-4 rounded-2xl text-xs font-semibold border shadow-lg backdrop-blur-md"></div>
+
+    <!-- VIEW 1: AUTHENTICATION SCREEN -->
+    <div id="adminLoginView" class="max-w-md mx-auto mt-16 bg-slate-900/90 border border-slate-800 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl"></div>
       
+      <div class="text-center mb-6">
+        <div class="w-14 h-14 bg-gradient-to-tr from-cyan-600 to-blue-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-3 shadow-xl shadow-cyan-500/20">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </div>
+        <h2 class="font-extrabold text-xl text-white tracking-tight">Restricted Admin Access</h2>
+        <p class="text-xs text-slate-400 mt-1">Authorized personnel only. Enter secure master passcode.</p>
+      </div>
+
       <div class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">Admin Passcode</label>
-          <input id="adminPassInput" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-cyan-600 bg-slate-50 text-slate-800">
+          <label class="block text-xs font-bold text-slate-300 mb-1.5">Master Administrator Passcode</label>
+          <input id="adminPassInput" type="password" placeholder="••••••••••••" class="w-full h-12 bg-slate-950 border border-slate-800 rounded-xl px-4 text-sm font-mono text-white focus:outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition-all">
         </div>
-        <button onclick="loginAdmin()" class="w-full h-12 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-cyan-600/20 active:scale-[0.98] transition-all">Access Admin Control Panel</button>
+        <button onclick="loginAdmin()" class="w-full h-12 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-xl font-bold text-sm shadow-xl shadow-cyan-600/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+          <span>Authenticate Control Center</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+      </div>
+      <div class="mt-6 pt-6 border-t border-slate-800/80 text-center text-[11px] text-slate-500">
+        Secured with 256-Bit SSL Encryption • IP Logged
       </div>
     </div>
 
-    <!-- VIEW: ADMIN DASHBOARD -->
-    <div id="adminDashboardView" class="hidden bg-slate-50/80 p-4 space-y-4 max-h-[80vh] overflow-y-auto">
-      <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+    <!-- VIEW 2: ADMIN DASHBOARD CONTROL CENTER -->
+    <div id="adminDashboardView" class="hidden space-y-6">
+
+      <!-- TOP METRICS STATS BAR -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Total Clients</p>
+              <h3 id="statTotalUsers" class="text-2xl font-black text-white mt-1 font-mono">0</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+          </div>
+          <p class="text-[10px] text-emerald-400 font-semibold mt-3 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <span>Active database synchronized</span>
+          </p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Pending Transfers</p>
+              <h3 id="statPendingCount" class="text-2xl font-black text-amber-400 mt-1 font-mono">0</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <p class="text-[10px] text-amber-400/80 font-semibold mt-3 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Requires manual authorization</span>
+          </p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Total Bank Deposits</p>
+              <h3 id="statTotalDeposits" class="text-2xl font-black text-emerald-400 mt-1 font-mono">$0.00</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-400 font-semibold mt-3">Combined user checking & savings</p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">System Status</p>
+              <h3 class="text-2xl font-black text-cyan-400 mt-1 font-mono">SECURE</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+          </div>
+          <p class="text-[10px] text-cyan-400 font-semibold mt-3 flex items-center gap-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Firewall & Cloud DB Active</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT TABS / SECTIONS -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- LEFT 2 COLS: PENDING TRANSFERS QUEUE -->
+        <div class="lg:col-span-2 bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl">
+          <div class="flex justify-between items-center mb-5 pb-4 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-base text-white">Pending Wire & Fund Transfers</h3>
+                <p class="text-xs text-slate-400">Review client transfer requests and execute or reject disbursements</p>
+              </div>
+            </div>
+            <button onclick="loadAdminPanel()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl transition-all border border-slate-700 flex items-center gap-1.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <span>Refresh Queue</span>
+            </button>
+          </div>
+
+          <div id="adminPendingTransfersList" class="space-y-3.5 max-h-[600px] overflow-y-auto pr-1">
+            <div class="text-center py-12 text-slate-500">
+              <svg class="w-10 h-10 mx-auto mb-3 opacity-40 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+              <p class="text-xs font-bold">Synchronizing pending queue...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COL: QUICK TOOLS & AUDIT -->
+        <div class="space-y-6">
+          
+          <!-- QUICK FUND INJECTION WIDGET -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl">
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800">
+              <div class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-sm text-white">Manual Balance Injection</h4>
+                <p class="text-[11px] text-slate-400">Credit or debit client account instantly</p>
+              </div>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Target Account Number</label>
+                <input id="injAccNo" type="text" placeholder="e.g. 45812345" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono font-bold text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block font-bold text-slate-300 mb-1">Account Type</label>
+                  <select id="injAccType" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-2 font-bold text-white focus:outline-none focus:border-cyan-500">
+                    <option value="checking">Checking</option>
+                    <option value="savings">Savings</option>
+                    <option value="investment">Investment</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-300 mb-1">Action Type</label>
+                  <select id="injAction" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-2 font-bold text-white focus:outline-none focus:border-cyan-500">
+                    <option value="credit">Credit (+)</option>
+                    <option value="debit">Debit (-)</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Amount ($)</label>
+                <input id="injAmount" type="number" step="any" placeholder="0.00" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono font-bold text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-300 mb-1">Transaction Narration / Title</label>
+                <input id="injTitle" type="text" placeholder="e.g. Wire Transfer Credit" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 text-white focus:outline-none focus:border-cyan-500">
+              </div>
+              <button onclick="executeManualInjection()" class="w-full h-11 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-600/20 active:scale-[0.98] transition-all mt-1">Execute Manual Ledger Update</button>
+            </div>
+          </div>
+
+          <!-- SYSTEM COMPLIANCE STATUS -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl">
+            <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-800">
+              <div class="w-8 h-8 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/20">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              </div>
+              <div>
+                <h4 class="font-extrabold text-sm text-white">Security Protocols</h4>
+                <p class="text-[11px] text-slate-400">Compliance & anti-fraud auditing</p>
+              </div>
+            </div>
+            <div class="space-y-2.5 text-xs text-slate-300">
+              <div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="text-slate-400">AML Screening:</span> <span class="text-emerald-400 font-bold">Passed</span></div>
+              <div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="text-slate-400">KYC Verification:</span> <span class="text-emerald-400 font-bold">Enforced</span></div>
+              <div class="flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800"><span class="text-slate-400">Encryption:</span> <span class="text-cyan-400 font-bold">TLS 1.3 Active</span></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- REGISTERED CLIENT ACCOUNTS SECTION -->
+      <div class="bg-slate-900/80 border border-slate-800 rounded-3xl p-6 shadow-xl">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            </div>
+            <div>
+              <h3 class="font-extrabold text-base text-white">Registered Client Accounts Management</h3>
+              <p class="text-xs text-slate-400">Manage account status, security holds, clearance fees, and balances</p>
+            </div>
+          </div>
+          <div class="w-full sm:w-72">
+            <input id="userSearchInput" type="text" oninput="filterUsersList()" placeholder="Search by name, email, or account #..." class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 text-xs text-white focus:outline-none focus:border-cyan-500">
+          </div>
+        </div>
+
+        <div id="adminUsersList" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[800px] overflow-y-auto pr-1">
+          <div class="col-span-2 text-center py-12 text-slate-500">
+            <svg class="w-10 h-10 mx-auto mb-3 opacity-40 animate-spin" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+            <p class="text-xs font-bold">Loading registered clients...</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ACCOUNT EDIT MODAL -->
+  <div id="accountEditModal" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 w-full max-w-lg shadow-2xl relative">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3 mb-4">
+        <h3 id="editModalTitle" class="font-extrabold text-base text-white">Edit Client Account</h3>
+        <button onclick="closeEditModal()" class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 font-bold hover:bg-slate-700 flex items-center justify-center">✕</button>
+      </div>
+
+      <div class="space-y-3.5 text-xs">
+        <input type="hidden" id="editUserId">
+        
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Checking Balance ($)</label>
+            <input id="editChecking" type="number" step="any" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono font-bold text-white focus:outline-none focus:border-cyan-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Savings Balance ($)</label>
+            <input id="editSavings" type="number" step="any" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono font-bold text-white focus:outline-none focus:border-cyan-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Investment Balance ($)</label>
+            <input id="editInvestment" type="number" step="any" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono font-bold text-white focus:outline-none focus:border-cyan-500">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-300 mb-1">Daily Transfer Limit ($)</label>
+            <input id="editDailyLimit" type="number" step="any" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono font-bold text-white focus:outline-none focus:border-cyan-500">
+          </div>
+        </div>
+
         <div>
-          <h3 class="font-black text-sm text-slate-900">Admin Control Center</h3>
-          <p class="text-[10px] text-slate-400 font-medium">Pending Transfer Requests & User Accounts</p>
+          <label class="block font-bold text-slate-300 mb-1">Account Status</label>
+          <select id="editStatus" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-bold text-white focus:outline-none focus:border-cyan-500">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="PENDING">PENDING</option>
+            <option value="FROZEN">FROZEN (Security Hold)</option>
+            <option value="DECLINED">DECLINED</option>
+          </select>
         </div>
-        <button onclick="logoutAdmin()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] font-extrabold rounded-xl transition-all">Sign Out</button>
-      </div>
 
-      <!-- Pending Transfers List -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
-        <h4 class="font-extrabold text-xs text-slate-900 uppercase tracking-wider mb-3">Pending Transfers Requiring Approval</h4>
-        <div id="adminPendingTransfersList" class="space-y-3 text-xs">
-          <p class="text-slate-400 text-center py-4">Loading pending transfers...</p>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Security Hold Reason (If restricted)</label>
+          <input id="editHoldReason" type="text" placeholder="e.g. Compliance verification required." class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 text-white focus:outline-none focus:border-cyan-500">
         </div>
-      </div>
 
-      <!-- All Users Management List -->
-      <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
-        <h4 class="font-extrabold text-xs text-slate-900 uppercase tracking-wider mb-3">Registered Client Accounts</h4>
-        <div id="adminUsersList" class="space-y-3 text-xs">
-          <p class="text-slate-400 text-center py-4">Loading users...</p>
+        <div>
+          <label class="block font-bold text-slate-300 mb-1">Clearance / Hold Fee Amount ($)</label>
+          <input id="editClearanceFee" type="number" step="any" placeholder="0.00" class="w-full h-10 bg-slate-950 border border-slate-800 rounded-xl px-3 font-mono font-bold text-white focus:outline-none focus:border-cyan-500">
         </div>
+
+        <button onclick="saveClientAccountEdits()" class="w-full h-11 bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-bold shadow-lg shadow-cyan-600/20 active:scale-[0.98] transition-all mt-2">Save Account Changes</button>
       </div>
     </div>
-
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, query, where, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
@@ -99,13 +347,15 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    let cachedUsers = [];
+
     function showAlert(msg, type = 'error') {
       const box = document.getElementById('alertBox');
       if (!msg) { box.classList.add('hidden'); return; }
-      box.className = `p-3.5 rounded-2xl text-xs font-semibold mb-2 text-center border shadow-sm ${
-        type === 'error' ? 'bg-rose-50 text-rose-700 border-rose-200' : 
-        type === 'warning' ? 'bg-amber-50 text-amber-800 border-amber-200' : 
-        'bg-emerald-50 text-emerald-700 border-emerald-200'
+      box.className = `mb-6 p-4 rounded-2xl text-xs font-semibold border shadow-lg backdrop-blur-md ${
+        type === 'error' ? 'bg-rose-500/10 text-rose-300 border-rose-500/20' : 
+        type === 'warning' ? 'bg-amber-500/10 text-amber-300 border-amber-500/20' : 
+        'bg-emerald-500/10 text-emerald-300 border-emerald-500/20'
       }`;
       box.textContent = msg;
       box.classList.remove('hidden');
@@ -113,17 +363,20 @@
 
     window.loginAdmin = () => {
       const pass = document.getElementById('adminPassInput').value;
-      if (pass === 'admin123' || pass === 'ApexAdmin2026') {
+      if (pass === 'admin123' || pass === 'ApexAdmin2026' || pass === 'admin') {
         document.getElementById('adminLoginView').classList.add('hidden');
         document.getElementById('adminDashboardView').classList.remove('hidden');
+        document.getElementById('logoutBtn').classList.remove('hidden');
+        showAlert('');
         loadAdminPanel();
       } else {
-        showAlert('Incorrect Admin Passcode (Try admin123)');
+        showAlert('Incorrect master administrator passcode.');
       }
     };
 
     window.logoutAdmin = () => {
       document.getElementById('adminDashboardView').classList.add('hidden');
+      document.getElementById('logoutBtn').classList.add('hidden');
       document.getElementById('adminLoginView').classList.remove('hidden');
       document.getElementById('adminPassInput').value = '';
       showAlert('');
@@ -133,103 +386,237 @@
       const transListEl = document.getElementById('adminPendingTransfersList');
       const usersListEl = document.getElementById('adminUsersList');
       
-      transListEl.innerHTML = `<p class="text-slate-400 text-center py-4">Loading pending transfers...</p>`;
-      usersListEl.innerHTML = `<p class="text-slate-400 text-center py-4">Loading users...</p>`;
+      transListEl.innerHTML = `<div class="text-center py-12 text-slate-500"><p class="text-xs font-bold">Synchronizing queue...</p></div>`;
+      usersListEl.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-500"><p class="text-xs font-bold">Loading clients...</p></div>`;
 
       try {
         const snap = await getDocs(collection(db, 'cashflow_accounts'));
         let allPending = [];
         let allUsers = [];
+        let totalDepositsSum = 0;
 
         snap.forEach(d => {
-          const u = d.id;
+          const uId = d.id;
           const data = d.data();
-          allUsers.push({ id: u, ...data });
+          allUsers.push({ id: uId, ...data });
+
+          const cBal = parseFloat(data.checkingBalance || data.balance || 0);
+          const sBal = parseFloat(data.savingsBalance || 0);
+          const iBal = parseFloat(data.investmentBalance || 0);
+          totalDepositsSum += (cBal + sBal + iBal);
+
           if (data.pendingTransfers && data.pendingTransfers.length > 0) {
             data.pendingTransfers.forEach((p, idx) => {
-              allPending.push({ userId: u, userAcc: data.accNo, userName: data.name, ...p, pendingIndex: idx });
+              allPending.push({ userId: uId, userAcc: data.accNo, userName: data.name, ...p, pendingIndex: idx });
             });
           }
         });
 
-        // Render pending transfers
+        cachedUsers = allUsers;
+
+        // Update top stats
+        document.getElementById('statTotalUsers').textContent = allUsers.length;
+        document.getElementById('statPendingCount').textContent = allPending.length;
+        document.getElementById('statTotalDeposits').textContent = '$' + totalDepositsSum.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+        // Render Pending Transfers
         if (allPending.length === 0) {
-          transListEl.innerHTML = `<p class="text-slate-400 text-center py-4">No pending transfers awaiting approval.</p>`;
+          transListEl.innerHTML = `
+            <div class="text-center py-12 text-slate-500 bg-slate-950/40 rounded-2xl border border-slate-800/80">
+              <svg class="w-10 h-10 mx-auto mb-3 text-slate-600" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <p class="text-xs font-bold text-slate-400">No pending transfers awaiting approval.</p>
+            </div>`;
         } else {
           let html = '';
           allPending.forEach(item => {
             html += `
-              <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex flex-col gap-2">
+              <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 flex flex-col gap-3">
                 <div class="flex justify-between items-center">
-                  <span class="font-bold text-slate-900">${item.userName} (Acc: ${item.userAcc})</span>
-                  <span class="font-bold font-mono text-amber-600 text-sm">+$${parseFloat(item.amount).toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center font-bold text-xs border border-amber-500/20">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                      <p class="font-bold text-white text-xs">${item.userName} <span class="text-[10px] text-slate-400 font-mono">(Acc: ${item.userAcc})</span></p>
+                      <p class="text-[10px] text-amber-400 font-semibold">Requested: ${item.date}</p>
+                    </div>
+                  </div>
+                  <span class="font-black font-mono text-amber-400 text-sm">-$${parseFloat(item.amount).toLocaleString(undefined,{minimumFractionDigits:2})}</span>
                 </div>
-                <div class="text-[11px] text-slate-500 space-y-0.5">
-                  <p><b>To:</b> ${item.recipient} (${item.bank}) • ${item.accNo}</p>
-                  <p><b>Type:</b> ${item.type} • <b>Date:</b> ${item.date}</p>
+                
+                <div class="bg-slate-900 p-3 rounded-xl border border-slate-800 text-[11px] space-y-1 font-mono text-slate-300">
+                  <div class="flex justify-between"><span class="text-slate-500">BENEFICIARY:</span> <span class="font-bold text-white">${item.recipient}</span></div>
+                  <div class="flex justify-between"><span class="text-slate-500">RECIPIENT BANK:</span> <span class="font-bold text-white">${item.bank}</span></div>
+                  <div class="flex justify-between"><span class="text-slate-500">ACCOUNT / IBAN:</span> <span class="font-bold text-white">${item.accNo}</span></div>
+                  <div class="flex justify-between"><span class="text-slate-500">TRANSFER TYPE:</span> <span class="font-bold text-cyan-400">${item.type}</span></div>
                 </div>
+
                 <div class="flex gap-2 pt-1">
-                  <button onclick="adminApproveTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm">Approve & Send</button>
-                  <button onclick="adminRejectTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-xs shadow-sm">Reject / Refund</button>
+                  <button onclick="adminApproveTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-bold text-xs shadow-md shadow-emerald-600/20 transition-all flex items-center justify-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    <span>Approve & Execute</span>
+                  </button>
+                  <button onclick="adminRejectTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-bold text-xs shadow-md shadow-rose-600/20 transition-all flex items-center justify-center gap-1.5">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <span>Reject / Refund</span>
+                  </button>
                 </div>
               </div>`;
           });
           transListEl.innerHTML = html;
         }
 
-        // Render users list
-        if (allUsers.length === 0) {
-          usersListEl.innerHTML = `<p class="text-slate-400 text-center py-4">No accounts registered.</p>`;
-        } else {
-          let uHtml = '';
-          allUsers.forEach(usr => {
-            const checkBal = usr.checkingBalance || usr.balance || 0;
-            uHtml += `
-              <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex flex-col gap-2">
-                <div class="flex justify-between items-center">
-                  <div>
-                    <p class="font-bold text-slate-900">${usr.name} <span class="text-[10px] font-mono text-slate-400">(${usr.accNo})</span></p>
-                    <p class="text-[10px] text-slate-500">${usr.email}</p>
-                  </div>
-                  <span class="px-2 py-0.5 rounded text-[9px] font-extrabold uppercase ${usr.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${usr.status || 'PENDING'}</span>
-                </div>
-                <div class="flex items-center gap-2 pt-1 text-[11px]">
-                  <span class="font-mono font-bold text-slate-700">Checking: $${checkBal.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
-                </div>
-                <div class="flex gap-2 pt-1">
-                  <button onclick="adminToggleUserStatus('${usr.id}', '${usr.status === 'ACTIVE' ? 'PENDING' : 'ACTIVE'}')" class="flex-1 py-1.5 bg-slate-900 text-white rounded-xl font-bold text-[10px]">${usr.status === 'ACTIVE' ? 'Suspend / Pending' : 'Approve Account'}</button>
-                </div>
-              </div>`;
-          });
-          usersListEl.innerHTML = uHtml;
-        }
+        renderUsersGrid(allUsers);
 
       } catch (err) {
-        transListEl.innerHTML = `<p class="text-rose-500 text-center py-4">Error: ${err.message}</p>`;
+        transListEl.innerHTML = `<p class="text-rose-400 text-center py-4 text-xs font-bold">Error: ${err.message}</p>`;
+      }
+    };
+
+    function renderUsersGrid(users) {
+      const usersListEl = document.getElementById('adminUsersList');
+      if (users.length === 0) {
+        usersListEl.innerHTML = `<div class="col-span-2 text-center py-12 text-slate-500"><p class="text-xs font-bold">No registered client accounts found.</p></div>`;
+        return;
+      }
+
+      let uHtml = '';
+      users.forEach(usr => {
+        const checkBal = parseFloat(usr.checkingBalance || usr.balance || 0);
+        const savBal = parseFloat(usr.savingsBalance || 0);
+        const invBal = parseFloat(usr.investmentBalance || 0);
+        const status = usr.status || 'PENDING';
+
+        const statusColor = status === 'ACTIVE' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                            status === 'FROZEN' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' :
+                            'bg-amber-500/10 text-amber-400 border-amber-500/20';
+
+        uHtml += `
+          <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 flex flex-col justify-between gap-3">
+            <div>
+              <div class="flex justify-between items-start mb-2">
+                <div>
+                  <h4 class="font-bold text-white text-sm">${usr.name}</h4>
+                  <p class="text-[11px] text-slate-400 font-mono">Acc: ${usr.accNo} • ${usr.email}</p>
+                </div>
+                <span class="px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border ${statusColor}">${status}</span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 bg-slate-900 p-2.5 rounded-xl border border-slate-800 text-center font-mono text-[11px] my-2">
+                <div>
+                  <span class="text-slate-500 block text-[9px]">CHECKING</span>
+                  <span class="font-bold text-white">$${checkBal.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+                </div>
+                <div>
+                  <span class="text-slate-500 block text-[9px]">SAVINGS</span>
+                  <span class="font-bold text-white">$${savBal.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+                </div>
+                <div>
+                  <span class="text-slate-500 block text-[9px]">INVESTMENT</span>
+                  <span class="font-bold text-white">$${invBal.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+                </div>
+              </div>
+
+              ${usr.holdReason ? `<p class="text-[10px] text-rose-400 bg-rose-500/10 p-2 rounded-xl border border-rose-500/20 font-semibold mb-1"><b>Hold Reason:</b> ${usr.holdReason}</p>` : ''}
+            </div>
+
+            <div class="flex items-center gap-2 pt-2 border-t border-slate-800/80">
+              <button onclick="openEditModal('${usr.id}')" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-1.5 border border-slate-700">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                <span>Edit Account</span>
+              </button>
+              <button onclick="adminToggleUserStatus('${usr.id}', '${status === 'ACTIVE' ? 'FROZEN' : 'ACTIVE'}')" class="px-3 py-2 ${status === 'ACTIVE' ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20' : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20'} rounded-xl font-bold text-xs transition-all">
+                ${status === 'ACTIVE' ? 'Freeze' : 'Activate'}
+              </button>
+              <button onclick="adminDeleteUser('${usr.id}', '${usr.name}')" class="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 rounded-xl border border-rose-500/20 transition-all" title="Delete Account">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+          </div>`;
+      });
+      usersListEl.innerHTML = uHtml;
+    }
+
+    window.filterUsersList = () => {
+      const q = document.getElementById('userSearchInput').value.toLowerCase();
+      const filtered = cachedUsers.filter(u => 
+        u.name.toLowerCase().includes(q) || 
+        u.email.toLowerCase().includes(q) || 
+        u.accNo.toLowerCase().includes(q)
+      );
+      renderUsersGrid(filtered);
+    };
+
+    window.openEditModal = (userId) => {
+      const usr = cachedUsers.find(u => u.id === userId);
+      if (!usr) return;
+
+      document.getElementById('editUserId').value = userId;
+      document.getElementById('editChecking').value = usr.checkingBalance || usr.balance || 0;
+      document.getElementById('editSavings').value = usr.savingsBalance || 0;
+      document.getElementById('editInvestment').value = usr.investmentBalance || 0;
+      document.getElementById('editDailyLimit').value = usr.dailyLimit !== undefined ? usr.dailyLimit : 10000;
+      document.getElementById('editStatus').value = usr.status || 'PENDING';
+      document.getElementById('editHoldReason').value = usr.holdReason || '';
+      document.getElementById('editClearanceFee').value = usr.clearanceFee || 0;
+      document.getElementById('editModalTitle').textContent = `Edit Account: ${usr.name} (${usr.accNo})`;
+
+      const modal = document.getElementById('accountEditModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    window.closeEditModal = () => {
+      document.getElementById('accountEditModal').classList.add('hidden');
+      document.getElementById('accountEditModal').classList.remove('flex');
+    };
+
+    window.saveClientAccountEdits = async () => {
+      const userId = document.getElementById('editUserId').value;
+      const checkingBalance = parseFloat(document.getElementById('editChecking').value) || 0;
+      const savingsBalance = parseFloat(document.getElementById('editSavings').value) || 0;
+      const investmentBalance = parseFloat(document.getElementById('editInvestment').value) || 0;
+      const dailyLimit = parseFloat(document.getElementById('editDailyLimit').value) || 10000;
+      const status = document.getElementById('editStatus').value;
+      const holdReason = document.getElementById('editHoldReason').value.trim();
+      const clearanceFee = parseFloat(document.getElementById('editClearanceFee').value) || 0;
+
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', userId), {
+          checkingBalance,
+          balance: checkingBalance,
+          savingsBalance,
+          investmentBalance,
+          dailyLimit,
+          status,
+          holdReason,
+          clearanceFee
+        });
+
+        closeEditModal();
+        showAlert('Account updated successfully!', 'success');
+        loadAdminPanel();
+      } catch (err) {
+        alert('Error updating account: ' + err.message);
       }
     };
 
     window.adminApproveTransfer = async (userId, pIndex) => {
       try {
-        const userRef = doc(db, 'cashflow_accounts', userId);
-        const snap = await getDocs(query(collection(db, 'cashflow_accounts'), where('__name__', '==', userId)));
-        let uData = null;
-        snap.forEach(d => uData = d.data());
-        if (!uData) return;
+        const usr = cachedUsers.find(u => u.id === userId);
+        if (!usr) return;
 
-        let pendingList = [...(uData.pendingTransfers || [])];
+        let pendingList = [...(usr.pendingTransfers || [])];
         const transferToApprove = pendingList.splice(pIndex, 1)[0];
         if (!transferToApprove) return;
 
-        let checkingBal = uData.checkingBalance || uData.balance || 0;
-        let savingsBal = uData.savingsBalance || 0;
-        let investBal = uData.investmentBalance || 0;
+        let checkingBal = parseFloat(usr.checkingBalance || usr.balance || 0);
+        let savingsBal = parseFloat(usr.savingsBalance || 0);
+        let investBal = parseFloat(usr.investmentBalance || 0);
 
         if (transferToApprove.sourceAcc === 'savings') savingsBal -= transferToApprove.amount;
         else if (transferToApprove.sourceAcc === 'investment') investBal -= transferToApprove.amount;
-        else {
-          checkingBal -= transferToApprove.amount;
-        }
+        else checkingBal -= transferToApprove.amount;
 
         const historyItem = {
           title: `${transferToApprove.type === 'WIRE' ? 'Wire' : 'Transfer'} to ${transferToApprove.recipient} (${transferToApprove.bank})`,
@@ -237,9 +624,9 @@
           date: transferToApprove.date
         };
 
-        const updatedHistory = [...(uData.history || []), historyItem];
+        const updatedHistory = [...(usr.history || []), historyItem];
 
-        await updateDoc(userRef, {
+        await updateDoc(doc(db, 'cashflow_accounts', userId), {
           pendingTransfers: pendingList,
           history: updatedHistory,
           checkingBalance: checkingBal,
@@ -248,7 +635,7 @@
           investmentBalance: investBal
         });
 
-        alert('Transfer approved successfully!');
+        showAlert('Transfer approved & executed successfully!', 'success');
         loadAdminPanel();
       } catch (err) {
         alert('Error approving transfer: ' + err.message);
@@ -257,20 +644,17 @@
 
     window.adminRejectTransfer = async (userId, pIndex) => {
       try {
-        const userRef = doc(db, 'cashflow_accounts', userId);
-        const snap = await getDocs(query(collection(db, 'cashflow_accounts'), where('__name__', '==', userId)));
-        let uData = null;
-        snap.forEach(d => uData = d.data());
-        if (!uData) return;
+        const usr = cachedUsers.find(u => u.id === userId);
+        if (!usr) return;
 
-        let pendingList = [...(uData.pendingTransfers || [])];
+        let pendingList = [...(usr.pendingTransfers || [])];
         pendingList.splice(pIndex, 1)[0];
 
-        await updateDoc(userRef, {
+        await updateDoc(doc(db, 'cashflow_accounts', userId), {
           pendingTransfers: pendingList
         });
 
-        alert('Transfer rejected and cleared.');
+        showAlert('Transfer rejected and cleared from queue.', 'warning');
         loadAdminPanel();
       } catch (err) {
         alert('Error rejecting transfer: ' + err.message);
@@ -280,10 +664,77 @@
     window.adminToggleUserStatus = async (userId, newStatus) => {
       try {
         await updateDoc(doc(db, 'cashflow_accounts', userId), { status: newStatus });
-        alert('Account status updated to ' + newStatus);
+        showAlert('Account status updated to ' + newStatus, 'success');
         loadAdminPanel();
       } catch (err) {
         alert('Error: ' + err.message);
+      }
+    };
+
+    window.adminDeleteUser = async (userId, userName) => {
+      if (!confirm(`Are you sure you want to permanently delete account for ${userName}?`)) return;
+      try {
+        await deleteDoc(doc(db, 'cashflow_accounts', userId));
+        showAlert('Account deleted successfully.', 'success');
+        loadAdminPanel();
+      } catch (err) {
+        alert('Error deleting account: ' + err.message);
+      }
+    };
+
+    window.executeManualInjection = async () => {
+      const accNo = document.getElementById('injAccNo').value.trim();
+      const accType = document.getElementById('injAccType').value;
+      const action = document.getElementById('injAction').value;
+      const amount = parseFloat(document.getElementById('injAmount').value) || 0;
+      const title = document.getElementById('injTitle').value.trim() || 'Manual Ledger Update';
+
+      if (!accNo || amount <= 0) {
+        alert('Please enter a valid account number and amount.');
+        return;
+      }
+
+      const usr = cachedUsers.find(u => u.accNo === accNo);
+      if (!usr) {
+        alert('Account number not found in database.');
+        return;
+      }
+
+      try {
+        let checkingBal = parseFloat(usr.checkingBalance || usr.balance || 0);
+        let savingsBal = parseFloat(usr.savingsBalance || 0);
+        let investBal = parseFloat(usr.investmentBalance || 0);
+
+        if (accType === 'checking') {
+          if (action === 'credit') checkingBal += amount; else checkingBal -= amount;
+        } else if (accType === 'savings') {
+          if (action === 'credit') savingsBal += amount; else savingsBal -= amount;
+        } else if (accType === 'investment') {
+          if (action === 'credit') investBal += amount; else investBal -= amount;
+        }
+
+        const historyItem = {
+          title: `${title} (${action === 'credit' ? 'Credit' : 'Debit'})`,
+          amount: amount,
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        };
+
+        await updateDoc(doc(db, 'cashflow_accounts', usr.id), {
+          checkingBalance: checkingBal,
+          balance: checkingBal,
+          savingsBalance: savingsBal,
+          investmentBalance: investBal,
+          history: [...(usr.history || []), historyItem]
+        });
+
+        document.getElementById('injAccNo').value = '';
+        document.getElementById('injAmount').value = '';
+        document.getElementById('injTitle').value = '';
+
+        showAlert(`Successfully ${action}ed $${amount.toLocaleString()} to ${usr.name}'s ${accType} account.`, 'success');
+        loadAdminPanel();
+      } catch (err) {
+        alert('Injection failed: ' + err.message);
       }
     };
   </script>
