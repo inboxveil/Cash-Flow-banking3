@@ -1,15 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Cash Flow Banking</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <style>*{font-family:'Inter',system-ui}body{background:#f4f6f9}</style>
+  <style>*{font-family:'Inter',system-ui}body{transition:background-color 0.3s, color 0.3s}</style>
 </head>
-<body>
+<body class="bg-[#f4f6f9] dark:bg-gray-950 text-gray-900 dark:text-gray-100">
 
 <!-- SVG ICONS -->
 <svg style="display:none">
@@ -29,6 +34,8 @@
   <symbol id="i-user" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
   <symbol id="i-bell" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
   <symbol id="i-menu" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.5" d="M3 12h18M3 6h18M3 18h18"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path fill="none" stroke="currentColor" stroke-width="2" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
 </svg>
 
 <!-- INITIAL APP LOADER -->
@@ -44,26 +51,31 @@
 </div>
 
 <!-- HEADER NAVBAR -->
-<header class="sticky top-0 z-20 bg-white border-b border-gray-100">
+<header class="sticky top-0 z-20 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 transition-colors">
   <div class="max-w-[560px] mx-auto px-4 h-[64px] flex items-center justify-between">
     <div class="flex items-center gap-3 cursor-pointer" onclick="goHome()">
       <div class="w-10 h-10 bg-[#b91c1c] rounded-xl flex items-center justify-center text-white shadow-sm">
         <svg class="w-6 h-6"><use href="#i-bank"/></svg>
       </div>
-      <span class="font-black text-lg text-[#0a2540] tracking-tight">CASH FLOW</span>
+      <span class="font-black text-lg text-[#0a2540] dark:text-white tracking-tight">CASH FLOW</span>
     </div>
     
     <div class="flex items-center gap-2">
-      <button class="w-9 h-9 flex items-center justify-center text-gray-700">
+      <!-- Dark/Light Mode Switcher -->
+      <button onclick="toggleTheme()" class="w-9 h-9 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" title="Toggle Theme">
+        <svg id="themeIcon" class="w-5 h-5"><use href="#i-moon"/></svg>
+      </button>
+
+      <button class="w-9 h-9 flex items-center justify-center text-gray-700 dark:text-gray-300">
         <svg class="w-6 h-6"><use href="#i-menu"/></svg>
       </button>
-      <button class="w-9 h-9 flex items-center justify-center text-gray-700 relative">
+      <button class="w-9 h-9 flex items-center justify-center text-gray-700 dark:text-gray-300 relative">
         <svg class="w-5 h-5"><use href="#i-bell"/></svg>
         <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
       </button>
 
       <div id="navUser" class="flex items-center gap-1 ml-1 cursor-pointer" onclick="logout()">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" class="w-9 h-9 rounded-full object-cover border" alt="Profile">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" class="w-9 h-9 rounded-full object-cover border border-gray-200 dark:border-gray-700" alt="Profile">
         <span class="text-xs text-gray-400">▼</span>
       </div>
     </div>
@@ -92,33 +104,33 @@
 
 <!-- AUTH VIEW (CREATE / LOGIN) -->
 <div id="bankView" style="display:none" class="max-w-[480px] mx-auto p-4">
-  <div class="flex justify-center bg-gray-200/80 p-1 rounded-xl mt-2">
+  <div class="flex justify-center bg-gray-200/80 dark:bg-gray-800 p-1 rounded-xl mt-2">
     <button id="t1" onclick="showAuth('create')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">Create Account</button>
     <button id="t2" onclick="showAuth('login')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">Login</button>
   </div>
 
   <!-- Create Account Card -->
-  <div id="createCard" class="bg-white shadow-sm border border-gray-100 rounded-[24px] p-6 mt-4">
+  <div id="createCard" class="bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 rounded-[24px] p-6 mt-4">
     <div class="mb-4">
-      <h3 class="font-black text-xl text-gray-900">Open a New Account</h3>
-      <p class="text-xs text-gray-500 mt-1">Get started with online banking in under 2 minutes.</p>
+      <h3 class="font-black text-xl text-gray-900 dark:text-white">Open a New Account</h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Get started with online banking in under 2 minutes.</p>
     </div>
     <div class="space-y-3">
       <div>
-        <label class="text-[11px] font-bold text-gray-600 ml-1">FULL LEGAL NAME</label>
-        <input id="fullname" placeholder="e.g. Lorenzo Parker" class="w-full h-[48px] border border-gray-200 rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
+        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">FULL LEGAL NAME</label>
+        <input id="fullname" placeholder="e.g. Lorenzo Parker" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
       </div>
       <div>
-        <label class="text-[11px] font-bold text-gray-600 ml-1">EMAIL ADDRESS</label>
-        <input id="email" type="email" placeholder="name@domain.com" class="w-full h-[48px] border border-gray-200 rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
+        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">EMAIL ADDRESS</label>
+        <input id="email" type="email" placeholder="name@domain.com" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
       </div>
       <div>
-        <label class="text-[11px] font-bold text-gray-600 ml-1">PASSWORD</label>
-        <input id="pass" type="password" placeholder="Min. 6 characters" class="w-full h-[48px] border border-gray-200 rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
+        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">PASSWORD</label>
+        <input id="pass" type="password" placeholder="Min. 6 characters" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
       </div>
       <div>
-        <label class="text-[11px] font-bold text-amber-800 ml-1">4-DIGIT TRANSFER PIN</label>
-        <input id="tpin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full h-[48px] border border-amber-200 bg-amber-50/30 rounded-xl px-4 mt-1 text-sm font-mono tracking-widest focus:outline-none focus:border-amber-500">
+        <label class="text-[11px] font-bold text-amber-800 dark:text-amber-400 ml-1">4-DIGIT TRANSFER PIN</label>
+        <input id="tpin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full h-[48px] border border-amber-200 dark:border-amber-900/50 bg-amber-50/30 dark:bg-amber-950/20 dark:text-white rounded-xl px-4 mt-1 text-sm font-mono tracking-widest focus:outline-none focus:border-amber-500">
       </div>
     </div>
     <button id="createBtn" onclick="createAcc()" class="w-full h-[50px] bg-[#0a2540] hover:bg-[#103357] text-white rounded-xl font-bold mt-5 text-sm shadow-md transition-all flex items-center justify-center gap-2">
@@ -128,19 +140,19 @@
   </div>
 
   <!-- Login Card -->
-  <div id="loginCard" style="display:none" class="bg-white shadow-sm border border-gray-100 rounded-[24px] p-6 mt-4">
+  <div id="loginCard" style="display:none" class="bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 rounded-[24px] p-6 mt-4">
     <div class="mb-4">
-      <h3 class="font-black text-xl text-gray-900">Welcome Back</h3>
-      <p class="text-xs text-gray-500 mt-1">Access your account securely using your credentials.</p>
+      <h3 class="font-black text-xl text-gray-900 dark:text-white">Welcome Back</h3>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Access your account securely using your credentials.</p>
     </div>
     <div class="space-y-3">
       <div>
-        <label class="text-[11px] font-bold text-gray-600 ml-1">ACCOUNT NUMBER</label>
-        <input id="lacc" placeholder="10-digit account number" class="w-full h-[48px] border border-gray-200 rounded-xl px-4 mt-1 text-sm font-mono focus:outline-none focus:border-[#0a2540]">
+        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">ACCOUNT NUMBER</label>
+        <input id="lacc" placeholder="10-digit account number" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm font-mono focus:outline-none focus:border-[#0a2540]">
       </div>
       <div>
-        <label class="text-[11px] font-bold text-gray-600 ml-1">PASSWORD</label>
-        <input id="lpass" type="password" placeholder="Enter your password" class="w-full h-[48px] border border-gray-200 rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
+        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">PASSWORD</label>
+        <input id="lpass" type="password" placeholder="Enter your password" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
       </div>
     </div>
     <button id="loginBtn" onclick="login()" class="w-full h-[50px] bg-[#0a2540] hover:bg-[#103357] text-white rounded-xl font-bold mt-5 text-sm shadow-md transition-all flex items-center justify-center gap-2">
@@ -148,8 +160,8 @@
       <span>Login Securely</span>
     </button>
     <div class="flex justify-between mt-4 px-1">
-      <button class="text-[11px] font-bold text-blue-700 hover:underline" onclick="openForgot('password')">Forgot Password?</button>
-      <button class="text-[11px] font-bold text-blue-700 hover:underline" onclick="openForgot('pin')">Forgot Transfer PIN?</button>
+      <button class="text-[11px] font-bold text-blue-700 dark:text-blue-400 hover:underline" onclick="openForgot('password')">Forgot Password?</button>
+      <button class="text-[11px] font-bold text-blue-700 dark:text-blue-400 hover:underline" onclick="openForgot('pin')">Forgot Transfer PIN?</button>
     </div>
   </div>
 </div>
@@ -158,10 +170,10 @@
 <div id="dashView" style="display:none" class="max-w-[560px] mx-auto p-4">
   <div class="mb-5 flex justify-between items-end">
     <div>
-      <h1 class="text-2xl font-black text-gray-900 tracking-tight">Dashboard</h1>
-      <p class="text-sm text-gray-600 font-medium mt-0.5" id="greetingText">Welcome</p>
+      <h1 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Dashboard</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mt-0.5" id="greetingText">Welcome</p>
     </div>
-    <button onclick="logout()" class="text-xs font-bold text-red-600 bg-red-50 px-3 py-1.5 rounded-lg border border-red-100">Logout</button>
+    <button onclick="logout()" class="text-xs font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 px-3 py-1.5 rounded-lg border border-red-100 dark:border-red-900/50">Logout</button>
   </div>
 
   <!-- Primary Dark Blue Card -->
@@ -219,36 +231,36 @@
   </div>
 
   <!-- Account Details Card -->
-  <div class="bg-white shadow-sm rounded-[24px] p-6 mt-4 border border-gray-100">
+  <div class="bg-white dark:bg-gray-900 shadow-sm rounded-[24px] p-6 mt-4 border border-gray-100 dark:border-gray-800">
     <div class="flex items-center justify-between pb-4">
       <div class="flex items-center gap-3">
         <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white">
           <svg class="w-4 h-4"><use href="#i-card"/></svg>
         </div>
-        <span class="font-bold text-gray-900 text-sm">Current Account</span>
+        <span class="font-bold text-gray-900 dark:text-white text-sm">Current Account</span>
       </div>
-      <span class="bg-gray-100 text-gray-500 text-[11px] font-semibold px-3 py-1 rounded-full">Primary</span>
+      <span class="bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-[11px] font-semibold px-3 py-1 rounded-full">Primary</span>
     </div>
 
     <div class="space-y-4 pt-2">
       <div>
         <div class="text-[11px] text-gray-400 font-medium">Account Number</div>
-        <div class="text-base font-bold text-gray-900 mt-1 font-mono tracking-wide" id="dacc">--</div>
+        <div class="text-base font-bold text-gray-900 dark:text-white mt-1 font-mono tracking-wide" id="dacc">--</div>
       </div>
 
       <div>
         <div class="text-[11px] text-gray-400 font-medium">Available Balance</div>
-        <div class="text-base font-bold text-gray-900 mt-1">$<span id="dbal2">0.00</span></div>
+        <div class="text-base font-bold text-gray-900 dark:text-white mt-1">$<span id="dbal2">0.00</span></div>
       </div>
 
       <div class="flex justify-between items-end pt-1">
         <div>
           <div class="text-[11px] text-gray-400 font-medium">Account Type</div>
-          <div class="text-xs font-bold text-gray-800 mt-1">Current Account</div>
+          <div class="text-xs font-bold text-gray-800 dark:text-gray-200 mt-1">Current Account</div>
         </div>
         <div>
           <div class="text-[11px] text-gray-400 font-medium text-right mb-1">Status</div>
-          <span class="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-100 flex items-center gap-1" id="dstatus">
+          <span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-100 dark:border-emerald-900/50 flex items-center gap-1" id="dstatus">
             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> Active
           </span>
         </div>
@@ -257,73 +269,73 @@
   </div>
 
   <!-- Transaction History -->
-  <div class="bg-white shadow-sm rounded-[24px] mt-4 border border-gray-100 overflow-hidden">
-    <div class="p-4 flex items-center justify-between border-b">
-      <div class="flex items-center gap-2 font-bold text-sm text-gray-900">
-        <div class="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-[#1e4bd8]">
+  <div class="bg-white dark:bg-gray-900 shadow-sm rounded-[24px] mt-4 border border-gray-100 dark:border-gray-800 overflow-hidden">
+    <div class="p-4 flex items-center justify-between border-b border-gray-100 dark:border-gray-800">
+      <div class="flex items-center gap-2 font-bold text-sm text-gray-900 dark:text-white">
+        <div class="w-8 h-8 bg-blue-50 dark:bg-blue-950/50 rounded-full flex items-center justify-center text-[#1e4bd8] dark:text-blue-400">
           <svg class="w-4 h-4"><use href="#i-transfer"/></svg>
         </div>
         Recent Transactions
       </div>
     </div>
-    <div id="txList" class="divide-y"></div>
+    <div id="txList" class="divide-y divide-gray-100 dark:divide-gray-800"></div>
   </div>
 </div>
 
 <!-- MODALS -->
-<div id="forgotModal" class="fixed inset-0 z-50 hidden bg-black/60 p-4 flex items-center justify-center">
-  <div class="bg-white rounded-[20px] p-5 w-full max-w-[380px]">
-    <h3 id="forgotTitle" class="font-bold">Reset</h3>
-    <input id="fAcc" placeholder="Account Number" class="w-full h-12 border rounded-xl px-4 mt-4 text-sm font-mono">
-    <input id="fEmail" placeholder="Registered Email" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm">
-    <div id="fPassArea"><input id="fNewPass" type="password" placeholder="New Password" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm"></div>
-    <div id="fPinArea"><input id="fNewPin" type="password" maxlength="4" placeholder="New 4-digit PIN" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm font-mono"></div>
+<div id="forgotModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm p-4 flex items-center justify-center">
+  <div class="bg-white dark:bg-gray-900 rounded-[20px] p-5 w-full max-w-[380px] border border-gray-100 dark:border-gray-800">
+    <h3 id="forgotTitle" class="font-bold text-gray-900 dark:text-white">Reset</h3>
+    <input id="fAcc" placeholder="Account Number" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-4 text-sm font-mono">
+    <input id="fEmail" placeholder="Registered Email" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-2 text-sm">
+    <div id="fPassArea"><input id="fNewPass" type="password" placeholder="New Password" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-2 text-sm"></div>
+    <div id="fPinArea"><input id="fNewPin" type="password" maxlength="4" placeholder="New 4-digit PIN" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-2 text-sm font-mono"></div>
     <button id="fBtn" onclick="doForgot()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">Reset Now</button>
-    <button onclick="closeForgot()" class="w-full h-12 bg-gray-100 rounded-xl font-bold mt-2 text-sm">Cancel</button>
+    <button onclick="closeForgot()" class="w-full h-12 bg-gray-100 dark:bg-gray-800 dark:text-gray-300 rounded-xl font-bold mt-2 text-sm">Cancel</button>
   </div>
 </div>
 
-<div id="transferModal" class="fixed inset-0 z-40 hidden bg-black/60 p-3 flex items-center justify-center">
-  <div class="bg-white rounded-[20px] w-full max-w-[460px] max-h-[90vh] overflow-auto">
+<div id="transferModal" class="fixed inset-0 z-40 hidden bg-black/60 backdrop-blur-sm p-3 flex items-center justify-center">
+  <div class="bg-white dark:bg-gray-900 rounded-[20px] w-full max-w-[460px] max-h-[90vh] overflow-auto border border-gray-100 dark:border-gray-800">
     <div class="p-5">
-      <h3 class="font-bold flex items-center gap-2"><svg class="w-5 h-5 text-[#0a2540]"><use href="#i-transfer"/></svg>Choose Transfer Type</h3>
+      <h3 class="font-bold flex items-center gap-2 text-gray-900 dark:text-white"><svg class="w-5 h-5 text-[#0a2540] dark:text-blue-400"><use href="#i-transfer"/></svg>Choose Transfer Type</h3>
       <div id="typeSelector" class="mt-4 space-y-2.5">
-        <div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('Domestic Wire')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-blue-50 rounded-full flex items-center justify-center text-[#1e4bd8]"><svg class="w-6 h-6"><use href="#i-domestic"/></svg></div><div><div class="font-bold text-[14px]">Domestic Wire</div><div class="text-[11px] text-gray-500">Same day • $15 fee</div></div></div><span id="check-Domestic Wire" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
-        <div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('ACH Transfer')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-amber-50 rounded-full flex items-center justify-center text-amber-600"><svg class="w-6 h-6"><use href="#i-ach"/></svg></div><div><div class="font-bold text-[14px]">ACH Transfer</div><div class="text-[11px] text-gray-500">1-3 days • Free</div></div></div><span id="check-ACH Transfer" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
-        <div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('International Wire')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-violet-50 rounded-full flex items-center justify-center text-violet-600"><svg class="w-6 h-6"><use href="#i-globe"/></svg></div><div><div class="font-bold text-[14px]">International Wire</div><div class="text-[11px] text-gray-500">SWIFT • $45 fee</div></div></div><span id="check-International Wire" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
-        <div class="typeOpt border-2 border-gray-200 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('Internal Transfer')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-green-50 rounded-full flex items-center justify-center text-green-600"><svg class="w-6 h-6"><use href="#i-internal"/></svg></div><div><div class="font-bold text-[14px]">Internal Transfer</div><div class="text-[11px] text-gray-500">Instant • Free</div></div></div><span id="check-Internal Transfer" class="w-6 h-6 border-2 border-gray-300 rounded-full"></span></div>
+        <div class="typeOpt border-2 border-gray-200 dark:border-gray-800 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('Domestic Wire')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-blue-50 dark:bg-blue-950/50 rounded-full flex items-center justify-center text-[#1e4bd8] dark:text-blue-400"><svg class="w-6 h-6"><use href="#i-domestic"/></svg></div><div><div class="font-bold text-[14px] text-gray-900 dark:text-white">Domestic Wire</div><div class="text-[11px] text-gray-500 dark:text-gray-400">Same day • $15 fee</div></div></div><span id="check-Domestic Wire" class="w-6 h-6 border-2 border-gray-300 dark:border-gray-700 rounded-full"></span></div>
+        <div class="typeOpt border-2 border-gray-200 dark:border-gray-800 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('ACH Transfer')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-amber-50 dark:bg-amber-950/50 rounded-full flex items-center justify-center text-amber-600 dark:text-amber-400"><svg class="w-6 h-6"><use href="#i-ach"/></svg></div><div><div class="font-bold text-[14px] text-gray-900 dark:text-white">ACH Transfer</div><div class="text-[11px] text-gray-500 dark:text-gray-400">1-3 days • Free</div></div></div><span id="check-ACH Transfer" class="w-6 h-6 border-2 border-gray-300 dark:border-gray-700 rounded-full"></span></div>
+        <div class="typeOpt border-2 border-gray-200 dark:border-gray-800 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('International Wire')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-violet-50 dark:bg-violet-950/50 rounded-full flex items-center justify-center text-violet-600 dark:text-violet-400"><svg class="w-6 h-6"><use href="#i-globe"/></svg></div><div><div class="font-bold text-[14px] text-gray-900 dark:text-white">International Wire</div><div class="text-[11px] text-gray-500 dark:text-gray-400">SWIFT • $45 fee</div></div></div><span id="check-International Wire" class="w-6 h-6 border-2 border-gray-300 dark:border-gray-700 rounded-full"></span></div>
+        <div class="typeOpt border-2 border-gray-200 dark:border-gray-800 p-3.5 rounded-[14px] flex justify-between items-center cursor-pointer" onclick="selectType('Internal Transfer')"><div class="flex gap-3 items-center"><div class="w-11 h-11 bg-green-50 dark:bg-green-950/50 rounded-full flex items-center justify-center text-green-600 dark:text-green-400"><svg class="w-6 h-6"><use href="#i-internal"/></svg></div><div><div class="font-bold text-[14px] text-gray-900 dark:text-white">Internal Transfer</div><div class="text-[11px] text-gray-500 dark:text-gray-400">Instant • Free</div></div></div><span id="check-Internal Transfer" class="w-6 h-6 border-2 border-gray-300 dark:border-gray-700 rounded-full"></span></div>
       </div>
-      <div id="transferForm" style="display:none" class="mt-4 border-t pt-4">
-        <div class="bg-blue-50 text-[12px] p-2 rounded-lg font-medium">Selected Method: <b id="selectedType" class="text-[#0a2540]"></b></div>
-        <input id="toName" placeholder="Recipient Full Name" class="w-full h-12 border rounded-xl px-4 mt-3 text-sm">
-        <input id="toBank" placeholder="Recipient Bank" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm">
-        <input id="toAcc" placeholder="Recipient Account" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm font-mono">
-        <input id="toAmount" type="number" placeholder="Amount USD" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm">
-        <input id="toDesc" placeholder="Description" class="w-full h-12 border rounded-xl px-4 mt-2 text-sm">
-        <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl mt-3">
-          <label class="text-[10px] font-bold text-amber-800">TRANSFER PIN • REQUIRED</label>
-          <input id="confirmPin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full h-12 border rounded-xl px-4 mt-1 text-sm font-mono">
-          <div class="text-right mt-1"><button class="text-[10px] font-bold text-blue-700 underline" onclick="closeTransfer();openForgot('pin')">Forgot PIN?</button></div>
+      <div id="transferForm" style="display:none" class="mt-4 border-t border-gray-100 dark:border-gray-800 pt-4">
+        <div class="bg-blue-50 dark:bg-blue-950/50 text-[12px] p-2 rounded-lg font-medium text-blue-900 dark:text-blue-300">Selected Method: <b id="selectedType" class="text-[#0a2540] dark:text-white"></b></div>
+        <input id="toName" placeholder="Recipient Full Name" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-3 text-sm">
+        <input id="toBank" placeholder="Recipient Bank" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-2 text-sm">
+        <input id="toAcc" placeholder="Recipient Account" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-2 text-sm font-mono">
+        <input id="toAmount" type="number" placeholder="Amount USD" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-2 text-sm">
+        <input id="toDesc" placeholder="Description" class="w-full h-12 border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-2 text-sm">
+        <div class="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 p-3 rounded-xl mt-3">
+          <label class="text-[10px] font-bold text-amber-800 dark:text-amber-400">TRANSFER PIN • REQUIRED</label>
+          <input id="confirmPin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full h-12 border border-amber-200 dark:border-amber-800 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm font-mono">
+          <div class="text-right mt-1"><button class="text-[10px] font-bold text-blue-700 dark:text-blue-400 underline" onclick="closeTransfer();openForgot('pin')">Forgot PIN?</button></div>
         </div>
         <button id="sendBtn" onclick="sendTransfer()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">Confirm & Send</button>
       </div>
-      <button onclick="closeTransfer()" class="w-full h-11 bg-gray-100 rounded-xl font-bold mt-2 text-sm">Cancel</button>
+      <button onclick="closeTransfer()" class="w-full h-11 bg-gray-100 dark:bg-gray-800 dark:text-gray-300 rounded-xl font-bold mt-2 text-sm">Cancel</button>
     </div>
   </div>
 </div>
 
-<div id="receiptModal" class="fixed inset-0 z-50 hidden bg-black/70 p-3 flex items-center justify-center">
-  <div class="bg-white w-full max-w-[400px] rounded-[16px] overflow-hidden">
+<div id="receiptModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm p-3 flex items-center justify-center">
+  <div class="bg-white dark:bg-gray-900 w-full max-w-[400px] rounded-[16px] overflow-hidden border border-gray-100 dark:border-gray-800">
     <div class="bg-[#0a2540] text-white p-5 text-center">
       <div class="font-black">CASH FLOW BANKING USA</div>
       <div class="text-[10px] opacity-70">FDIC Insured • Official Receipt</div>
       <div class="mt-3"><span id="rStamp" class="inline-block border-2 border-green-400 text-green-400 px-3 py-1 rounded-lg font-black text-[11px]">PENDING</span></div>
     </div>
-    <div class="p-4 text-[12px] space-y-2">
-      <div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Transaction ID</span><b id="rId"></b></div>
-      <div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Date</span><b id="rDate"></b></div>
-      <div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Type</span><b id="rType"></b></div>
-      <div class="flex justify-between border-b border-dashed py-2"><span class="text-gray-500">Status</span><b id="rStatus"></b></div>
+    <div class="p-4 text-[12px] space-y-2 dark:text-gray-200">
+      <div class="flex justify-between border-b border-gray-100 dark:border-gray-800 border-dashed py-2"><span class="text-gray-500 dark:text-gray-400">Transaction ID</span><b id="rId"></b></div>
+      <div class="flex justify-between border-b border-gray-100 dark:border-gray-800 border-dashed py-2"><span class="text-gray-500 dark:text-gray-400">Date</span><b id="rDate"></b></div>
+      <div class="flex justify-between border-b border-gray-100 dark:border-gray-800 border-dashed py-2"><span class="text-gray-500 dark:text-gray-400">Type</span><b id="rType"></b></div>
+      <div class="flex justify-between border-b border-gray-100 dark:border-gray-800 border-dashed py-2"><span class="text-gray-500 dark:text-gray-400">Status</span><b id="rStatus"></b></div>
       <div class="pt-2 text-[10px] font-bold text-gray-400">FROM</div>
       <div class="flex justify-between"><span id="rFromName"></span><span id="rFromAcc" class="font-mono"></span></div>
       <div class="pt-2 text-[10px] font-bold text-gray-400">TO</div>
@@ -331,20 +343,20 @@
       <div class="flex justify-between"><span>Bank</span><b id="rToBank"></b></div>
       <div class="flex justify-between"><span>Account</span><b id="rToAcc"></b></div>
       <div class="flex justify-between"><span>Description</span><b id="rDesc"></b></div>
-      <div class="bg-gray-50 -mx-4 -mb-4 mt-3 p-4 flex justify-between font-black text-[14px]"><span>Amount</span><span class="text-red-600">$<span id="rAmt"></span></span></div>
+      <div class="bg-gray-50 dark:bg-gray-800 -mx-4 -mb-4 mt-3 p-4 flex justify-between font-black text-[14px]"><span>Amount</span><span class="text-red-600 dark:text-red-400">$<span id="rAmt"></span></span></div>
     </div>
-    <div class="p-3 flex gap-2 bg-gray-50">
+    <div class="p-3 flex gap-2 bg-gray-50 dark:bg-gray-800">
       <button onclick="downloadReceipt()" class="flex-1 h-11 bg-[#0a2540] text-white rounded-xl font-bold text-xs">Download PDF</button>
-      <button onclick="closeReceipt()" class="flex-1 h-11 bg-gray-200 rounded-xl font-bold text-xs">Close</button>
+      <button onclick="closeReceipt()" class="flex-1 h-11 bg-gray-200 dark:bg-gray-700 dark:text-gray-200 rounded-xl font-bold text-xs">Close</button>
     </div>
   </div>
 </div>
 
-<div id="fineAlert" class="fixed inset-0 z-[100] hidden bg-black/50 p-6 flex items-center justify-center">
-  <div class="bg-white rounded-[20px] p-6 w-full max-w-[340px] text-center shadow-2xl">
-    <div id="fineIcon" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl bg-red-100">❌</div>
-    <div id="fineTitle" class="font-black mt-3">Error</div>
-    <div id="fineMsg" class="text-[13px] text-gray-600 mt-1 whitespace-pre-line"></div>
+<div id="fineAlert" class="fixed inset-0 z-[100] hidden bg-black/50 backdrop-blur-sm p-6 flex items-center justify-center">
+  <div class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-[20px] p-6 w-full max-w-[340px] text-center shadow-2xl">
+    <div id="fineIcon" class="w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl bg-red-100 dark:bg-red-950/50">❌</div>
+    <div id="fineTitle" class="font-black mt-3 text-gray-900 dark:text-white">Error</div>
+    <div id="fineMsg" class="text-[13px] text-gray-600 dark:text-gray-300 mt-1 whitespace-pre-line"></div>
     <button onclick="closeFineAlert()" class="w-full h-11 bg-[#0a2540] text-white rounded-xl font-bold mt-4 text-sm">OK</button>
   </div>
 </div>
@@ -358,6 +370,31 @@ const firebaseConfig={apiKey:"AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",authDomai
 const app=initializeApp(firebaseConfig);const db=getFirestore(app);
 let cur=null,curId=null,selectedTransferType='',currentReceipt=null,forgotMode='password',balHidden=false,realBal=0;
 const $=id=>document.getElementById(id);
+
+// DARK / LIGHT THEME TOGGLE
+window.toggleTheme = () => {
+  const isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('cfb_theme', isDark ? 'dark' : 'light');
+  updateThemeIcon(isDark);
+};
+
+function updateThemeIcon(isDark) {
+  const icon = $('themeIcon');
+  if (icon) {
+    icon.innerHTML = `<use href="#${isDark ? 'i-sun' : 'i-moon'}"/>`;
+  }
+}
+
+// Initialize saved theme or system preference
+const savedTheme = localStorage.getItem('cfb_theme');
+const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
+  document.documentElement.classList.add('dark');
+  updateThemeIcon(true);
+} else {
+  document.documentElement.classList.remove('dark');
+  updateThemeIcon(false);
+}
 
 // Reliable Initial Loader Dismissal
 const dismissInitialLoader = () => {
@@ -379,16 +416,14 @@ setTimeout(dismissInitialLoader, 1500);
 
 window.showActionLoader=(msg='Processing...')=>{
   $('actionLoaderMsg').textContent=msg;
-  $('actionLoader').style.display='flex';
-  $('actionLoader').classList.remove('hidden');
+  $('actionLoader').style.display='flex';$('actionLoader').classList.remove('hidden');
 };
 
 window.hideActionLoader=()=>{
-  $('actionLoader').style.display='none';
-  $('actionLoader').classList.add('hidden');
+  $('actionLoader').style.display='none';$('actionLoader').classList.add('hidden');
 };
 
-window.showFineAlert=(t,m,type='error')=>{ $('fineTitle').textContent=t;$('fineMsg').textContent=m;$('fineIcon').className='w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl '+(type=='error'?'bg-red-100':type=='success'?'bg-green-100':'bg-blue-100');$('fineIcon').textContent=type=='error'?'✕':type=='success'?'✓':'i';$('fineAlert').style.display='flex';$('fineAlert').classList.remove('hidden');};
+window.showFineAlert=(t,m,type='error')=>{ $('fineTitle').textContent=t;$('fineMsg').textContent=m;$('fineIcon').className='w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl '+(type=='error'?'bg-red-100 dark:bg-red-950/50':type=='success'?'bg-green-100 dark:bg-green-950/50':'bg-blue-100 dark:bg-blue-950/50');$('fineIcon').textContent=type=='error'?'✕':type=='success'?'✓':'i';$('fineAlert').style.display='flex';$('fineAlert').classList.remove('hidden');};
 window.closeFineAlert=()=>{$('fineAlert').style.display='none';$('fineAlert').classList.add('hidden');};
 
 window.addEventListener('load',()=>{
@@ -400,22 +435,19 @@ window.addEventListener('load',()=>{
 
 window.goHome=()=>{ 
   $('homeView').style.display='block';
-  $('bankView').style.display='none';
-  $('dashView').style.display='none'; 
+  $('bankView').style.display='none';$('dashView').style.display='none'; 
 };
 
 window.goBanking=(tab='create')=>{ 
   $('homeView').style.display='none';
-  $('bankView').style.display='block';
-  $('dashView').style.display='none'; 
+  $('bankView').style.display='block';$('dashView').style.display='none'; 
   showAuth(tab);
 };
 
 window.showAuth=t=>{ 
   $('createCard').style.display=t=='create'?'block':'none'; 
-  $('loginCard').style.display=t=='login'?'block':'none'; 
-  $('t1').className=t=='create'?'flex-1 py-2.5 rounded-lg text-xs font-bold bg-[#0a2540] text-white shadow-sm':'flex-1 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:text-gray-900'; 
-  $('t2').className=t=='login'?'flex-1 py-2.5 rounded-lg text-xs font-bold bg-[#0a2540] text-white shadow-sm':'flex-1 py-2.5 rounded-lg text-xs font-bold text-gray-600 hover:text-gray-900'; 
+  $('loginCard').style.display=t=='login'?'block':'none';$('t1').className=t=='create'?'flex-1 py-2.5 rounded-lg text-xs font-bold bg-[#0a2540] dark:bg-gray-900 text-white shadow-sm':'flex-1 py-2.5 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900'; 
+  $('t2').className=t=='login'?'flex-1 py-2.5 rounded-lg text-xs font-bold bg-[#0a2540] dark:bg-gray-900 text-white shadow-sm':'flex-1 py-2.5 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900'; 
 };
 
 window.toggleBal=()=>{ 
@@ -434,24 +466,24 @@ window.toggleBal=()=>{
   } 
 };
 
-window.openTransfer=()=>{ $('transferModal').style.display='flex'; $('transferModal').classList.remove('hidden'); selectedTransferType=''; $('transferForm').style.display='none'; document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('border-[#0a2540]','bg-blue-50/30')); document.querySelectorAll('[id^="check-"]').forEach(el=>{el.innerHTML='';el.className='w-6 h-6 border-2 border-gray-300 rounded-full';}); };
-window.closeTransfer=()=>{ $('transferModal').style.display='none'; $('transferModal').classList.add('hidden'); };
+window.openTransfer=()=>{ $('transferModal').style.display='flex'; $('transferModal').classList.remove('hidden'); selectedTransferType='';$('transferForm').style.display='none'; document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('border-[#0a2540]','bg-blue-50/30','dark:border-blue-500')); document.querySelectorAll('[id^="check-"]').forEach(el=>{el.innerHTML='';el.className='w-6 h-6 border-2 border-gray-300 dark:border-gray-700 rounded-full';}); };
+window.closeTransfer=()=>{ $('transferModal').style.display='none';$('transferModal').classList.add('hidden'); };
 
 window.selectType=type=>{ 
   selectedTransferType=type; 
-  document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('border-[#0a2540]','bg-blue-50/30')); 
-  document.querySelectorAll('[id^="check-"]').forEach(el=>{el.innerHTML='';el.className='w-6 h-6 border-2 border-gray-300 rounded-full';}); 
+  document.querySelectorAll('.typeOpt').forEach(el=>el.classList.remove('border-[#0a2540]','bg-blue-50/30','dark:border-blue-500')); 
+  document.querySelectorAll('[id^="check-"]').forEach(el=>{el.innerHTML='';el.className='w-6 h-6 border-2 border-gray-300 dark:border-gray-700 rounded-full';}); 
   const el=document.getElementById('check-'+type); 
-  el.innerHTML='<div class="w-3 h-3 bg-[#0a2540] rounded-full"></div>'; 
-  el.className='w-6 h-6 border-2 border-[#0a2540] rounded-full flex items-center justify-center'; 
-  [...document.querySelectorAll('.typeOpt')].find(e=>e.innerHTML.includes(type))?.classList.add('border-[#0a2540]','bg-blue-50/30'); 
+  el.innerHTML='<div class="w-3 h-3 bg-[#0a2540] dark:bg-blue-400 rounded-full"></div>'; 
+  el.className='w-6 h-6 border-2 border-[#0a2540] dark:border-blue-400 rounded-full flex items-center justify-center'; 
+  [...document.querySelectorAll('.typeOpt')].find(e=>e.innerHTML.includes(type))?.classList.add('border-[#0a2540]','bg-blue-50/30','dark:border-blue-500'); 
   $('selectedType').textContent=type; 
   $('transferForm').style.display='block'; 
-  if(type=='Internal Transfer')$('toBank').value='Cash Flow Banking USA'; else $('toBank').value=''; 
+  if(type=='Internal Transfer')$('toBank').value='Cash Flow Banking USA'; else$('toBank').value=''; 
 };
 
-window.openForgot=mode=>{ forgotMode=mode; if(mode=='password'){ $('forgotTitle').textContent='Reset Password'; $('fPassArea').style.display='block'; $('fPinArea').style.display='none'; }else{ $('forgotTitle').textContent='Reset Transfer PIN'; $('fPassArea').style.display='none'; $('fPinArea').style.display='block'; } $('fAcc').value=$('lacc').value||''; $('forgotModal').style.display='flex'; $('forgotModal').classList.remove('hidden'); };
-window.closeForgot=()=>{ $('forgotModal').style.display='none'; $('forgotModal').classList.add('hidden'); };
+window.openForgot=mode=>{ forgotMode=mode; if(mode=='password'){ $('forgotTitle').textContent='Reset Password';$('fPassArea').style.display='block'; $('fPinArea').style.display='none'; }else{$('forgotTitle').textContent='Reset Transfer PIN'; $('fPassArea').style.display='none';$('fPinArea').style.display='block'; } $('fAcc').value=$('lacc').value||''; $('forgotModal').style.display='flex';$('forgotModal').classList.remove('hidden'); };
+window.closeForgot=()=>{ $('forgotModal').style.display='none';$('forgotModal').classList.add('hidden'); };
 
 window.doForgot=async()=>{ 
   const acc=$('fAcc').value.trim(),email=$('fEmail').value.toLowerCase().trim(),newPass=$('fNewPass').value.trim(),newPin=$('fNewPin').value.trim(); 
@@ -588,17 +620,17 @@ function renderHistory(){
     const oi=hist.length-1-idx; 
     const isCredit=h.type=='credit'; 
     const status=h.status||'APPROVED'; 
-    let badge='bg-green-50 text-green-700 border-green-200'; 
-    if(status=='PENDING')badge='bg-amber-50 text-amber-700 border-amber-200'; 
-    if(status=='DECLINED')badge='bg-red-50 text-red-700 border-red-200'; 
+    let badge='bg-green-50 text-green-700 border-green-200 dark:bg-green-950/40 dark:text-green-400 dark:border-green-900/50'; 
+    if(status=='PENDING')badge='bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-900/50'; 
+    if(status=='DECLINED')badge='bg-red-50 text-red-700 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/50'; 
     let displayDesc = h.desc; 
     if(isCredit && h.amount>0){ 
       if(displayDesc.toLowerCase().includes('admin') || displayDesc.toLowerCase().includes('adjustment')){ 
         displayDesc = 'Wire transfer • Payment received'; 
       } 
     } 
-    const typeTag=h.transferType?`<span class="text-[9px] font-bold bg-[#0a2540] text-white px-2 py-0.5 rounded-full mr-1">${h.transferType}</span>`:'';
-    html+=`<div class="p-4 flex justify-between items-center hover:bg-gray-50/80 transition-all"><div class="flex-1"><div class="font-semibold text-[13px] text-gray-900">${typeTag}${displayDesc}</div><div class="text-[11px] text-gray-500 mt-0.5">${new Date(h.date).toLocaleDateString()} • ${h.toName||'System'} • <span class="border px-2 py-0.5 rounded-full text-[9px] font-bold ${badge}">${status}</span></div></div><div class="text-right ml-3"><div class="font-bold text-[13px] ${isCredit?'text-emerald-600':'text-red-600'}">${isCredit?'+':'-'}$${Math.abs(h.amount).toLocaleString()}</div><button onclick="viewReceipt(${oi})" class="mt-1 h-7 px-3 bg-[#0a2540] hover:bg-[#103357] text-white rounded-full text-[10px] font-bold transition-all">Receipt</button></div></div>`; 
+    const typeTag=h.transferType?`<span class="text-[9px] font-bold bg-[#0a2540] dark:bg-blue-600 text-white px-2 py-0.5 rounded-full mr-1">${h.transferType}</span>`:'';
+    html+=`<div class="p-4 flex justify-between items-center hover:bg-gray-50/80 dark:hover:bg-gray-800/50 transition-all"><div class="flex-1"><div class="font-semibold text-[13px] text-gray-900 dark:text-white">${typeTag}${displayDesc}</div><div class="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">${new Date(h.date).toLocaleDateString()} • ${h.toName||'System'} • <span class="border px-2 py-0.5 rounded-full text-[9px] font-bold ${badge}">${status}</span></div></div><div class="text-right ml-3"><div class="font-bold text-[13px] ${isCredit?'text-emerald-600 dark:text-emerald-400':'text-red-600 dark:text-red-400'}">${isCredit?'+':'-'}$${Math.abs(h.amount).toLocaleString()}</div><button onclick="viewReceipt(${oi})" class="mt-1 h-7 px-3 bg-[#0a2540] hover:bg-[#103357] text-white rounded-full text-[10px] font-bold transition-all">Receipt</button></div></div>`; 
   }); 
   $('txList').innerHTML=html||'<div class="p-8 text-center text-gray-400 text-xs">No transactions recorded yet</div>'; 
 }
