@@ -3,704 +3,861 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cash Flow Banking</title>
+  <title>Cash Flow Banking - Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * { font-family: 'Inter', system-ui; }
+    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
     body { background: #0b1426; color: #1e293b; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0b1426; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
   </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col justify-center items-center p-3 md:p-6 relative">
+<body class="antialiased min-h-screen flex flex-col justify-center items-center p-2 sm:p-4 md:p-6 relative">
 
-<!-- SIDE NAVIGATION DRAWER (MAIN MENU) -->
-<div id="sideNavOverlay" onclick="toggleNav()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
+  <!-- SIDE NAVIGATION DRAWER (MAIN MENU) -->
+  <div id="sideNavOverlay" onclick="toggleNav()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity"></div>
 
-<div id="sideNav" class="fixed top-0 left-0 h-full w-[280px] bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto flex flex-col">
-  <!-- NAV HEADER -->
-  <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-    <div class="flex items-center gap-2">
-      <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center font-black text-white text-base">🏛</div>
-      <span class="font-extrabold text-slate-800 text-sm tracking-tight">CASH FLOW BANK</span>
-    </div>
-    <button onclick="toggleNav()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
-  </div>
-
-  <!-- NAV LINKS LIST -->
-  <div class="p-4 space-y-6 text-xs text-slate-600 font-semibold flex-1">
-    
-    <!-- MAIN SECTION -->
-    <div>
-      <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">MAIN</p>
-      <div class="space-y-1">
-        <button onclick="navAction('Dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold">
-          <span class="text-base">🏠</span> Dashboard
-        </button>
-        <button onclick="navAction('Account Summary')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">🕒</span> Account Summary
-        </button>
-        <button onclick="toggleNav(); openTransferModal();" class="w-full flex justify-between items-center px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <div class="flex items-center gap-3">
-            <span class="text-base">💳</span> Transfer
-          </div>
-          <span class="text-slate-400 font-bold">></span>
-        </button>
-        <button onclick="navAction('Deposit Check')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">💸</span> Deposit Check
-        </button>
-        <button onclick="navAction('Deposit Crypto')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">₿</span> Deposit Crypto
-        </button>
-      </div>
-    </div>
-
-    <!-- SERVICES SECTION -->
-    <div>
-      <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">SERVICES</p>
-      <div class="space-y-1">
-        <button onclick="navAction('Loans')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">⚖️</span> Loans
-        </button>
-        <button onclick="navAction('Cards')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">💳</span> Cards
-        </button>
-      </div>
-    </div>
-
-    <!-- ACCOUNT SECTION -->
-    <div>
-      <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">ACCOUNT</p>
-      <div class="space-y-1">
-        <button onclick="navAction('KYC Verification')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">🪪</span> KYC Verification
-        </button>
-        <button onclick="navAction('Profile')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">👤</span> Profile
-        </button>
-        <button onclick="navAction('Settings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">⚙️</span> Settings
-        </button>
-        <button onclick="navAction('Account Status')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">📊</span> Account Status
-        </button>
-        <button onclick="navAction('Support')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-          <span class="text-base">🎧</span> Support
-        </button>
-        <button onclick="toggleNav(); logoutUser();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 transition-all font-bold">
-          <span class="text-base">↪</span> Sign Out
-        </button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- CONTAINER -->
-<div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 mb-12">
-
-  <!-- TOP HEADER -->
-  <div class="bg-[#0a2540] p-6 text-white text-center relative flex items-center justify-between">
-    <!-- MENU TRIGGER BUTTON -->
-    <button id="menuBtn" onclick="toggleNav()" class="hidden w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold text-lg text-white transition-all">
-      ☰
-    </button>
-    
-    <div class="flex items-center justify-center gap-2 mx-auto">
-      <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white text-lg">CF</div>
-      <h1 class="text-xl font-extrabold tracking-tight">CASH FLOW BANK</h1>
-    </div>
-
-    <div class="w-10"></div> <!-- Spacer for centering -->
-  </div>
-
-  <!-- STATUS ALERT -->
-  <div class="px-6 pt-4">
-    <div id="alertBox" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
-  </div>
-
-  <!-- VIEW 1: LOGIN FORM -->
-  <div id="loginView" class="p-6 pt-2">
-    <h2 class="font-extrabold text-xl text-slate-800 mb-1">Welcome Back</h2>
-    <p class="text-xs text-slate-500 mb-5">Sign in using your account details</p>
-    
-    <div class="space-y-4">
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Account Number</label>
-        <input id="loginAccNo" type="text" placeholder="e.g. 45812345" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50 font-mono">
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
-        <input id="loginPass" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
-      </div>
-      <button onclick="loginUser()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-sm shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all">Sign In</button>
-    </div>
-
-    <p class="text-xs text-center text-slate-500 mt-6">Don't have an account? <a href="#" onclick="showPage('register')" class="text-[#0a2540] font-extrabold hover:underline">Create Account</a></p>
-  </div>
-
-  <!-- VIEW 2: REGISTER FORM -->
-  <div id="registerView" class="hidden p-6 pt-2">
-    <h2 class="font-extrabold text-xl text-slate-800 mb-1">Open an Account</h2>
-    <p class="text-xs text-slate-500 mb-5">Join Cash Flow Banking today</p>
-    
-    <div class="space-y-3">
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Full Name</label>
-        <input id="regName" type="text" placeholder="John Doe" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
-        <input id="regEmail" type="email" placeholder="john@example.com" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
-        <input id="regPass" type="password" placeholder="••••••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
-      </div>
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">4-Digit Security PIN</label>
-        <input id="regPin" type="password" maxlength="4" placeholder="1234" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
-      </div>
-      <button onclick="registerUser()" class="w-full h-12 bg-emerald-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/10 active:scale-[0.98] transition-all mt-2">Submit Application</button>
-    </div>
-
-    <p class="text-xs text-center text-slate-500 mt-5">Already registered? <a href="#" onclick="showPage('login')" class="text-[#0a2540] font-extrabold hover:underline">Sign In</a></p>
-  </div>
-
-  <!-- VIEW 3: REALISTIC BANK DASHBOARD -->
-  <div id="dashboardView" class="hidden bg-slate-50 p-4 space-y-4">
-    
-    <!-- ACCOUNT HOLD NOTICE BANNER -->
-    <div id="holdNotice" class="hidden bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-red-900 shadow-sm relative">
-      <div class="flex items-start gap-3">
-        <div class="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">⚠️</div>
-        <div>
-          <h4 class="font-extrabold text-xs uppercase tracking-wide text-red-700">Account On Hold / Action Required</h4>
-          <p class="text-xs font-semibold mt-1" id="holdReasonText">Security verification required.</p>
-          <div id="feeRequirementBox" class="mt-2 bg-red-100/80 p-2 rounded-lg text-[11px] font-extrabold text-red-800">
-            Clearance Fee Required: <span id="holdFeeAmount">$0.00</span>
-          </div>
-          <p class="text-[10px] text-red-500 mt-2">Please contact compliance support using the live chat widget to clear this restriction.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- USER GREETING CARD -->
-    <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-[#0a2540] text-white flex items-center justify-center font-black text-sm" id="userAvatar">JD</div>
-        <div>
-          <h3 class="font-bold text-sm text-slate-800" id="userName">User Name</h3>
-          <p class="text-[11px] text-slate-400">Primary ID: <span id="userAcc" class="font-mono font-bold text-slate-600">330000000</span></p>
-        </div>
-      </div>
-      <span id="userStatus" class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">Active</span>
-    </div>
-
-    <!-- ACCOUNT TYPE TAB SELECTOR -->
-    <div class="flex bg-slate-200/80 p-1 rounded-xl text-xs font-bold gap-1">
-      <button id="tabChecking" onclick="switchAccount('checking')" class="flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all">Checking</button>
-      <button id="tabSavings" onclick="switchAccount('savings')" class="flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all">Savings</button>
-      <button id="tabInvestment" onclick="switchAccount('investment')" class="flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all">Investment</button>
-    </div>
-
-    <!-- VIRTUAL CARD / BALANCE BOARD -->
-    <div class="bg-gradient-to-tr from-[#0a2540] via-[#11385f] to-[#1e4e80] rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
-      <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
-      <div class="flex justify-between items-center text-xs opacity-80">
-        <span id="accTypeLabel">Checking Balance</span>
-        <span class="font-bold tracking-widest">DEBIT CARD</span>
-      </div>
-      <div class="text-3xl font-black mt-2 tracking-tight" id="userBalance">$0.00</div>
-      
-      <div class="mt-4 border-t border-white/10 pt-3 text-[10px] space-y-1 font-mono">
-        <div class="flex justify-between"><span class="opacity-60">ROUTING (ABA):</span> <span class="font-bold" id="routingNo">021000021</span></div>
-        <div class="flex justify-between"><span class="opacity-60">SWIFT / BIC:</span> <span class="font-bold" id="swiftCode">CSFLUS33XXX</span></div>
-        <div class="flex justify-between"><span class="opacity-60">IBAN:</span> <span class="font-bold text-[9px]" id="ibanNo">US64 CSFL 0210 0002 1000</span></div>
-      </div>
-    </div>
-
-    <!-- CREDIT SCORE METER -->
-    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-      <div class="flex justify-between items-center mb-2">
-        <span class="text-xs font-bold text-slate-700">Credit Score Index</span>
-        <span class="text-xs font-extrabold text-emerald-600">750 / 850 (Excellent)</span>
-      </div>
-      <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-        <div class="bg-gradient-to-r from-amber-400 via-emerald-400 to-emerald-600 h-full rounded-full" style="width: 88%"></div>
-      </div>
-      <p class="text-[10px] text-slate-400 mt-2">Calculated based on account activity and payment reliability.</p>
-    </div>
-
-    <!-- QUICK ACTIONS -->
-    <div class="grid grid-cols-3 gap-2">
-      <button onclick="openTransferModal()" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
-        <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">↗</div>
-        <span class="text-[11px] font-bold text-slate-700">Transfer</span>
-      </button>
-      <button onclick="handleAction('Check Deposit')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
-        <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">↙</div>
-        <span class="text-[11px] font-bold text-slate-700">Deposit</span>
-      </button>
-      <button onclick="handleAction('Card Management')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
-        <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">💳</div>
-        <span class="text-[11px] font-bold text-slate-700">Cards</span>
-      </button>
-    </div>
-
-    <!-- RECENT TRANSACTIONS -->
-    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-      <h4 class="font-extrabold text-xs text-slate-800 mb-3 uppercase tracking-wider">Recent Activity</h4>
-      <div id="activityList" class="space-y-3 text-xs">
-        <div class="flex justify-between items-center border-b border-slate-50 pb-2">
-          <div class="flex items-center gap-2">
-            <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</div>
-            <div>
-              <p class="font-bold text-slate-800">Account Opening Bonus</p>
-              <p class="text-[10px] text-slate-400">System Credit</p>
-            </div>
-          </div>
-          <span class="font-bold text-emerald-600">+$0.00</span>
-        </div>
-      </div>
-    </div>
-
-    <button onclick="logoutUser()" class="w-full h-11 bg-slate-200 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-300 transition-all">Log Out</button>
-  </div>
-
-</div>
-
-<!-- TRANSFER MODAL -->
-<div id="transferModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-  <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
-    <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
-      <h3 class="font-extrabold text-base text-slate-800">Initiate Transfer</h3>
-      <button onclick="closeTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
-    </div>
-
-    <div id="trError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
-
-    <div class="space-y-3">
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Transfer Type</label>
-        <select id="trType" onchange="toggleSwiftField()" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
-          <option value="LOCAL">Local Bank Transfer</option>
-          <option value="WIRE">International Wire Transfer</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Debit From Account</label>
-        <select id="trSourceAcc" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
-          <option value="checking">Checking Account</option>
-          <option value="savings">Savings Account</option>
-          <option value="investment">Investment Account</option>
-        </select>
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Recipient Full Name</label>
-        <input id="trRecipient" type="text" placeholder="e.g. Sarah Jenkins" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Bank Name</label>
-        <input id="trBank" type="text" placeholder="e.g. Chase Bank / Barclays" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Account Number / IBAN</label>
-        <input id="trAccountNo" type="text" placeholder="e.g. 0098765432" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
-      </div>
-
-      <div id="swiftBox" class="hidden">
-        <label class="block text-xs font-bold text-slate-600 mb-1">SWIFT / BIC Code</label>
-        <input id="trSwift" type="text" placeholder="e.g. CHASUS33" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Transfer Amount ($)</label>
-        <input id="trAmount" type="number" step="any" placeholder="0.00" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-bold">
-      </div>
-
-      <div>
-        <label class="block text-xs font-bold text-slate-600 mb-1">Enter 4-Digit Security PIN</label>
-        <input id="trPin" type="password" maxlength="4" placeholder="••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
-      </div>
-
-      <button id="trSubmitBtn" onclick="processTransfer()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all mt-2">Authorize & Send Payment</button>
-    </div>
-  </div>
-</div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
-  authDomain: "cash-flow-banking3.firebaseapp.com",
-  databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
-  projectId: "cash-flow-banking3",
-  storageBucket: "cash-flow-banking3.firebasestorage.app",
-  messagingSenderId: "782707432276",
-  appId: "1:782707432276:web:680425b777d227179c86c1"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-let currentUserData = null;
-let currentDocId = null;
-let activeAccountTab = 'checking';
-
-/* SIDE DRAWER TOGGLE */
-window.toggleNav = () => {
-  const nav = document.getElementById('sideNav');
-  const overlay = document.getElementById('sideNavOverlay');
-  
-  if (nav.classList.contains('-translate-x-full')) {
-    nav.classList.remove('-translate-x-full');
-    overlay.classList.remove('hidden');
-  } else {
-    nav.classList.add('-translate-x-full');
-    overlay.classList.add('hidden');
-  }
-};
-
-window.navAction = (action) => {
-  toggleNav();
-  alert(`${action} section is active.`);
-};
-
-window.showPage = (viewName) => {
-  document.getElementById('loginView').classList.add('hidden');
-  document.getElementById('registerView').classList.add('hidden');
-  document.getElementById('dashboardView').classList.add('hidden');
-  document.getElementById('menuBtn').classList.add('hidden');
-  showAlert('');
-
-  if (viewName === 'login') document.getElementById('loginView').classList.remove('hidden');
-  if (viewName === 'register') document.getElementById('registerView').classList.remove('hidden');
-  if (viewName === 'dashboard') {
-    document.getElementById('dashboardView').classList.remove('hidden');
-    document.getElementById('menuBtn').classList.remove('hidden');
-  }
-};
-
-function showAlert(msg, type = 'error') {
-  const box = document.getElementById('alertBox');
-  if (!msg) { box.classList.add('hidden'); return; }
-  box.className = `p-3 rounded-xl text-xs font-semibold mb-2 text-center ${type === 'error' ? 'bg-red-100 text-red-700' : type === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-700'}`;
-  box.textContent = msg;
-  box.classList.remove('hidden');
-}
-
-window.registerUser = async () => {
-  const name = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regEmail').value.trim().toLowerCase();
-  const pass = document.getElementById('regPass').value;
-  const pin = document.getElementById('regPin').value;
-
-  if (!name || !email || !pass || !pin) { showAlert('Please complete all fields.'); return; }
-
-  try {
-    const q = query(collection(db, 'cashflow_accounts'), where('email', '==', email));
-    const existing = await getDocs(q);
-    if (!existing.empty) { showAlert('Email is already registered.'); return; }
-
-    const rawId = Math.floor(100000 + Math.random() * 900000);
-    const accNo = '458' + rawId;
-
-    await addDoc(collection(db, 'cashflow_accounts'), {
-      name, email, pass, pin, accNo,
-      checkingBalance: 0,
-      savingsBalance: 0,
-      investmentBalance: 0,
-      routingNo: '021000' + (100 + Math.floor(Math.random() * 899)),
-      swiftCode: 'CSFLUS33' + Math.floor(100 + Math.random() * 899),
-      ibanNo: 'US64 CSFL 0210 ' + rawId + ' 1000',
-      status: 'PENDING',
-      holdReason: '',
-      clearanceFee: 0,
-      created: Date.now(),
-      history: []
-    });
-
-    document.getElementById('loginAccNo').value = accNo;
-    showPage('login');
-    showAlert(`Account created! Your Account Number is ${accNo}. Status: PENDING approval before login.`, 'warning');
-  } catch (err) {
-    showAlert('Error: ' + err.message);
-  }
-};
-
-window.loginUser = async () => {
-  const accNo = document.getElementById('loginAccNo').value.trim();
-  const pass = document.getElementById('loginPass').value;
-
-  if (!accNo || !pass) { showAlert('Enter both Account Number and password.'); return; }
-
-  try {
-    const q = query(collection(db, 'cashflow_accounts'), where('accNo', '==', accNo));
-    const snap = await getDocs(q);
-
-    if (snap.empty) { showAlert('Account number not found.'); return; }
-
-    snap.forEach(d => {
-      currentUserData = d.data();
-      currentDocId = d.id;
-    });
-
-    if (currentUserData.pass !== pass) { showAlert('Incorrect password.'); return; }
-
-    if (currentUserData.status === 'PENDING') {
-      showAlert('Your account registration is still PENDING administrator approval.', 'warning');
-      return;
-    }
-
-    if (currentUserData.status === 'DECLINED') {
-      showAlert(`Your account application was DECLINED. Access denied.`);
-      return;
-    }
-
-    const initials = currentUserData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    document.getElementById('userAvatar').textContent = initials || 'CF';
-    document.getElementById('userName').textContent = currentUserData.name;
-    document.getElementById('userAcc').textContent = currentUserData.accNo;
-    document.getElementById('routingNo').textContent = currentUserData.routingNo || '021000021';
-    document.getElementById('swiftCode').textContent = currentUserData.swiftCode || 'CSFLUS33XXX';
-    document.getElementById('ibanNo').textContent = currentUserData.ibanNo || 'US64 CSFL 0210 0000 1000';
-    
-    // Status Badge & Hold Banner Evaluation
-    const statusBadge = document.getElementById('userStatus');
-    const holdNotice = document.getElementById('holdNotice');
-
-    if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
-      statusBadge.className = "bg-red-100 text-red-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
-      statusBadge.textContent = currentUserData.status === 'FROZEN' ? "ON HOLD / FROZEN" : "RESTRICTED";
-      
-      document.getElementById('holdReasonText').textContent = currentUserData.holdReason || "Account activities are temporarily restricted due to compliance auditing.";
-      if (currentUserData.clearanceFee && currentUserData.clearanceFee > 0) {
-        document.getElementById('holdFeeAmount').textContent = '$' + parseFloat(currentUserData.clearanceFee).toLocaleString(undefined, {minimumFractionDigits: 2});
-        document.getElementById('feeRequirementBox').classList.remove('hidden');
-      } else {
-        document.getElementById('feeRequirementBox').classList.add('hidden');
-      }
-      holdNotice.classList.remove('hidden');
-    } else {
-      statusBadge.className = "bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
-      statusBadge.textContent = "APPROVED";
-      holdNotice.classList.add('hidden');
-    }
-
-    renderTransactions();
-    switchAccount('checking');
-    showPage('dashboard');
-  } catch (err) {
-    showAlert('Error: ' + err.message);
-  }
-};
-
-window.switchAccount = (type) => {
-  if (!currentUserData) return;
-  activeAccountTab = type;
-  const btnC = document.getElementById('tabChecking');
-  const btnS = document.getElementById('tabSavings');
-  const btnI = document.getElementById('tabInvestment');
-
-  btnC.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
-  btnS.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
-  btnI.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
-
-  let bal = 0;
-  if (type === 'checking') {
-    btnC.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
-    document.getElementById('accTypeLabel').textContent = "Checking Balance";
-    bal = currentUserData.checkingBalance || currentUserData.balance || 0;
-  } else if (type === 'savings') {
-    btnS.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
-    document.getElementById('accTypeLabel').textContent = "Savings Balance";
-    bal = currentUserData.savingsBalance || 0;
-  } else if (type === 'investment') {
-    btnI.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
-    document.getElementById('accTypeLabel').textContent = "Investment Balance";
-    bal = currentUserData.investmentBalance || 0;
-  }
-
-  document.getElementById('userBalance').textContent = '$' + bal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-};
-
-function renderTransactions() {
-  const list = document.getElementById('activityList');
-  const history = currentUserData.history || [];
-
-  let html = `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
-    <div class="flex items-center gap-2">
-      <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</div>
-      <div>
-        <p class="font-bold text-slate-800">Account Opening Bonus</p>
-        <p class="text-[10px] text-slate-400">System Credit</p>
-      </div>
-    </div>
-    <span class="font-bold text-emerald-600">+$0.00</span>
-  </div>`;
-
-  history.slice().reverse().forEach(t => {
-    html += `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
+  <div id="sideNav" class="fixed top-0 left-0 h-full w-[280px] bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl overflow-y-auto flex flex-col">
+    <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
       <div class="flex items-center gap-2">
-        <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-black">↗</div>
-        <div>
-          <p class="font-bold text-slate-800">${t.title}</p>
-          <p class="text-[10px] text-slate-400">${t.date}</p>
+        <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center font-black text-white text-base">🏛</div>
+        <span class="font-extrabold text-slate-800 text-sm tracking-tight">CASH FLOW BANK</span>
+      </div>
+      <button onclick="toggleNav()" class="text-slate-400 hover:text-slate-700 font-bold text-lg">✕</button>
+    </div>
+
+    <div class="p-4 space-y-6 text-xs text-slate-600 font-semibold flex-1">
+      <div>
+        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">MAIN</p>
+        <div class="space-y-1">
+          <button onclick="navAction('Dashboard')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold">
+            <span class="text-base">🏠</span> Dashboard
+          </button>
+          <button onclick="navAction('Account Summary')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">🕒</span> Account Summary
+          </button>
+          <button onclick="toggleNav(); openTransferModal();" class="w-full flex justify-between items-center px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <div class="flex items-center gap-3">
+              <span class="text-base">💳</span> Transfer
+            </div>
+            <span class="text-slate-400 font-bold">></span>
+          </button>
+          <button onclick="navAction('Deposit Check')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">💸</span> Deposit Check
+          </button>
+          <button onclick="navAction('Deposit Crypto')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">₿</span> Deposit Crypto
+          </button>
         </div>
       </div>
-      <span class="font-bold text-red-600">-$${t.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
-    </div>`;
-  });
 
-  list.innerHTML = html;
-}
+      <div>
+        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">SERVICES</p>
+        <div class="space-y-1">
+          <button onclick="navAction('Loans')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">⚖️</span> Loans
+          </button>
+          <button onclick="navAction('Cards')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">💳</span> Cards
+          </button>
+        </div>
+      </div>
 
-/* TRANSFER LOGIC */
-window.openTransferModal = () => {
-  if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
-    alert(`TRANSFER BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}\n\nPlease settle any required fees or contact compliance support via live chat.`);
-    return;
-  }
+      <div>
+        <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">ACCOUNT</p>
+        <div class="space-y-1">
+          <button onclick="toggleNav(); openKycModal();" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <div class="flex items-center gap-3">
+              <span class="text-base">🪪</span> KYC Verification
+            </div>
+            <span id="navKycBadge" class="text-[9px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-600 uppercase font-black">--</span>
+          </button>
+          <button onclick="navAction('Profile')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">👤</span> Profile
+          </button>
+          <button onclick="navAction('Settings')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">⚙️</span> Settings
+          </button>
+          <button onclick="navAction('Account Status')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">📊</span> Account Status
+          </button>
+          <button onclick="navAction('Support')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <span class="text-base">🎧</span> Support
+          </button>
+          <a href="admin.html" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-amber-700 bg-amber-50 hover:bg-amber-100 transition-all font-bold mt-2">
+            <span class="text-base">🔐</span> Admin Console
+          </a>
+          <button onclick="toggleNav(); logoutUser();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-600 hover:bg-red-50 transition-all font-bold">
+            <span class="text-base">↪</span> Sign Out
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  document.getElementById('trError').textContent = '';
-  document.getElementById('trError').classList.add('hidden');
-  document.getElementById('transferModal').classList.remove('hidden');
-  document.getElementById('transferModal').classList.add('flex');
-};
+  <!-- MAIN CONTAINER -->
+  <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 mb-12 relative">
 
-window.closeTransferModal = () => {
-  document.getElementById('transferModal').classList.add('hidden');
-  document.getElementById('transferModal').classList.remove('flex');
-};
+    <!-- TOP HEADER -->
+    <div class="bg-[#0a2540] p-6 text-white text-center relative flex items-center justify-between">
+      <button id="menuBtn" onclick="toggleNav()" class="hidden w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center font-bold text-lg text-white transition-all">
+        ☰
+      </button>
+      
+      <div class="flex items-center justify-center gap-2 mx-auto">
+        <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white text-lg">CF</div>
+        <h1 class="text-xl font-extrabold tracking-tight">CASH FLOW BANK</h1>
+      </div>
 
-window.toggleSwiftField = () => {
-  const type = document.getElementById('trType').value;
-  const box = document.getElementById('swiftBox');
-  if (type === 'WIRE') box.classList.remove('hidden');
-  else box.classList.add('hidden');
-};
+      <div class="w-10"></div>
+    </div>
 
-window.processTransfer = async () => {
-  const errBox = document.getElementById('trError');
-  errBox.classList.add('hidden');
+    <!-- GLOBAL STATUS ALERT -->
+    <div class="px-6 pt-4">
+      <div id="alertBox" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
+    </div>
 
-  const trType = document.getElementById('trType').value;
-  const sourceAcc = document.getElementById('trSourceAcc').value;
-  const recipient = document.getElementById('trRecipient').value.trim();
-  const bank = document.getElementById('trBank').value.trim();
-  const accNo = document.getElementById('trAccountNo').value.trim();
-  const swift = document.getElementById('trSwift').value.trim();
-  const amount = parseFloat(document.getElementById('trAmount').value) || 0;
-  const pin = document.getElementById('trPin').value.trim();
+    <!-- VIEW 1: CLIENT LOGIN FORM -->
+    <div id="loginView" class="p-6 pt-2">
+      <h2 class="font-extrabold text-xl text-slate-800 mb-1">Welcome Back</h2>
+      <p class="text-xs text-slate-500 mb-5">Sign in using your account details</p>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Account Number</label>
+          <input id="loginAccNo" type="text" placeholder="e.g. 45812345" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50 font-mono">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
+          <input id="loginPass" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+        </div>
+        <button onclick="loginUser()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-sm shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all">Sign In</button>
+      </div>
 
-  if (!recipient || !bank || !accNo || amount <= 0 || !pin) {
-    errBox.textContent = 'Please fill out all required transfer details accurately.';
-    errBox.classList.remove('hidden');
-    return;
-  }
+      <div class="flex justify-between items-center mt-6 text-xs text-slate-500">
+        <p>Don't have an account? <a href="#" onclick="showPage('register')" class="text-[#0a2540] font-extrabold hover:underline">Create Account</a></p>
+        <a href="admin.html" class="text-amber-700 font-extrabold hover:underline flex items-center gap-1">🔒 Admin</a>
+      </div>
+    </div>
 
-  if (trType === 'WIRE' && !swift) {
-    errBox.textContent = 'SWIFT / BIC code is required for International Wire Transfers.';
-    errBox.classList.remove('hidden');
-    return;
-  }
+    <!-- VIEW 2: REGISTER FORM -->
+    <div id="registerView" class="hidden p-6 pt-2">
+      <h2 class="font-extrabold text-xl text-slate-800 mb-1">Open an Account</h2>
+      <p class="text-xs text-slate-500 mb-5">Join Cash Flow Banking today</p>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Full Name</label>
+          <input id="regName" type="text" placeholder="John Doe" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
+          <input id="regEmail" type="email" placeholder="john@example.com" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
+          <input id="regPass" type="password" placeholder="••••••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">4-Digit Security PIN</label>
+          <input id="regPin" type="password" maxlength="4" placeholder="1234" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50 font-mono">
+        </div>
+        <button onclick="registerUser()" class="w-full h-12 bg-emerald-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/10 active:scale-[0.98] transition-all mt-2">Submit Application</button>
+      </div>
 
-  if (pin !== currentUserData.pin) {
-    errBox.textContent = 'Incorrect 4-Digit Security PIN.';
-    errBox.classList.remove('hidden');
-    return;
-  }
+      <p class="text-xs text-center text-slate-500 mt-5">Already registered? <a href="#" onclick="showPage('login')" class="text-[#0a2540] font-extrabold hover:underline">Sign In</a></p>
+    </div>
 
-  let currentBal = sourceAcc === 'savings' ? (currentUserData.savingsBalance || 0) : sourceAcc === 'investment' ? (currentUserData.investmentBalance || 0) : (currentUserData.checkingBalance || currentUserData.balance || 0);
+    <!-- VIEW 3: CLIENT DASHBOARD -->
+    <div id="dashboardView" class="hidden bg-slate-50 p-4 space-y-4">
+      
+      <!-- ACCOUNT HOLD NOTICE BANNER -->
+      <div id="holdNotice" class="hidden bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-red-900 shadow-sm relative">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-xl bg-red-600 text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5">⚠️</div>
+          <div>
+            <h4 class="font-extrabold text-xs uppercase tracking-wide text-red-700">Account On Hold / Action Required</h4>
+            <p class="text-xs font-semibold mt-1" id="holdReasonText">Security verification required.</p>
+            <div id="feeRequirementBox" class="mt-2 bg-red-100/80 p-2 rounded-lg text-[11px] font-extrabold text-red-800">
+              Clearance Fee Required: <span id="holdFeeAmount">$0.00</span>
+            </div>
+            <p class="text-[10px] text-red-500 mt-2">Please contact compliance support using the live chat widget to clear this restriction.</p>
+          </div>
+        </div>
+      </div>
 
-  if (amount > currentBal) {
-    errBox.textContent = `Insufficient funds in selected ${sourceAcc} account. Current balance: $${currentBal.toFixed(2)}`;
-    errBox.classList.remove('hidden');
-    return;
-  }
+      <!-- USER GREETING CARD -->
+      <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-[#0a2540] text-white flex items-center justify-center font-black text-sm" id="userAvatar">JD</div>
+          <div>
+            <h3 class="font-bold text-sm text-slate-800" id="userName">User Name</h3>
+            <p class="text-[11px] text-slate-400">Primary ID: <span id="userAcc" class="font-mono font-bold text-slate-600">330000000</span></p>
+          </div>
+        </div>
+        <span id="userStatus" class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">Active</span>
+      </div>
 
-  const btn = document.getElementById('trSubmitBtn');
-  btn.disabled = true;
-  btn.textContent = 'Processing Transfer...';
+      <!-- ACCOUNT TYPE TAB SELECTOR -->
+      <div class="flex bg-slate-200/80 p-1 rounded-xl text-xs font-bold gap-1">
+        <button id="tabChecking" onclick="switchAccount('checking')" class="flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all">Checking</button>
+        <button id="tabSavings" onclick="switchAccount('savings')" class="flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all">Savings</button>
+        <button id="tabInvestment" onclick="switchAccount('investment')" class="flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all">Investment</button>
+      </div>
 
-  try {
-    const updatedBal = currentBal - amount;
-    const historyItem = {
-      title: `${trType === 'WIRE' ? 'Wire' : 'Transfer'} to ${recipient} (${bank})`,
-      amount: amount,
-      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+      <!-- VIRTUAL CARD / BALANCE BOARD -->
+      <div class="bg-gradient-to-tr from-[#0a2540] via-[#11385f] to-[#1e4e80] rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+        <div class="flex justify-between items-center text-xs opacity-80">
+          <span id="accTypeLabel">Checking Balance</span>
+          <span class="font-bold tracking-widest">DEBIT CARD</span>
+        </div>
+        <div class="text-3xl font-black mt-2 tracking-tight" id="userBalance">$0.00</div>
+        
+        <div class="mt-4 border-t border-white/10 pt-3 text-[10px] space-y-1 font-mono">
+          <div class="flex justify-between"><span class="opacity-60">ROUTING (ABA):</span> <span class="font-bold" id="routingNo">021000021</span></div>
+          <div class="flex justify-between"><span class="opacity-60">SWIFT / BIC:</span> <span class="font-bold" id="swiftCode">CSFLUS33XXX</span></div>
+          <div class="flex justify-between"><span class="opacity-60">IBAN:</span> <span class="font-bold text-[9px]" id="ibanNo">US64 CSFL 0210 0002 1000</span></div>
+          <div class="flex justify-between pt-1 border-t border-white/5 text-amber-300"><span class="opacity-80 font-mono">DAILY TRANSFER LIMIT:</span> <span class="font-bold font-mono" id="dailyLimitText">$10,000.00</span></div>
+        </div>
+      </div>
+
+      <!-- KYC STATUS BANNER -->
+      <div id="kycBanner" class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div id="kycIcon" class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-sm">🪪</div>
+          <div>
+            <h4 class="font-bold text-xs text-slate-800" id="kycBannerTitle">KYC Verification Required</h4>
+            <p class="text-[10px] text-slate-400" id="kycBannerSub">Verify identity to unlock higher daily transfer limits.</p>
+          </div>
+        </div>
+        <button onclick="openKycModal()" id="kycBannerBtn" class="px-3 py-1.5 bg-[#0a2540] text-white text-xs font-bold rounded-lg shrink-0">Verify</button>
+      </div>
+
+      <!-- QUICK ACTIONS -->
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="openTransferModal()" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+          <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">↗</div>
+          <span class="text-[11px] font-bold text-slate-700">Transfer</span>
+        </button>
+        <button onclick="handleAction('Check Deposit')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+          <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">↙</div>
+          <span class="text-[11px] font-bold text-slate-700">Deposit</span>
+        </button>
+        <button onclick="handleAction('Card Management')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+          <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">💳</div>
+          <span class="text-[11px] font-bold text-slate-700">Cards</span>
+        </button>
+      </div>
+
+      <!-- RECENT TRANSACTIONS -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+        <h4 class="font-extrabold text-xs text-slate-800 mb-3 uppercase tracking-wider">Recent Activity</h4>
+        <div id="activityList" class="space-y-3 text-xs">
+          <div class="flex justify-between items-center border-b border-slate-50 pb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</div>
+              <div>
+                <p class="font-bold text-slate-800">Account Opening Bonus</p>
+                <p class="text-[10px] text-slate-400">System Credit</p>
+              </div>
+            </div>
+            <span class="font-bold text-emerald-600">+$0.00</span>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="logoutUser()" class="w-full h-11 bg-slate-200 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-300 transition-all">Log Out</button>
+    </div>
+
+  </div>
+
+  <!-- TRANSFER MODAL -->
+  <div id="transferModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+        <h3 class="font-extrabold text-base text-slate-800">Initiate Transfer</h3>
+        <button onclick="closeTransferModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
+      </div>
+
+      <div id="trError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Transfer Type</label>
+          <select id="trType" onchange="toggleSwiftField()" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+            <option value="LOCAL">Local Bank Transfer</option>
+            <option value="WIRE">International Wire Transfer</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Debit From Account</label>
+          <select id="trSourceAcc" class="w-full h-11 border border-slate-200 rounded-xl px-3 text-xs font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+            <option value="checking">Checking Account</option>
+            <option value="savings">Savings Account</option>
+            <option value="investment">Investment Account</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Recipient Full Name</label>
+          <input id="trRecipient" type="text" placeholder="e.g. Sarah Jenkins" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Bank Name</label>
+          <input id="trBank" type="text" placeholder="e.g. Chase Bank / Barclays" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Account Number / IBAN</label>
+          <input id="trAccountNo" type="text" placeholder="e.g. 0098765432" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+        </div>
+
+        <div id="swiftBox" class="hidden">
+          <label class="block text-xs font-bold text-slate-600 mb-1">SWIFT / BIC Code</label>
+          <input id="trSwift" type="text" placeholder="e.g. CHASUS33" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+        </div>
+
+        <div>
+          <div class="flex justify-between items-center mb-1">
+            <label class="block text-xs font-bold text-slate-600">Transfer Amount ($)</label>
+            <span class="text-[10px] text-amber-700 font-bold">Max Limit: <span id="modalLimitText">$10,000.00</span></span>
+          </div>
+          <input id="trAmount" type="number" step="any" placeholder="0.00" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-bold">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-600 mb-1">Enter 4-Digit Security PIN</label>
+          <input id="trPin" type="password" maxlength="4" placeholder="••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-xs bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+        </div>
+
+        <button id="trSubmitBtn" onclick="processTransfer()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all mt-2">Authorize & Send Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KYC VERIFICATION MODAL -->
+  <div id="kycModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+        <div>
+          <h3 class="font-extrabold text-base text-slate-800">KYC Identity Verification</h3>
+          <p class="text-[10px] text-slate-400">Complete verification to increase daily transfer limits.</p>
+        </div>
+        <button onclick="closeKycModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
+      </div>
+
+      <div id="kycModalError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
+
+      <div id="kycFormContent" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Government ID Type</label>
+          <select id="kycDocType" class="w-full h-11 border border-slate-200 rounded-xl px-3 font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+            <option value="Passport">International Passport</option>
+            <option value="Driver License">Driver's License</option>
+            <option value="National ID Card">National Identification Card</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Document Serial Number</label>
+          <input id="kycDocNo" type="text" placeholder="e.g. A00981245" class="w-full h-11 border border-slate-200 rounded-xl px-4 bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-600 mb-1">Residential Address</label>
+          <input id="kycAddress" type="text" placeholder="123 Financial Way, Suite 400" class="w-full h-11 border border-slate-200 rounded-xl px-4 bg-slate-50 focus:outline-none focus:border-[#0a2540]">
+        </div>
+
+        <!-- IMAGE ATTACHMENTS -->
+        <div class="space-y-3 pt-2 border-t border-slate-100">
+          <p class="font-extrabold text-slate-700 uppercase text-[10px]">Document Image Uploads</p>
+          
+          <div>
+            <label class="block font-semibold text-slate-500 mb-1">Front of ID Document</label>
+            <input type="file" id="kycFrontFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-500 mb-1">Back of ID Document</label>
+            <input type="file" id="kycBackFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+          </div>
+
+          <div>
+            <label class="block font-semibold text-slate-500 mb-1">Selfie Holding ID Document</label>
+            <input type="file" id="kycSelfieFile" accept="image/*" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200">
+          </div>
+        </div>
+
+        <button id="kycSubmitBtn" onclick="submitKycForm()" class="w-full h-12 bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-600/10 active:scale-[0.98] transition-all mt-3">Submit Identity Audit Request</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
+      authDomain: "cash-flow-banking3.firebaseapp.com",
+      databaseURL: "https://cash-flow-banking3-default-rtdb.firebaseio.com",
+      projectId: "cash-flow-banking3",
+      storageBucket: "cash-flow-banking3.firebasestorage.app",
+      messagingSenderId: "782707432276",
+      appId: "1:782707432276:web:680425b777d227179c86c1"
     };
 
-    const updatedHistory = [...(currentUserData.history || []), historyItem];
-    
-    let updateData = { history: updatedHistory };
-    if (sourceAcc === 'checking') {
-      updateData.checkingBalance = updatedBal;
-      updateData.balance = updatedBal;
-      currentUserData.checkingBalance = updatedBal;
-      currentUserData.balance = updatedBal;
-    } else if (sourceAcc === 'savings') {
-      updateData.savingsBalance = updatedBal;
-      currentUserData.savingsBalance = updatedBal;
-    } else if (sourceAcc === 'investment') {
-      updateData.investmentBalance = updatedBal;
-      currentUserData.investmentBalance = updatedBal;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let currentUserData = null;
+    let currentDocId = null;
+    let activeAccountTab = 'checking';
+
+    window.toggleNav = () => {
+      const nav = document.getElementById('sideNav');
+      const overlay = document.getElementById('sideNavOverlay');
+      if (nav.classList.contains('-translate-x-full')) {
+        nav.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        nav.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    };
+
+    window.navAction = (action) => {
+      toggleNav();
+      alert(`${action} section is active.`);
+    };
+
+    window.showPage = (viewName) => {
+      document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('registerView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.add('hidden');
+      document.getElementById('menuBtn').classList.add('hidden');
+      showAlert('');
+
+      if (viewName === 'login') document.getElementById('loginView').classList.remove('hidden');
+      if (viewName === 'register') document.getElementById('registerView').classList.remove('hidden');
+      if (viewName === 'dashboard') {
+        document.getElementById('dashboardView').classList.remove('hidden');
+        document.getElementById('menuBtn').classList.remove('hidden');
+      }
+    };
+
+    function showAlert(msg, type = 'error') {
+      const box = document.getElementById('alertBox');
+      if (!msg) { box.classList.add('hidden'); return; }
+      box.className = `p-3 rounded-xl text-xs font-semibold mb-2 text-center ${type === 'error' ? 'bg-red-100 text-red-700' : type === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-700'}`;
+      box.textContent = msg;
+      box.classList.remove('hidden');
     }
 
-    currentUserData.history = updatedHistory;
+    window.registerUser = async () => {
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim().toLowerCase();
+      const pass = document.getElementById('regPass').value;
+      const pin = document.getElementById('regPin').value;
 
-    await updateDoc(doc(db, 'cashflow_accounts', currentDocId), updateData);
+      if (!name || !email || !pass || !pin) { showAlert('Please complete all fields.'); return; }
 
-    btn.disabled = false;
-    btn.textContent = 'Authorize & Send Payment';
-    closeTransferModal();
+      try {
+        const q = query(collection(db, 'cashflow_accounts'), where('email', '==', email));
+        const existing = await getDocs(q);
+        if (!existing.empty) { showAlert('Email is already registered.'); return; }
 
-    switchAccount(activeAccountTab);
-    renderTransactions();
+        const rawId = Math.floor(100000 + Math.random() * 900000);
+        const accNo = '458' + rawId;
 
-    alert(`SUCCESS: Transfer of $${amount.toFixed(2)} to ${recipient} was completed successfully.`);
-  } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Authorize & Send Payment';
-    errBox.textContent = 'Transfer failed: ' + err.message;
-    errBox.classList.remove('hidden');
-  }
-};
+        await addDoc(collection(db, 'cashflow_accounts'), {
+          name, email, pass, pin, accNo,
+          checkingBalance: 0,
+          savingsBalance: 0,
+          investmentBalance: 0,
+          dailyLimit: 10000,
+          routingNo: '021000' + (100 + Math.floor(Math.random() * 899)),
+          swiftCode: 'CSFLUS33' + Math.floor(100 + Math.random() * 899),
+          ibanNo: 'US64 CSFL 0210 ' + rawId + ' 1000',
+          status: 'PENDING',
+          holdReason: '',
+          clearanceFee: 0,
+          kycStatus: 'UNVERIFIED',
+          kycDocType: '',
+          kycDocNo: '',
+          kycAddress: '',
+          created: Date.now(),
+          history: []
+        });
 
-window.handleAction = (actionName) => {
-  if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
-    alert(`ACTION BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}\n\nPlease settle any required fees or contact compliance support via live chat.`);
-  } else {
-    alert(`Feature coming soon: ${actionName}`);
-  }
-};
+        document.getElementById('loginAccNo').value = accNo;
+        showPage('login');
+        showAlert(`Account created! Your Account Number is ${accNo}. Status: PENDING approval.`, 'warning');
+      } catch (err) {
+        showAlert('Error: ' + err.message);
+      }
+    };
 
-window.logoutUser = () => {
-  document.getElementById('loginAccNo').value = '';
-  document.getElementById('loginPass').value = '';
-  currentUserData = null;
-  currentDocId = null;
-  showPage('login');
-};
-</script>
+    window.loginUser = async () => {
+      const accNo = document.getElementById('loginAccNo').value.trim();
+      const pass = document.getElementById('loginPass').value;
 
-<!-- Tawk.to Live Chat Script -->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
+      if (!accNo || !pass) { showAlert('Enter both Account Number and password.'); return; }
 
+      try {
+        const q = query(collection(db, 'cashflow_accounts'), where('accNo', '==', accNo));
+        const snap = await getDocs(q);
+
+        if (snap.empty) { showAlert('Account number not found.'); return; }
+
+        snap.forEach(d => {
+          currentUserData = d.data();
+          currentDocId = d.id;
+        });
+
+        if (currentUserData.pass !== pass) { showAlert('Incorrect password.'); return; }
+
+        if (currentUserData.status === 'PENDING') {
+          showAlert('Your account registration is still PENDING administrator approval.', 'warning');
+          return;
+        }
+
+        if (currentUserData.status === 'DECLINED') {
+          showAlert(`Your account application was DECLINED. Access denied.`);
+          return;
+        }
+
+        updateDashboardUI();
+        showPage('dashboard');
+      } catch (err) {
+        showAlert('Error: ' + err.message);
+      }
+    };
+
+    function updateDashboardUI() {
+      const initials = currentUserData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      document.getElementById('userAvatar').textContent = initials || 'CF';
+      document.getElementById('userName').textContent = currentUserData.name;
+      document.getElementById('userAcc').textContent = currentUserData.accNo;
+      document.getElementById('routingNo').textContent = currentUserData.routingNo || '021000021';
+      document.getElementById('swiftCode').textContent = currentUserData.swiftCode || 'CSFLUS33XXX';
+      document.getElementById('ibanNo').textContent = currentUserData.ibanNo || 'US64 CSFL 0210 0000 1000';
+      
+      const limitVal = currentUserData.dailyLimit !== undefined ? parseFloat(currentUserData.dailyLimit) : 10000;
+      const formattedLimit = '$' + limitVal.toLocaleString(undefined, {minimumFractionDigits: 2});
+      document.getElementById('dailyLimitText').textContent = formattedLimit;
+      document.getElementById('modalLimitText').textContent = formattedLimit;
+
+      const statusBadge = document.getElementById('userStatus');
+      const holdNotice = document.getElementById('holdNotice');
+
+      if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
+        statusBadge.className = "bg-red-100 text-red-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
+        statusBadge.textContent = currentUserData.status === 'FROZEN' ? "ON HOLD / FROZEN" : "RESTRICTED";
+        
+        document.getElementById('holdReasonText').textContent = currentUserData.holdReason || "Account activities are temporarily restricted due to compliance auditing.";
+        if (currentUserData.clearanceFee && currentUserData.clearanceFee > 0) {
+          document.getElementById('holdFeeAmount').textContent = '$' + parseFloat(currentUserData.clearanceFee).toLocaleString(undefined, {minimumFractionDigits: 2});
+          document.getElementById('feeRequirementBox').classList.remove('hidden');
+        } else {
+          document.getElementById('feeRequirementBox').classList.add('hidden');
+        }
+        holdNotice.classList.remove('hidden');
+      } else {
+        statusBadge.className = "bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase";
+        statusBadge.textContent = "APPROVED";
+        holdNotice.classList.add('hidden');
+      }
+
+      const kycTitle = document.getElementById('kycBannerTitle');
+      const kycSub = document.getElementById('kycBannerSub');
+      const kycBtn = document.getElementById('kycBannerBtn');
+      const navBadge = document.getElementById('navKycBadge');
+      const kycStatus = currentUserData.kycStatus || 'UNVERIFIED';
+
+      navBadge.textContent = kycStatus;
+
+      if (kycStatus === 'VERIFIED') {
+        kycTitle.textContent = "Identity Verified (Tier 2)";
+        kycSub.textContent = "You have full access to transfer services and higher daily limits.";
+        kycBtn.textContent = "Verified";
+        kycBtn.className = "px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg shrink-0 pointer-events-none";
+        navBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 uppercase font-black";
+      } else if (kycStatus === 'PENDING_REVIEW') {
+        kycTitle.textContent = "KYC Audit Under Review";
+        kycSub.textContent = "Your identification documents are being processed by compliance.";
+        kycBtn.textContent = "In Review";
+        kycBtn.className = "px-3 py-1.5 bg-amber-500 text-slate-900 text-xs font-bold rounded-lg shrink-0 pointer-events-none";
+        navBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 uppercase font-black";
+      } else {
+        kycTitle.textContent = "KYC Verification Required";
+        kycSub.textContent = "Verify identity to unlock higher daily transfer limits.";
+        kycBtn.textContent = "Verify";
+        kycBtn.className = "px-3 py-1.5 bg-[#0a2540] text-white text-xs font-bold rounded-lg shrink-0";
+        navBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-red-100 text-red-600 uppercase font-black";
+      }
+
+      renderTransactions();
+      switchAccount(activeAccountTab);
+    }
+
+    window.switchAccount = (type) => {
+      if (!currentUserData) return;
+      activeAccountTab = type;
+      const btnC = document.getElementById('tabChecking');
+      const btnS = document.getElementById('tabSavings');
+      const btnI = document.getElementById('tabInvestment');
+
+      btnC.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+      btnS.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+      btnI.className = "flex-1 py-2 rounded-lg text-slate-500 hover:text-slate-800 transition-all";
+
+      let bal = 0;
+      if (type === 'checking') {
+        btnC.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
+        document.getElementById('accTypeLabel').textContent = "Checking Balance";
+        bal = currentUserData.checkingBalance || currentUserData.balance || 0;
+      } else if (type === 'savings') {
+        btnS.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
+        document.getElementById('accTypeLabel').textContent = "Savings Balance";
+        bal = currentUserData.savingsBalance || 0;
+      } else if (type === 'investment') {
+        btnI.className = "flex-1 py-2 rounded-lg bg-white text-[#0a2540] shadow-sm transition-all";
+        document.getElementById('accTypeLabel').textContent = "Investment Balance";
+        bal = currentUserData.investmentBalance || 0;
+      }
+
+      document.getElementById('userBalance').textContent = '$' + parseFloat(bal).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    };
+
+    function renderTransactions() {
+      const list = document.getElementById('activityList');
+      const history = currentUserData.history || [];
+
+      let html = `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</div>
+          <div>
+            <p class="font-bold text-slate-800">Account Opening Bonus</p>
+            <p class="text-[10px] text-slate-400">System Credit</p>
+          </div>
+        </div>
+        <span class="font-bold text-emerald-600">+$0.00</span>
+      </div>`;
+
+      history.slice().reverse().forEach(t => {
+        html += `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-black">↗</div>
+            <div>
+              <p class="font-bold text-slate-800">${t.title}</p>
+              <p class="text-[10px] text-slate-400">${t.date}</p>
+            </div>
+          </div>
+          <span class="font-bold text-red-600">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+        </div>`;
+      });
+
+      list.innerHTML = html;
+    }
+
+    window.openKycModal = () => {
+      document.getElementById('kycModalError').classList.add('hidden');
+      document.getElementById('kycModal').classList.remove('hidden');
+      document.getElementById('kycModal').classList.add('flex');
+    };
+
+    window.closeKycModal = () => {
+      document.getElementById('kycModal').classList.add('hidden');
+      document.getElementById('kycModal').classList.remove('flex');
+    };
+
+    window.submitKycForm = async () => {
+      const errBox = document.getElementById('kycModalError');
+      errBox.classList.add('hidden');
+
+      const docType = document.getElementById('kycDocType').value;
+      const docNo = document.getElementById('kycDocNo').value.trim();
+      const address = document.getElementById('kycAddress').value.trim();
+
+      if (!docNo || !address) {
+        errBox.textContent = "Please enter document serial number and residential address.";
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const btn = document.getElementById('kycSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = "Uploading & Submitting Documents...";
+
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', currentDocId), {
+          kycStatus: 'PENDING_REVIEW',
+          kycDocType: docType,
+          kycDocNo: docNo,
+          kycAddress: address,
+          kycSubmittedDate: Date.now()
+        });
+
+        currentUserData.kycStatus = 'PENDING_REVIEW';
+        btn.disabled = false;
+        btn.textContent = "Submit Identity Audit Request";
+        closeKycModal();
+        updateDashboardUI();
+        alert("KYC SUBMITTED: Your identification documents are currently under review by compliance.");
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = "Submit Identity Audit Request";
+        errBox.textContent = "Failed to submit KYC: " + err.message;
+        errBox.classList.remove('hidden');
+      }
+    };
+
+    window.openTransferModal = () => {
+      if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
+        alert(`TRANSFER BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}`);
+        return;
+      }
+      document.getElementById('trError').textContent = '';
+      document.getElementById('trError').classList.add('hidden');
+      document.getElementById('transferModal').classList.remove('hidden');
+      document.getElementById('transferModal').classList.add('flex');
+    };
+
+    window.closeTransferModal = () => {
+      document.getElementById('transferModal').classList.add('hidden');
+      document.getElementById('transferModal').classList.remove('flex');
+    };
+
+    window.toggleSwiftField = () => {
+      const type = document.getElementById('trType').value;
+      const box = document.getElementById('swiftBox');
+      if (type === 'WIRE') box.classList.remove('hidden');
+      else box.classList.add('hidden');
+    };
+
+    window.processTransfer = async () => {
+      const errBox = document.getElementById('trError');
+      errBox.classList.add('hidden');
+
+      const trType = document.getElementById('trType').value;
+      const sourceAcc = document.getElementById('trSourceAcc').value;
+      const recipient = document.getElementById('trRecipient').value.trim();
+      const bank = document.getElementById('trBank').value.trim();
+      const accNo = document.getElementById('trAccountNo').value.trim();
+      const swift = document.getElementById('trSwift').value.trim();
+      const amount = parseFloat(document.getElementById('trAmount').value) || 0;
+      const pin = document.getElementById('trPin').value.trim();
+
+      if (!recipient || !bank || !accNo || amount <= 0 || !pin) {
+        errBox.textContent = 'Please fill out all required transfer details accurately.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const allowedDailyLimit = currentUserData.dailyLimit !== undefined ? parseFloat(currentUserData.dailyLimit) : 10000;
+      if (amount > allowedDailyLimit) {
+        errBox.textContent = `TRANSFER EXCEEDS DAILY LIMIT: Your current limit is $${allowedDailyLimit.toLocaleString()}.`;
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      if (trType === 'WIRE' && !swift) {
+        errBox.textContent = 'SWIFT / BIC code is required for International Wire Transfers.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      if (pin !== currentUserData.pin) {
+        errBox.textContent = 'Incorrect 4-Digit Security PIN.';
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      let currentBal = sourceAcc === 'savings' ? (currentUserData.savingsBalance || 0) : sourceAcc === 'investment' ? (currentUserData.investmentBalance || 0) : (currentUserData.checkingBalance || currentUserData.balance || 0);
+
+      if (amount > currentBal) {
+        errBox.textContent = `Insufficient funds in selected ${sourceAcc} account.`;
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      const btn = document.getElementById('trSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Processing Transfer...';
+
+      try {
+        const updatedBal = currentBal - amount;
+        const historyItem = {
+          title: `${trType === 'WIRE' ? 'Wire' : 'Transfer'} to ${recipient} (${bank})`,
+          amount: amount,
+          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        };
+
+        const updatedHistory = [...(currentUserData.history || []), historyItem];
+        let updateData = { history: updatedHistory };
+        if (sourceAcc === 'checking') {
+          updateData.checkingBalance = updatedBal;
+          updateData.balance = updatedBal;
+          currentUserData.checkingBalance = updatedBal;
+          currentUserData.balance = updatedBal;
+        } else if (sourceAcc === 'savings') {
+          updateData.savingsBalance = updatedBal;
+          currentUserData.savingsBalance = updatedBal;
+        } else if (sourceAcc === 'investment') {
+          updateData.investmentBalance = updatedBal;
+          currentUserData.investmentBalance = updatedBal;
+        }
+        currentUserData.history = updatedHistory;
+
+        await updateDoc(doc(db, 'cashflow_accounts', currentDocId), updateData);
+
+        btn.disabled = false;
+        btn.textContent = 'Authorize & Send Payment';
+        closeTransferModal();
+        switchAccount(activeAccountTab);
+        renderTransactions();
+
+        alert(`SUCCESS: Transfer of $${amount.toFixed(2)} completed successfully.`);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Authorize & Send Payment';
+        errBox.textContent = 'Transfer failed: ' + err.message;
+        errBox.classList.remove('hidden');
+      }
+    };
+
+    window.handleAction = (actionName) => {
+      if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
+        alert(`ACTION BLOCKED: Your account is restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit.'}`);
+      } else {
+        alert(`Feature coming soon: ${actionName}`);
+      }
+    };
+
+    window.logoutUser = () => {
+      currentUserData = null;
+      currentDocId = null;
+      showPage('login');
+    };
+  </script>
+
+  <!-- Live Chat Widget -->
+  <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+  </script>
 </body>
 </html>
