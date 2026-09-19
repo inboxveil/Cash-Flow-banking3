@@ -40,6 +40,9 @@
           <button onclick="openMenuModal('summary')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Account Summary
           </button>
+          <button onclick="openMenuModal('transactions')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg> Transaction History
+          </button>
           <button onclick="toggleNav(); openTransferModal();" class="w-full flex justify-between items-center px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
             <div class="flex items-center gap-3">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg> Transfer
@@ -252,17 +255,19 @@
           </div>
           <span class="text-[11px] font-bold text-slate-700">Deposit</span>
         </button>
-        <button onclick="openMenuModal('cards')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
-          <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-          </div>
-          <span class="text-[11px] font-bold text-slate-700">Cards</span>
+        <button onclick="openMenuModal('transactions')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+          <div class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg></div>
+          <span class="text-[11px] font-bold text-slate-700">History</span>
         </button>
       </div>
 
       <!-- RECENT TRANSACTIONS -->
       <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-        <h4 class="font-extrabold text-xs text-slate-800 mb-3 uppercase tracking-wider">Recent Activity</h4>
+        <div class="flex justify-between items-center mb-3">
+          <h4 class="font-extrabold text-xs text-slate-800 uppercase tracking-wider">Recent Activity</h4>
+          <button onclick="openMenuModal('transactions')" class="text-[11px] font-bold text-[#0a2540] hover:underline">View All</button>
+        </div>
         <div id="activityList" class="space-y-3 text-xs">
           <div class="flex justify-between items-center border-b border-slate-50 pb-2">
             <div class="flex items-center gap-2">
@@ -453,6 +458,31 @@
             <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-500">Investment Balance:</span> <span class="font-bold">$${(currentUserData?.investmentBalance || 0).toLocaleString(undefined,{minimumFractionDigits:2})}</span></div>
             <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl"><span class="text-slate-500">Routing Number:</span> <span class="font-bold">${currentUserData?.routingNo || 'N/A'}</span></div>
           </div>`;
+      } else if (type === 'transactions') {
+        title.textContent = "Complete Transaction History";
+        const history = currentUserData?.history || [];
+        if (history.length === 0) {
+          body.innerHTML = `<p class="text-center text-slate-400 py-6">No past transactions found.</p>`;
+        } else {
+          let listHtml = `<div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">`;
+          history.slice().reverse().forEach(t => {
+            listHtml += `
+              <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7m10 0v10"/></svg>
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-800">${t.title}</p>
+                    <p class="text-[10px] text-slate-400">${t.date}</p>
+                  </div>
+                </div>
+                <span class="font-bold font-mono text-red-600">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+              </div>`;
+          });
+          listHtml += `</div>`;
+          body.innerHTML = listHtml;
+        }
       } else if (type === 'depositCheck') {
         title.textContent = "Mobile Check Deposit";
         body.innerHTML = `
@@ -744,7 +774,7 @@
         <span class="font-bold text-emerald-600">+$0.00</span>
       </div>`;
 
-      history.slice().reverse().forEach(t => {
+      history.slice(-3).reverse().forEach(t => {
         html += `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
           <div class="flex items-center gap-2">
             <div class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center">
