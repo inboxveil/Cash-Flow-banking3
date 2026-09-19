@@ -14,7 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>*{font-family:'Inter',system-ui}body{transition:background-color 0.3s, color 0.3s}</style>
 </head>
-<body class="bg-[#f4f6f9] dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+<body class="bg-[#f4f6f9] dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen">
 
 <!-- SVG ICONS -->
 <svg style="display:none">
@@ -118,66 +118,125 @@
 </div>
 
 <!-- AUTH VIEW (CREATE / LOGIN) -->
-<div id="bankView" style="display:none" class="max-w-[480px] mx-auto p-4">
-  <div class="flex justify-center bg-gray-200/80 dark:bg-gray-800 p-1 rounded-xl mt-2">
-    <button id="t1" onclick="showAuth('create')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">Create Account</button>
-    <button id="t2" onclick="showAuth('login')" class="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all">Login</button>
-  </div>
+<div id="bankView" style="display:none" class="max-w-[460px] mx-auto px-4 py-6">
+  <div class="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800/80 rounded-[28px] p-6 sm:p-8 shadow-xl shadow-slate-200/50 dark:shadow-none transition-all duration-300">
+    
+    <!-- Tab Toggle Navigation -->
+    <div class="relative bg-gray-100 dark:bg-gray-800/80 p-1.5 rounded-2xl flex items-center mb-6">
+      <button id="t1" onclick="showAuth('create')" class="relative z-10 flex-1 py-2.5 text-xs font-extrabold tracking-wide rounded-xl transition-all duration-200 text-center">
+        Create Account
+      </button>
+      <button id="t2" onclick="showAuth('login')" class="relative z-10 flex-1 py-2.5 text-xs font-extrabold tracking-wide rounded-xl transition-all duration-200 text-center">
+        Sign In
+      </button>
+    </div>
 
-  <!-- Create Account Card -->
-  <div id="createCard" class="bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 rounded-[24px] p-6 mt-4">
-    <div class="mb-4">
-      <h3 class="font-black text-xl text-gray-900 dark:text-white">Open a New Account</h3>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Get started with online banking in under 2 minutes.</p>
-    </div>
-    <div class="space-y-3">
-      <div>
-        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">FULL LEGAL NAME</label>
-        <input id="fullname" placeholder="e.g. Lorenzo Parker" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
+    <!-- CREATE ACCOUNT CARD -->
+    <div id="createCard" class="space-y-4">
+      <div class="text-center pb-2">
+        <h3 class="font-black text-2xl text-gray-900 dark:text-white tracking-tight">Open Your Account</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Get started with online banking in under 2 minutes.</p>
       </div>
-      <div>
-        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">EMAIL ADDRESS</label>
-        <input id="email" type="email" placeholder="name@domain.com" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
-      </div>
-      <div>
-        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">PASSWORD</label>
-        <input id="pass" type="password" placeholder="Min. 6 characters" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
-      </div>
-      <div>
-        <label class="text-[11px] font-bold text-amber-800 dark:text-amber-400 ml-1">4-DIGIT TRANSFER PIN</label>
-        <input id="tpin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full h-[48px] border border-amber-200 dark:border-amber-900/50 bg-amber-50/30 dark:bg-amber-950/20 dark:text-white rounded-xl px-4 mt-1 text-sm font-mono tracking-widest focus:outline-none focus:border-amber-500">
-      </div>
-    </div>
-    <button id="createBtn" onclick="createAcc()" class="w-full h-[50px] bg-[#0a2540] hover:bg-[#103357] text-white rounded-xl font-bold mt-5 text-sm shadow-md transition-all flex items-center justify-center gap-2">
-      <span>Complete Registration</span> →
-    </button>
-    <div id="msg" class="text-xs mt-3 text-center"></div>
-  </div>
 
-  <!-- Login Card -->
-  <div id="loginCard" style="display:none" class="bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 rounded-[24px] p-6 mt-4">
-    <div class="mb-4">
-      <h3 class="font-black text-xl text-gray-900 dark:text-white">Welcome Back</h3>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Access your account securely using your credentials.</p>
-    </div>
-    <div class="space-y-3">
-      <div>
-        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">ACCOUNT NUMBER</label>
-        <input id="lacc" placeholder="10-digit account number" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm font-mono focus:outline-none focus:border-[#0a2540]">
+      <div class="space-y-3.5">
+        <div>
+          <label class="block text-[10px] font-extrabold uppercase tracking-wider text-gray-400 mb-1 ml-1">Full Legal Name</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <svg class="w-4 h-4"><use href="#i-user"/></svg>
+            </span>
+            <input id="fullname" type="text" placeholder="e.g. Lorenzo Parker" class="w-full h-12 pl-10 pr-4 bg-gray-50/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 focus:border-[#0a2540] dark:focus:border-blue-400 rounded-xl text-sm dark:text-white placeholder-gray-400 transition-all outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-extrabold uppercase tracking-wider text-gray-400 mb-1 ml-1">Email Address</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <svg class="w-4 h-4"><use href="#i-globe"/></svg>
+            </span>
+            <input id="email" type="email" placeholder="name@domain.com" class="w-full h-12 pl-10 pr-4 bg-gray-50/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 focus:border-[#0a2540] dark:focus:border-blue-400 rounded-xl text-sm dark:text-white placeholder-gray-400 transition-all outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-extrabold uppercase tracking-wider text-gray-400 mb-1 ml-1">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <svg class="w-4 h-4"><use href="#i-lock"/></svg>
+            </span>
+            <input id="pass" type="password" placeholder="Min. 6 characters" class="w-full h-12 pl-10 pr-10 bg-gray-50/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 focus:border-[#0a2540] dark:focus:border-blue-400 rounded-xl text-sm dark:text-white placeholder-gray-400 transition-all outline-none">
+            <button type="button" onclick="togglePassVisibility('pass', 'passIcon1')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+              <svg id="passIcon1" class="w-4 h-4"><use href="#i-eye"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/40 p-3.5 rounded-2xl">
+          <label class="block text-[10px] font-extrabold uppercase tracking-wider text-amber-800 dark:text-amber-400 mb-1 ml-0.5">4-Digit Transfer PIN</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-amber-500">
+              <svg class="w-4 h-4"><use href="#i-shield"/></svg>
+            </span>
+            <input id="tpin" type="password" maxlength="4" inputmode="numeric" placeholder="••••" class="w-full h-11 pl-10 pr-4 bg-white dark:bg-gray-800 border border-amber-200 dark:border-amber-800/60 focus:border-amber-500 rounded-xl text-sm dark:text-white font-mono tracking-widest outline-none">
+          </div>
+          <p class="text-[10px] text-amber-700/80 dark:text-amber-400/70 mt-1.5 ml-0.5 font-medium">Required to authorize transfers and withdrawals.</p>
+        </div>
       </div>
-      <div>
-        <label class="text-[11px] font-bold text-gray-600 dark:text-gray-400 ml-1">PASSWORD</label>
-        <input id="lpass" type="password" placeholder="Enter your password" class="w-full h-[48px] border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-xl px-4 mt-1 text-sm focus:outline-none focus:border-[#0a2540]">
+
+      <button id="createBtn" onclick="createAcc()" class="w-full h-12 bg-[#0a2540] hover:bg-[#12365a] dark:bg-blue-600 dark:hover:bg-blue-500 text-white rounded-xl font-bold mt-6 text-sm shadow-lg shadow-blue-900/10 transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
+        <span>Complete Registration</span>
+        <span>→</span>
+      </button>
+    </div>
+
+    <!-- LOGIN CARD -->
+    <div id="loginCard" style="display:none" class="space-y-4">
+      <div class="text-center pb-2">
+        <h3 class="font-black text-2xl text-gray-900 dark:text-white tracking-tight">Welcome Back</h3>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Access your account securely with your credentials.</p>
+      </div>
+
+      <div class="space-y-3.5">
+        <div>
+          <label class="block text-[10px] font-extrabold uppercase tracking-wider text-gray-400 mb-1 ml-1">Account Number</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <svg class="w-4 h-4"><use href="#i-card"/></svg>
+            </span>
+            <input id="lacc" type="text" placeholder="10-digit account number" class="w-full h-12 pl-10 pr-4 bg-gray-50/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 focus:border-[#0a2540] dark:focus:border-blue-400 rounded-xl text-sm dark:text-white font-mono placeholder-gray-400 transition-all outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[10px] font-extrabold uppercase tracking-wider text-gray-400 mb-1 ml-1">Password</label>
+          <div class="relative">
+            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+              <svg class="w-4 h-4"><use href="#i-lock"/></svg>
+            </span>
+            <input id="lpass" type="password" placeholder="Enter your password" class="w-full h-12 pl-10 pr-10 bg-gray-50/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/80 focus:border-[#0a2540] dark:focus:border-blue-400 rounded-xl text-sm dark:text-white placeholder-gray-400 transition-all outline-none">
+            <button type="button" onclick="togglePassVisibility('lpass', 'passIcon2')" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+              <svg id="passIcon2" class="w-4 h-4"><use href="#i-eye"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button id="loginBtn" onclick="login()" class="w-full h-12 bg-[#0a2540] hover:bg-[#12365a] dark:bg-blue-600 dark:hover:bg-blue-500 text-white rounded-xl font-bold mt-6 text-sm shadow-lg shadow-blue-900/10 transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
+        <svg class="w-4 h-4"><use href="#i-lock"/></svg>
+        <span>Sign In Securely</span>
+      </button>
+
+      <div class="flex items-center justify-between pt-2 px-1">
+        <button class="text-xs font-bold text-[#0a2540] dark:text-blue-400 hover:underline transition-all" onclick="openForgot('password')">
+          Forgot Password?
+        </button>
+        <button class="text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:underline transition-all" onclick="openForgot('pin')">
+          Forgot PIN?
+        </button>
       </div>
     </div>
-    <button id="loginBtn" onclick="login()" class="w-full h-[50px] bg-[#0a2540] hover:bg-[#103357] text-white rounded-xl font-bold mt-5 text-sm shadow-md transition-all flex items-center justify-center gap-2">
-      <svg class="w-4 h-4"><use href="#i-lock"/></svg>
-      <span>Login Securely</span>
-    </button>
-    <div class="flex justify-between mt-4 px-1">
-      <button class="text-[11px] font-bold text-blue-700 dark:text-blue-400 hover:underline" onclick="openForgot('password')">Forgot Password?</button>
-      <button class="text-[11px] font-bold text-blue-700 dark:text-blue-400 hover:underline" onclick="openForgot('pin')">Forgot Transfer PIN?</button>
-    </div>
+
   </div>
 </div>
 
@@ -432,6 +491,7 @@ window.showFineAlert = (t, m, type = 'error') => {
   $('fineIcon').className = 'w-14 h-14 rounded-full flex items-center justify-center mx-auto text-2xl ' + (type == 'error' ? 'bg-red-100 dark:bg-red-950/50' : type == 'success' ? 'bg-green-100 dark:bg-green-950/50' : 'bg-blue-100 dark:bg-blue-950/50');$('fineIcon').textContent = type == 'error' ? '✕' : type == 'success' ? '✓' : 'i';
   $('fineAlert').style.display = 'flex';$('fineAlert').classList.remove('hidden');
 };
+
 window.closeFineAlert = () => {
   $('fineAlert').style.display = 'none';$('fineAlert').classList.add('hidden');
 };
@@ -455,9 +515,30 @@ window.goBanking = (tab = 'create') => {
 };
 
 window.showAuth = t => { 
-  $('createCard').style.display = t == 'create' ? 'block' : 'none'; 
-  $('loginCard').style.display = t == 'login' ? 'block' : 'none';$('t1').className = t == 'create' ? 'flex-1 py-2.5 rounded-lg text-xs font-bold bg-[#0a2540] dark:bg-gray-900 text-white shadow-sm' : 'flex-1 py-2.5 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900'; 
-  $('t2').className = t == 'login' ? 'flex-1 py-2.5 rounded-lg text-xs font-bold bg-[#0a2540] dark:bg-gray-900 text-white shadow-sm' : 'flex-1 py-2.5 rounded-lg text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900'; 
+  const isCreate = t === 'create';
+  
+  $('createCard').style.display = isCreate ? 'block' : 'none'; 
+  $('loginCard').style.display = isCreate ? 'none' : 'block'; 
+
+  const activeClass = 'bg-white dark:bg-gray-900 text-gray-900 dark:text-white shadow-md';
+  const inactiveClass = 'text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white';
+
+  $('t1').className = `relative z-10 flex-1 py-2.5 text-xs font-extrabold tracking-wide rounded-xl transition-all duration-200 text-center ${isCreate ? activeClass : inactiveClass}`;
+  $('t2').className = `relative z-10 flex-1 py-2.5 text-xs font-extrabold tracking-wide rounded-xl transition-all duration-200 text-center ${!isCreate ? activeClass : inactiveClass}`;
+};
+
+window.togglePassVisibility = (inputId, iconId) => {
+  const input = $(inputId);
+  const icon = $(iconId);
+  if (!input || !icon) return;
+  
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.innerHTML = '<use href="#i-eye-off"/>';
+  } else {
+    input.type = 'password';
+    icon.innerHTML = '<use href="#i-eye"/>';
+  }
 };
 
 window.toggleBal = () => { 
@@ -483,6 +564,7 @@ window.openTransfer = () => {
   document.querySelectorAll('.typeOpt').forEach(el => el.classList.remove('border-[#0a2540]', 'bg-blue-50/30', 'dark:border-blue-500'));
   document.querySelectorAll('[id^="check-"]').forEach(el => { el.innerHTML = ''; el.className = 'w-6 h-6 border-2 border-gray-300 dark:border-gray-700 rounded-full'; });
 };
+
 window.closeTransfer = () => {
   $('transferModal').style.display = 'none';$('transferModal').classList.add('hidden');
 };
@@ -512,6 +594,7 @@ window.openForgot = mode => {
   $('fAcc').value =$('lacc').value || '';
   $('forgotModal').style.display = 'flex';$('forgotModal').classList.remove('hidden');
 };
+
 window.closeForgot = () => {
   $('forgotModal').style.display = 'none';$('forgotModal').classList.add('hidden');
 };
