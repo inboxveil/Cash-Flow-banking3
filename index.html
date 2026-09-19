@@ -73,12 +73,6 @@
       <div>
         <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mb-2">ACCOUNT</p>
         <div class="space-y-1">
-          <button onclick="toggleNav(); openKycModal();" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
-            <div class="flex items-center gap-3">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2"/></svg> KYC Verification
-            </div>
-            <span id="navKycBadge" class="text-[9px] px-1.5 py-0.5 rounded bg-slate-200 text-slate-600 uppercase font-black">--</span>
-          </button>
           <button onclick="openMenuModal('profile')" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Profile
           </button>
@@ -227,20 +221,6 @@
         </div>
       </div>
 
-      <!-- KYC STATUS BANNER -->
-      <div id="kycBanner" class="bg-white p-3.5 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <div id="kycIcon" class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2"/></svg>
-          </div>
-          <div>
-            <h4 class="font-bold text-xs text-slate-800" id="kycBannerTitle">KYC Verification Required</h4>
-            <p class="text-[10px] text-slate-400" id="kycBannerSub">Verify identity to unlock higher daily transfer limits.</p>
-          </div>
-        </div>
-        <button onclick="openKycModal()" id="kycBannerBtn" class="px-3 py-1.5 bg-[#0a2540] text-white text-xs font-bold rounded-lg shrink-0">Verify</button>
-      </div>
-
       <!-- QUICK ACTIONS -->
       <div class="grid grid-cols-3 gap-2">
         <button onclick="openTransferModal()" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
@@ -284,7 +264,6 @@
         </div>
       </div>
 
-      <button onclick="logoutUser()" class="w-full h-11 bg-slate-200 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-300 transition-all">Log Out</button>
     </div>
 
   </div>
@@ -362,44 +341,6 @@
         </div>
 
         <button id="trSubmitBtn" onclick="processTransfer()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all mt-2">Authorize & Send Payment</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- KYC VERIFICATION MODAL -->
-  <div id="kycModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
-        <div>
-          <h3 class="font-extrabold text-base text-slate-800">KYC Identity Verification</h3>
-          <p class="text-[10px] text-slate-400">Complete verification to increase daily transfer limits.</p>
-        </div>
-        <button onclick="closeKycModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold hover:bg-slate-200">✕</button>
-      </div>
-
-      <div id="kycModalError" class="hidden p-3 rounded-xl text-xs font-semibold mb-3 bg-red-100 text-red-700"></div>
-
-      <div id="kycFormContent" class="space-y-4 text-xs">
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Government ID Type</label>
-          <select id="kycDocType" class="w-full h-11 border border-slate-200 rounded-xl px-3 font-bold bg-slate-50 focus:outline-none focus:border-[#0a2540]">
-            <option value="Passport">International Passport</option>
-            <option value="Driver License">Driver's License</option>
-            <option value="National ID Card">National Identification Card</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Document Serial Number</label>
-          <input id="kycDocNo" type="text" placeholder="e.g. A00981245" class="w-full h-11 border border-slate-200 rounded-xl px-4 bg-slate-50 focus:outline-none focus:border-[#0a2540] font-mono">
-        </div>
-
-        <div>
-          <label class="block font-bold text-slate-600 mb-1">Residential Address</label>
-          <input id="kycAddress" type="text" placeholder="123 Financial Way, Suite 400" class="w-full h-11 border border-slate-200 rounded-xl px-4 bg-slate-50 focus:outline-none focus:border-[#0a2540]">
-        </div>
-
-        <button id="kycSubmitBtn" onclick="submitKycForm()" class="w-full h-12 bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-lg shadow-emerald-600/10 active:scale-[0.98] transition-all mt-3">Submit Identity Audit Request</button>
       </div>
     </div>
   </div>
@@ -540,7 +481,6 @@
         body.innerHTML = `
           <div class="space-y-2">
             <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl font-bold"><span>Status:</span> <span class="text-emerald-600">${currentUserData?.status}</span></div>
-            <div class="flex justify-between bg-slate-50 p-2.5 rounded-xl font-bold"><span>KYC Level:</span> <span class="text-indigo-600">${currentUserData?.kycStatus || 'UNVERIFIED'}</span></div>
           </div>`;
       } else if (type === 'support') {
         title.textContent = "Customer Support & Helpdesk";
@@ -609,10 +549,6 @@
           status: 'PENDING',
           holdReason: '',
           clearanceFee: 0,
-          kycStatus: 'UNVERIFIED',
-          kycDocType: '',
-          kycDocNo: '',
-          kycAddress: '',
           created: Date.now(),
           history: []
         });
@@ -696,34 +632,6 @@
         holdNotice.classList.add('hidden');
       }
 
-      const kycTitle = document.getElementById('kycBannerTitle');
-      const kycSub = document.getElementById('kycBannerSub');
-      const kycBtn = document.getElementById('kycBannerBtn');
-      const navBadge = document.getElementById('navKycBadge');
-      const kycStatus = currentUserData.kycStatus || 'UNVERIFIED';
-
-      navBadge.textContent = kycStatus;
-
-      if (kycStatus === 'VERIFIED') {
-        kycTitle.textContent = "Identity Verified (Tier 2)";
-        kycSub.textContent = "You have full access to transfer services and higher daily limits.";
-        kycBtn.textContent = "Verified";
-        kycBtn.className = "px-3 py-1.5 bg-emerald-600 text-white text-xs font-bold rounded-lg shrink-0 pointer-events-none";
-        navBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 uppercase font-black";
-      } else if (kycStatus === 'PENDING_REVIEW') {
-        kycTitle.textContent = "KYC Audit Under Review";
-        kycSub.textContent = "Your identification documents are being processed by compliance.";
-        kycBtn.textContent = "In Review";
-        kycBtn.className = "px-3 py-1.5 bg-amber-500 text-slate-900 text-xs font-bold rounded-lg shrink-0 pointer-events-none";
-        navBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 uppercase font-black";
-      } else {
-        kycTitle.textContent = "KYC Verification Required";
-        kycSub.textContent = "Verify identity to unlock higher daily transfer limits.";
-        kycBtn.textContent = "Verify";
-        kycBtn.className = "px-3 py-1.5 bg-[#0a2540] text-white text-xs font-bold rounded-lg shrink-0";
-        navBadge.className = "text-[9px] px-1.5 py-0.5 rounded bg-red-100 text-red-600 uppercase font-black";
-      }
-
       renderTransactions();
       switchAccount(activeAccountTab);
     }
@@ -791,58 +699,6 @@
 
       list.innerHTML = html;
     }
-
-    window.openKycModal = () => {
-      document.getElementById('kycModalError').classList.add('hidden');
-      document.getElementById('kycModal').classList.remove('hidden');
-      document.getElementById('kycModal').classList.add('flex');
-    };
-
-    window.closeKycModal = () => {
-      document.getElementById('kycModal').classList.add('hidden');
-      document.getElementById('kycModal').classList.remove('flex');
-    };
-
-    window.submitKycForm = async () => {
-      const errBox = document.getElementById('kycModalError');
-      errBox.classList.add('hidden');
-
-      const docType = document.getElementById('kycDocType').value;
-      const docNo = document.getElementById('kycDocNo').value.trim();
-      const address = document.getElementById('kycAddress').value.trim();
-
-      if (!docNo || !address) {
-        errBox.textContent = "Please enter document serial number and residential address.";
-        errBox.classList.remove('hidden');
-        return;
-      }
-
-      const btn = document.getElementById('kycSubmitBtn');
-      btn.disabled = true;
-      btn.textContent = "Uploading & Submitting Documents...";
-
-      try {
-        await updateDoc(doc(db, 'cashflow_accounts', currentDocId), {
-          kycStatus: 'PENDING_REVIEW',
-          kycDocType: docType,
-          kycDocNo: docNo,
-          kycAddress: address,
-          kycSubmittedDate: Date.now()
-        });
-
-        currentUserData.kycStatus = 'PENDING_REVIEW';
-        btn.disabled = false;
-        btn.textContent = "Submit Identity Audit Request";
-        closeKycModal();
-        updateDashboardUI();
-        alert("KYC SUBMITTED: Your identification documents are currently under review by compliance.");
-      } catch (err) {
-        btn.disabled = false;
-        btn.textContent = "Submit Identity Audit Request";
-        errBox.textContent = "Failed to submit KYC: " + err.message;
-        errBox.classList.remove('hidden');
-      }
-    };
 
     window.openTransferModal = () => {
       if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
