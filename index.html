@@ -14,7 +14,7 @@
 <body class="antialiased min-h-screen flex flex-col justify-center items-center p-3 md:p-6">
 
 <!-- CONTAINER -->
-<div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+<div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100 mb-12">
 
   <!-- TOP HEADER -->
   <div class="bg-[#0a2540] p-6 text-white text-center relative">
@@ -91,7 +91,7 @@
           <div id="feeRequirementBox" class="mt-2 bg-red-100/80 p-2 rounded-lg text-[11px] font-extrabold text-red-800">
             Clearance Fee Required: <span id="holdFeeAmount">$0.00</span>
           </div>
-          <p class="text-[10px] text-red-500 mt-2">Please contact compliance support or your account manager to clear this restriction.</p>
+          <p class="text-[10px] text-red-500 mt-2">Please contact compliance support using the live chat widget to clear this restriction.</p>
         </div>
       </div>
     </div>
@@ -360,7 +360,7 @@ window.switchAccount = (type) => {
 
 window.handleAction = (actionName) => {
   if (currentUserData.status === 'FROZEN' || currentUserData.holdReason) {
-    alert(`ACTION BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}\n\nPlease settle any required fees or contact compliance support to resolve.`);
+    alert(`ACTION BLOCKED: Your account is currently restricted.\n\nReason: ${currentUserData.holdReason || 'Compliance audit in progress.'}\n\nPlease settle any required fees or contact compliance support via live chat.`);
   } else {
     alert(`Feature coming soon: ${actionName}`);
   }
@@ -373,5 +373,20 @@ window.logoutUser = () => {
   showPage('login');
 };
 </script>
+
+<!-- Tawk.to Live Chat Script -->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!-- End of Tawk.to Live Chat Script -->
+
 </body>
 </html>
