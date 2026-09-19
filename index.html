@@ -345,6 +345,48 @@
     </div>
   </div>
 
+  <!-- TRANSACTION RECEIPT MODAL -->
+  <div id="receiptModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl relative max-h-[90vh] overflow-y-auto text-slate-800">
+      
+      <!-- Receipt Header -->
+      <div class="text-center pb-4 border-b border-dashed border-slate-200">
+        <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2 shadow-lg shadow-emerald-500/20">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3 class="font-black text-lg text-slate-900 tracking-tight">Transfer Successful</h3>
+        <p class="text-xs text-slate-400 mt-0.5">Cash Flow Bank Official Receipt</p>
+      </div>
+
+      <!-- Amount Banner -->
+      <div class="py-4 text-center bg-slate-50 rounded-2xl my-4 border border-slate-100">
+        <p class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Total Sent Amount</p>
+        <p class="text-3xl font-black text-slate-900 mt-1" id="recAmount">$0.00</p>
+        <span class="inline-block mt-2 bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase">Completed</span>
+      </div>
+
+      <!-- Detailed Breakdown -->
+      <div class="space-y-2.5 text-xs font-mono bg-slate-50/70 p-4 rounded-2xl border border-slate-100">
+        <div class="flex justify-between"><span class="text-slate-400">Reference No:</span> <span class="font-bold text-slate-700" id="recRef">CFB-8941239</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Date & Time:</span> <span class="font-bold text-slate-700" id="recDate">Oct 24, 2026, 4:12 PM</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Transfer Type:</span> <span class="font-bold text-slate-700" id="recType">Local Bank Transfer</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Source Account:</span> <span class="font-bold text-slate-700" id="recSource">Checking Account</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Recipient Name:</span> <span class="font-bold text-slate-700" id="recRecipient">Sarah Jenkins</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Recipient Bank:</span> <span class="font-bold text-slate-700" id="recBank">Chase Bank</span></div>
+        <div class="flex justify-between"><span class="text-slate-400">Destination Account:</span> <span class="font-bold text-slate-700" id="recAccNo">•••• 5432</span></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="mt-6 space-y-2">
+        <button onclick="window.print()" class="w-full h-11 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-xs transition-all flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> Save / Print Receipt
+        </button>
+        <button onclick="closeReceiptModal()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-xs shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all">Done</button>
+      </div>
+
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -716,6 +758,11 @@
       document.getElementById('transferModal').classList.remove('flex');
     };
 
+    window.closeReceiptModal = () => {
+      document.getElementById('receiptModal').classList.add('hidden');
+      document.getElementById('receiptModal').classList.remove('flex');
+    };
+
     window.toggleSwiftField = () => {
       const type = document.getElementById('trType').value;
       const box = document.getElementById('swiftBox');
@@ -775,10 +822,11 @@
 
       try {
         const updatedBal = currentBal - amount;
+        const formattedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         const historyItem = {
           title: `${trType === 'WIRE' ? 'Wire' : 'Transfer'} to ${recipient} (${bank})`,
           amount: amount,
-          date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+          date: formattedDate
         };
 
         const updatedHistory = [...(currentUserData.history || []), historyItem];
@@ -805,7 +853,24 @@
         switchAccount(activeAccountTab);
         renderTransactions();
 
-        alert(`SUCCESS: Transfer of $${amount.toFixed(2)} completed successfully.`);
+        // Populate and display receipt modal instead of native alert
+        const refNo = 'CFB-' + Math.floor(1000000 + Math.random() * 9000000);
+        const maskedAcc = '•••• ' + accNo.slice(-4);
+        const sourceLabel = sourceAcc.charAt(0).toUpperCase() + sourceAcc.slice(1) + ' Account';
+
+        document.getElementById('recAmount').textContent = '$' + amount.toLocaleString(undefined, {minimumFractionDigits: 2});
+        document.getElementById('recRef').textContent = refNo;
+        document.getElementById('recDate').textContent = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        document.getElementById('recType').textContent = trType === 'WIRE' ? 'International Wire Transfer' : 'Local Bank Transfer';
+        document.getElementById('recSource').textContent = sourceLabel;
+        document.getElementById('recRecipient').textContent = recipient;
+        document.getElementById('recBank').textContent = bank;
+        document.getElementById('recAccNo').textContent = maskedAcc;
+
+        const receiptModal = document.getElementById('receiptModal');
+        receiptModal.classList.remove('hidden');
+        receiptModal.classList.add('flex');
+
       } catch (err) {
         btn.disabled = false;
         btn.textContent = 'Authorize & Send Payment';
