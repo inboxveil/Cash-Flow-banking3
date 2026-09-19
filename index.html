@@ -4,57 +4,174 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cash Flow Banking</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     * { font-family: 'Inter', system-ui; }
-    body { background: #0a2540; color: #fff; }
+    body { background: #0b1426; color: #1e293b; }
   </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col justify-center items-center p-4">
+<body class="antialiased min-h-screen flex flex-col justify-center items-center p-3 md:p-6">
 
-<div class="w-full max-w-md bg-white text-gray-900 rounded-2xl p-6 shadow-2xl">
-  <div class="text-center mb-6">
-    <h1 class="text-2xl font-black text-[#0a2540]">CASH FLOW BANKING</h1>
-    <p class="text-xs text-gray-500 mt-1">Secure Digital Banking</p>
+<!-- CONTAINER -->
+<div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-slate-100">
+
+  <!-- TOP HEADER -->
+  <div class="bg-[#0a2540] p-6 text-white text-center relative">
+    <div class="flex items-center justify-center gap-2">
+      <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-black text-white text-lg">CF</div>
+      <h1 class="text-xl font-extrabold tracking-tight">CASH FLOW BANK</h1>
+    </div>
+    <p class="text-[11px] text-slate-300 mt-1 uppercase tracking-widest font-semibold">Online Banking Portal</p>
   </div>
 
   <!-- STATUS ALERT -->
-  <div id="alertBox" class="hidden p-3 rounded-xl text-xs font-semibold mb-4 text-center"></div>
+  <div class="px-6 pt-4">
+    <div id="alertBox" class="hidden p-3 rounded-xl text-xs font-semibold text-center"></div>
+  </div>
 
   <!-- VIEW 1: LOGIN FORM -->
-  <div id="loginView">
-    <h2 class="font-bold text-lg mb-3">Sign In</h2>
-    <input id="loginEmail" type="email" placeholder="Email Address" class="w-full h-12 border rounded-xl px-4 text-sm mb-3 focus:outline-none focus:border-[#0a2540]">
-    <input id="loginPass" type="password" placeholder="Password" class="w-full h-12 border rounded-xl px-4 text-sm mb-4 focus:outline-none focus:border-[#0a2540]">
-    <button onclick="loginUser()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-sm">Login</button>
-    <p class="text-xs text-center text-gray-500 mt-4">Don't have an account? <a href="#" onclick="showPage('register')" class="text-[#0a2540] font-bold">Register here</a></p>
+  <div id="loginView" class="p-6 pt-2">
+    <h2 class="font-extrabold text-xl text-slate-800 mb-1">Welcome Back</h2>
+    <p class="text-xs text-slate-500 mb-5">Sign in to manage your digital assets</p>
+    
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
+        <input id="loginEmail" type="email" placeholder="name@example.com" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
+        <input id="loginPass" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+      </div>
+      <button onclick="loginUser()" class="w-full h-12 bg-[#0a2540] text-white rounded-xl font-bold text-sm shadow-lg shadow-slate-900/10 active:scale-[0.98] transition-all">Sign In</button>
+    </div>
+
+    <p class="text-xs text-center text-slate-500 mt-6">Don't have an account? <a href="#" onclick="showPage('register')" class="text-[#0a2540] font-extrabold hover:underline">Create Account</a></p>
   </div>
 
   <!-- VIEW 2: REGISTER FORM -->
-  <div id="registerView" class="hidden">
-    <h2 class="font-bold text-lg mb-3">Create Account</h2>
-    <input id="regName" type="text" placeholder="Full Name" class="w-full h-12 border rounded-xl px-4 text-sm mb-3">
-    <input id="regEmail" type="email" placeholder="Email Address" class="w-full h-12 border rounded-xl px-4 text-sm mb-3">
-    <input id="regPass" type="password" placeholder="Password" class="w-full h-12 border rounded-xl px-4 text-sm mb-3">
-    <input id="regPin" type="password" maxlength="4" placeholder="4-Digit Security PIN" class="w-full h-12 border rounded-xl px-4 text-sm mb-4">
-    <button onclick="registerUser()" class="w-full h-12 bg-green-600 text-white rounded-xl font-bold text-sm">Create Account</button>
-    <p class="text-xs text-center text-gray-500 mt-4">Already registered? <a href="#" onclick="showPage('login')" class="text-[#0a2540] font-bold">Sign In</a></p>
+  <div id="registerView" class="hidden p-6 pt-2">
+    <h2 class="font-extrabold text-xl text-slate-800 mb-1">Open an Account</h2>
+    <p class="text-xs text-slate-500 mb-5">Join Cash Flow Banking today</p>
+    
+    <div class="space-y-3">
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Full Name</label>
+        <input id="regName" type="text" placeholder="John Doe" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Email Address</label>
+        <input id="regEmail" type="email" placeholder="john@example.com" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">Password</label>
+        <input id="regPass" type="password" placeholder="••••••••" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+      </div>
+      <div>
+        <label class="block text-xs font-bold text-slate-600 mb-1">4-Digit Security PIN</label>
+        <input id="regPin" type="password" maxlength="4" placeholder="1234" class="w-full h-11 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-[#0a2540] bg-slate-50">
+      </div>
+      <button onclick="registerUser()" class="w-full h-12 bg-emerald-600 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-600/10 active:scale-[0.98] transition-all mt-2">Submit Application</button>
+    </div>
+
+    <p class="text-xs text-center text-slate-500 mt-5">Already registered? <a href="#" onclick="showPage('login')" class="text-[#0a2540] font-extrabold hover:underline">Sign In</a></p>
   </div>
 
-  <!-- VIEW 3: USER DASHBOARD -->
-  <div id="dashboardView" class="hidden text-center">
-    <div class="bg-gray-50 p-4 rounded-xl border mb-4">
-      <span class="text-xs text-gray-500">Available Balance</span>
-      <div class="text-3xl font-black text-green-600 mt-1" id="userBalance">$0.00</div>
+  <!-- VIEW 3: REALISTIC BANK DASHBOARD -->
+  <div id="dashboardView" class="hidden bg-slate-50 p-5 space-y-4">
+    
+    <!-- USER GREETING CARD -->
+    <div class="flex items-center justify-between bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-[#0a2540] text-white flex items-center justify-center font-black text-sm" id="userAvatar">JD</div>
+        <div>
+          <h3 class="font-bold text-sm text-slate-800" id="userName">User Name</h3>
+          <p class="text-[11px] text-slate-400">Acc: <span id="userAcc" class="font-mono font-bold text-slate-600">330000000</span></p>
+        </div>
+      </div>
+      <span id="userStatus" class="bg-emerald-100 text-emerald-700 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase">Active</span>
     </div>
-    <div class="text-left text-xs space-y-2 mb-6">
-      <p><b>Account Name:</b> <span id="userName">---</span></p>
-      <p><b>Account Number:</b> <span id="userAcc">---</span></p>
-      <p><b>Status:</b> <span id="userStatus" class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">APPROVED</span></p>
+
+    <!-- VIRTUAL CARD / BALANCE BOARD -->
+    <div class="bg-gradient-to-tr from-[#0a2540] via-[#11385f] to-[#1e4e80] rounded-2xl p-5 text-white shadow-xl relative overflow-hidden">
+      <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+      <div class="flex justify-between items-center text-xs opacity-80">
+        <span>Available Balance</span>
+        <span class="font-bold tracking-widest">DEBIT CARD</span>
+      </div>
+      <div class="text-3xl font-black mt-2 tracking-tight" id="userBalance">$0.00</div>
+      
+      <div class="mt-6 flex justify-between items-end border-t border-white/10 pt-3">
+        <div>
+          <span class="text-[9px] uppercase tracking-wider text-slate-300 block">Account Status</span>
+          <span class="text-xs font-bold text-emerald-400">Verified Member</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[9px] uppercase tracking-wider text-slate-300 block">Currency</span>
+          <span class="text-xs font-bold">USD ($)</span>
+        </div>
+      </div>
     </div>
-    <button onclick="logoutUser()" class="w-full h-11 bg-gray-200 text-gray-800 rounded-xl font-bold text-xs">Log Out</button>
+
+    <!-- CREDIT SCORE METER -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <div class="flex justify-between items-center mb-2">
+        <span class="text-xs font-bold text-slate-700">Credit Score Index</span>
+        <span class="text-xs font-extrabold text-emerald-600">750 / 850 (Excellent)</span>
+      </div>
+      <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+        <div class="bg-gradient-to-r from-amber-400 via-emerald-400 to-emerald-600 h-full rounded-full" style="width: 88%"></div>
+      </div>
+      <p class="text-[10px] text-slate-400 mt-2">Calculated based on account activity and payment reliability.</p>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="grid grid-cols-3 gap-2">
+      <button onclick="alert('Feature coming soon: Wire Transfer')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+        <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm">↗</div>
+        <span class="text-[11px] font-bold text-slate-700">Transfer</span>
+      </button>
+      <button onclick="alert('Feature coming soon: Deposit Check')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+        <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">↙</div>
+        <span class="text-[11px] font-bold text-slate-700">Deposit</span>
+      </button>
+      <button onclick="alert('Feature coming soon: Cards Management')" class="bg-white border border-slate-100 p-3 rounded-xl flex flex-col items-center gap-1.5 shadow-sm hover:bg-slate-100 transition-all">
+        <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">💳</div>
+        <span class="text-[11px] font-bold text-slate-700">Cards</span>
+      </button>
+    </div>
+
+    <!-- RECENT TRANSACTIONS -->
+    <div class="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+      <h4 class="font-extrabold text-xs text-slate-800 mb-3 uppercase tracking-wider">Recent Activity</h4>
+      <div class="space-y-3 text-xs">
+        <div class="flex justify-between items-center border-b border-slate-50 pb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</div>
+            <div>
+              <p class="font-bold text-slate-800">Account Opening Bonus</p>
+              <p class="text-[10px] text-slate-400">System Credit</p>
+            </div>
+          </div>
+          <span class="font-bold text-emerald-600">+$0.00</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-black">🛡</div>
+            <div>
+              <p class="font-bold text-slate-800">Security Verification</p>
+              <p class="text-[10px] text-slate-400">System Check</p>
+            </div>
+          </div>
+          <span class="font-bold text-slate-400">Completed</span>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="logoutUser()" class="w-full h-11 bg-slate-200 text-slate-700 rounded-xl font-bold text-xs hover:bg-slate-300 transition-all">Log Out</button>
   </div>
+
 </div>
 
 <script type="module">
@@ -88,7 +205,7 @@ window.showPage = (viewName) => {
 function showAlert(msg, type = 'error') {
   const box = document.getElementById('alertBox');
   if (!msg) { box.classList.add('hidden'); return; }
-  box.className = `p-3 rounded-xl text-xs font-semibold mb-4 text-center ${type === 'error' ? 'bg-red-100 text-red-700' : type === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-green-100 text-green-700'}`;
+  box.className = `p-3 rounded-xl text-xs font-semibold mb-2 text-center ${type === 'error' ? 'bg-red-100 text-red-700' : type === 'warning' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-700'}`;
   box.textContent = msg;
   box.classList.remove('hidden');
 }
@@ -99,7 +216,7 @@ window.registerUser = async () => {
   const pass = document.getElementById('regPass').value;
   const pin = document.getElementById('regPin').value;
 
-  if (!name || !email || !pass || !pin) { showAlert('Please fill in all fields.'); return; }
+  if (!name || !email || !pass || !pin) { showAlert('Please complete all fields.'); return; }
 
   try {
     const q = query(collection(db, 'cashflow_accounts'), where('email', '==', email));
@@ -116,7 +233,7 @@ window.registerUser = async () => {
     });
 
     showPage('login');
-    showAlert('Registration successful! Your account is PENDING approval from the administrator before you can log in.', 'warning');
+    showAlert('Application received! Your account is PENDING administrator approval before login.', 'warning');
   } catch (err) {
     showAlert('Error: ' + err.message);
   }
@@ -149,9 +266,12 @@ window.loginUser = async () => {
       return;
     }
 
+    const initials = userData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+    document.getElementById('userAvatar').textContent = initials || 'CF';
     document.getElementById('userName').textContent = userData.name;
     document.getElementById('userAcc').textContent = userData.accNo;
-    document.getElementById('userBalance').textContent = '$' + (userData.balance || 0).toLocaleString();
+    document.getElementById('userBalance').textContent = '$' + (userData.balance || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    
     showPage('dashboard');
   } catch (err) {
     showAlert('Error: ' + err.message);
