@@ -117,9 +117,12 @@
 
     <!-- VIEW 1: CLIENT LOGIN FORM -->
     <div id="loginView" class="p-6 pt-3">
-      <div class="mb-5">
-        <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Client Portal Sign In</h2>
-        <p class="text-xs text-slate-500 mt-1">Access your secure accounts and financial dashboards</p>
+      <div class="mb-5 flex justify-between items-center">
+        <div>
+          <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Client Portal Sign In</h2>
+          <p class="text-xs text-slate-500 mt-1">Access your secure accounts and dashboards</p>
+        </div>
+        <button onclick="showAdminLogin()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-xl transition-all border border-slate-200">Admin Portal</button>
       </div>
       
       <div class="space-y-4">
@@ -139,6 +142,52 @@
 
       <div class="flex justify-center items-center mt-6 text-xs text-slate-500 pt-4 border-t border-slate-100">
         <p>New customer? <a href="#" onclick="showPage('register')" class="text-cyan-600 font-extrabold hover:underline">Open an Account</a></p>
+      </div>
+    </div>
+
+    <!-- VIEW 1B: ADMIN LOGIN MODAL / VIEW -->
+    <div id="adminLoginView" class="hidden p-6 pt-3">
+      <div class="mb-5 flex justify-between items-center">
+        <div>
+          <h2 class="font-extrabold text-xl text-slate-900 tracking-tight">Admin Portal Sign In</h2>
+          <p class="text-xs text-slate-500 mt-1">Manage user accounts, balances, and transfer approvals</p>
+        </div>
+        <button onclick="showPage('login')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-extrabold rounded-xl transition-all border border-slate-200">Client Portal</button>
+      </div>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Admin Passcode</label>
+          <input id="adminPassInput" type="password" placeholder="••••••••" class="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm focus:outline-none focus:border-cyan-600 bg-slate-50 text-slate-800">
+        </div>
+        <button onclick="loginAdmin()" class="w-full h-12 bg-cyan-600 hover:bg-cyan-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-cyan-600/20 active:scale-[0.98] transition-all">Access Admin Control Panel</button>
+      </div>
+    </div>
+
+    <!-- VIEW 1C: ADMIN DASHBOARD -->
+    <div id="adminDashboardView" class="hidden bg-slate-50/80 p-4 space-y-4 max-h-[80vh] overflow-y-auto">
+      <div class="flex justify-between items-center bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+        <div>
+          <h3 class="font-black text-sm text-slate-900">Admin Control Center</h3>
+          <p class="text-[10px] text-slate-400 font-medium">Pending Transfer Requests & User Accounts</p>
+        </div>
+        <button onclick="showPage('login')" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-[10px] font-extrabold rounded-xl transition-all">Sign Out</button>
+      </div>
+
+      <!-- Pending Transfers List -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+        <h4 class="font-extrabold text-xs text-slate-900 uppercase tracking-wider mb-3">Pending Transfers Requiring Approval</h4>
+        <div id="adminPendingTransfersList" class="space-y-3 text-xs">
+          <p class="text-slate-400 text-center py-4">Loading pending transfers...</p>
+        </div>
+      </div>
+
+      <!-- All Users Management List -->
+      <div class="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-sm">
+        <h4 class="font-extrabold text-xs text-slate-900 uppercase tracking-wider mb-3">Registered Client Accounts</h4>
+        <div id="adminUsersList" class="space-y-3 text-xs">
+          <p class="text-slate-400 text-center py-4">Loading users...</p>
+        </div>
       </div>
     </div>
 
@@ -399,18 +448,18 @@
       
       <!-- Receipt Header -->
       <div class="text-center pb-4 border-b border-dashed border-slate-200">
-        <div class="w-12 h-12 bg-emerald-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-emerald-500/30">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+        <div id="recHeaderIcon" class="w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-amber-500/30">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <h3 class="font-black text-lg text-slate-900 tracking-tight">Transfer Successful</h3>
+        <h3 id="recHeaderTitle" class="font-black text-lg text-slate-900 tracking-tight">Transfer Pending Approval</h3>
         <p class="text-xs text-slate-400 mt-0.5">Apex Trust Bank Official Transaction Receipt</p>
       </div>
 
       <!-- Amount Banner -->
       <div class="py-4 text-center bg-slate-50 rounded-2xl my-4 border border-slate-100">
-        <p class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Total Transferred Amount</p>
+        <p class="text-[10px] uppercase tracking-wider font-extrabold text-slate-400">Total Transfer Amount</p>
         <p class="text-3xl font-black text-slate-900 mt-1 font-mono" id="recAmount">$0.00</p>
-        <span class="inline-block mt-2 bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Completed</span>
+        <span id="recBadge" class="inline-block mt-2 bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Pending Admin Approval</span>
       </div>
 
       <!-- Detailed Breakdown -->
@@ -437,7 +486,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCNQiRLu1xSUc1nNcT_mE0u5-EbysO52y0",
@@ -455,6 +504,7 @@
     let currentUserData = null;
     let currentDocId = null;
     let activeAccountTab = 'checking';
+    let userUnsubscribe = null;
 
     window.toggleNav = () => {
       const nav = document.getElementById('sideNav');
@@ -509,10 +559,33 @@
       } else if (type === 'transactions') {
         title.textContent = "Complete Transaction History";
         const history = currentUserData?.history || [];
-        if (history.length === 0) {
-          body.innerHTML = `<p class="text-center text-slate-400 py-8 font-medium">No prior transactions on record.</p>`;
-        } else {
-          let listHtml = `<div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">`;
+        const pendingList = currentUserData?.pendingTransfers || [];
+        
+        let listHtml = `<div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">`;
+        
+        if (pendingList.length > 0) {
+          listHtml += `<p class="text-[10px] font-extrabold text-amber-600 uppercase tracking-wider">Pending Approvals</p>`;
+          pendingList.slice().reverse().forEach(p => {
+            listHtml += `
+              <div class="flex justify-between items-center bg-amber-50/70 p-3 rounded-xl border border-amber-200">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div>
+                    <p class="font-bold text-slate-900 text-xs">${p.title}</p>
+                    <p class="text-[10px] text-amber-700 font-semibold">${p.date} • Pending Admin Approval</p>
+                  </div>
+                </div>
+                <span class="font-bold font-mono text-amber-700 text-xs">-$${parseFloat(p.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+              </div>`;
+          });
+        }
+
+        if (history.length === 0 && pendingList.length === 0) {
+          listHtml += `<p class="text-center text-slate-400 py-8 font-medium">No prior transactions on record.</p>`;
+        } else if (history.length > 0) {
+          listHtml += `<p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mt-3">Completed History</p>`;
           history.slice().reverse().forEach(t => {
             listHtml += `
               <div class="flex justify-between items-center bg-slate-50 p-3 rounded-xl border border-slate-100">
@@ -528,9 +601,9 @@
                 <span class="font-bold font-mono text-rose-600 text-xs">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
               </div>`;
           });
-          listHtml += `</div>`;
-          body.innerHTML = listHtml;
         }
+        listHtml += `</div>`;
+        body.innerHTML = listHtml;
       } else if (type === 'depositCheck') {
         title.textContent = "Mobile Check Deposit";
         body.innerHTML = `
@@ -608,17 +681,199 @@
     };
 
     window.showPage = (viewName) => {
+      if (userUnsubscribe) { userUnsubscribe(); userUnsubscribe = null; }
+
       document.getElementById('loginView').classList.add('hidden');
+      document.getElementById('adminLoginView').classList.add('hidden');
+      document.getElementById('adminDashboardView').classList.add('hidden');
       document.getElementById('registerView').classList.add('hidden');
       document.getElementById('dashboardView').classList.add('hidden');
       document.getElementById('menuBtn').classList.add('hidden');
       showAlert('');
 
       if (viewName === 'login') document.getElementById('loginView').classList.remove('hidden');
+      if (viewName === 'adminLogin') document.getElementById('adminLoginView').classList.remove('hidden');
+      if (viewName === 'adminDashboard') {
+        document.getElementById('adminDashboardView').classList.remove('hidden');
+        loadAdminPanel();
+      }
       if (viewName === 'register') document.getElementById('registerView').classList.remove('hidden');
       if (viewName === 'dashboard') {
         document.getElementById('dashboardView').classList.remove('hidden');
         document.getElementById('menuBtn').classList.remove('hidden');
+      }
+    };
+
+    window.showAdminLogin = () => {
+      showPage('adminLogin');
+    };
+
+    window.loginAdmin = () => {
+      const pass = document.getElementById('adminPassInput').value;
+      if (pass === 'admin123' || pass === 'ApexAdmin2026') {
+        showPage('adminDashboard');
+      } else {
+        showAlert('Incorrect Admin Passcode (Try admin123)');
+      }
+    };
+
+    window.loadAdminPanel = async () => {
+      const transListEl = document.getElementById('adminPendingTransfersList');
+      const usersListEl = document.getElementById('adminUsersList');
+      
+      transListEl.innerHTML = `<p class="text-slate-400 text-center py-4">Loading pending transfers...</p>`;
+      usersListEl.innerHTML = `<p class="text-slate-400 text-center py-4">Loading users...</p>`;
+
+      try {
+        const snap = await getDocs(collection(db, 'cashflow_accounts'));
+        let allPending = [];
+        let allUsers = [];
+
+        snap.forEach(d => {
+          const u = d.id;
+          const data = d.data();
+          allUsers.push({ id: u, ...data });
+          if (data.pendingTransfers && data.pendingTransfers.length > 0) {
+            data.pendingTransfers.forEach((p, idx) => {
+              allPending.push({ userId: u, userAcc: data.accNo, userName: data.name, ...p, pendingIndex: idx });
+            });
+          }
+        });
+
+        // Render pending transfers
+        if (allPending.length === 0) {
+          transListEl.innerHTML = `<p class="text-slate-400 text-center py-4">No pending transfers awaiting approval.</p>`;
+        } else {
+          let html = '';
+          allPending.forEach(item => {
+            html += `
+              <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex flex-col gap-2">
+                <div class="flex justify-between items-center">
+                  <span class="font-bold text-slate-900">${item.userName} (Acc: ${item.userAcc})</span>
+                  <span class="font-bold font-mono text-amber-600 text-sm">+$${parseFloat(item.amount).toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+                </div>
+                <div class="text-[11px] text-slate-500 space-y-0.5">
+                  <p><b>To:</b> ${item.recipient} (${item.bank}) • ${item.accNo}</p>
+                  <p><b>Type:</b> ${item.type} • <b>Date:</b> ${item.date}</p>
+                </div>
+                <div class="flex gap-2 pt-1">
+                  <button onclick="adminApproveTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm">Approve & Send</button>
+                  <button onclick="adminRejectTransfer('${item.userId}', ${item.pendingIndex})" class="flex-1 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold text-xs shadow-sm">Reject / Refund</button>
+                </div>
+              </div>`;
+          });
+          transListEl.innerHTML = html;
+        }
+
+        // Render users list
+        if (allUsers.length === 0) {
+          usersListEl.innerHTML = `<p class="text-slate-400 text-center py-4">No accounts registered.</p>`;
+        } else {
+          let uHtml = '';
+          allUsers.forEach(usr => {
+            const checkBal = usr.checkingBalance || usr.balance || 0;
+            uHtml += `
+              <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex flex-col gap-2">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="font-bold text-slate-900">${usr.name} <span class="text-[10px] font-mono text-slate-400">(${usr.accNo})</span></p>
+                    <p class="text-[10px] text-slate-500">${usr.email}</p>
+                  </div>
+                  <span class="px-2 py-0.5 rounded text-[9px] font-extrabold uppercase ${usr.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${usr.status || 'PENDING'}</span>
+                </div>
+                <div class="flex items-center gap-2 pt-1 text-[11px]">
+                  <span class="font-mono font-bold text-slate-700">Checking: $${checkBal.toLocaleString(undefined,{minimumFractionDigits:2})}</span>
+                </div>
+                <div class="flex gap-2 pt-1">
+                  <button onclick="adminToggleUserStatus('${usr.id}', '${usr.status === 'ACTIVE' ? 'PENDING' : 'ACTIVE'}')" class="flex-1 py-1.5 bg-slate-900 text-white rounded-xl font-bold text-[10px]">${usr.status === 'ACTIVE' ? 'Suspend / Pending' : 'Approve Account'}</button>
+                </div>
+              </div>`;
+          });
+          usersListEl.innerHTML = uHtml;
+        }
+
+      } catch (err) {
+        transListEl.innerHTML = `<p class="text-rose-500 text-center py-4">Error: ${err.message}</p>`;
+      }
+    };
+
+    window.adminApproveTransfer = async (userId, pIndex) => {
+      try {
+        const userRef = doc(db, 'cashflow_accounts', userId);
+        const snap = await getDocs(query(collection(db, 'cashflow_accounts'), where('__name__', '==', userId)));
+        // Get user data
+        let uData = null;
+        snap.forEach(d => uData = d.data());
+        if (!uData) return;
+
+        let pendingList = [...(uData.pendingTransfers || [])];
+        const transferToApprove = pendingList.splice(pIndex, 1)[0];
+        if (!transferToApprove) return;
+
+        // Deduct from balance
+        let checkingBal = uData.checkingBalance || uData.balance || 0;
+        let savingsBal = uData.savingsBalance || 0;
+        let investBal = uData.investmentBalance || 0;
+
+        if (transferToApprove.sourceAcc === 'savings') savingsBal -= transferToApprove.amount;
+        else if (transferToApprove.sourceAcc === 'investment') investBal -= transferToApprove.amount;
+        else {
+          checkingBal -= transferToApprove.amount;
+        }
+
+        const historyItem = {
+          title: `${transferToApprove.type === 'WIRE' ? 'Wire' : 'Transfer'} to ${transferToApprove.recipient} (${transferToApprove.bank})`,
+          amount: transferToApprove.amount,
+          date: transferToApprove.date
+        };
+
+        const updatedHistory = [...(uData.history || []), historyItem];
+
+        await updateDoc(userRef, {
+          pendingTransfers: pendingList,
+          history: updatedHistory,
+          checkingBalance: checkingBal,
+          balance: checkingBal,
+          savingsBalance: savingsBal,
+          investmentBalance: investBal
+        });
+
+        alert('Transfer approved successfully! Funds deducted and moved to completed history.');
+        loadAdminPanel();
+      } catch (err) {
+        alert('Error approving transfer: ' + err.message);
+      }
+    };
+
+    window.adminRejectTransfer = async (userId, pIndex) => {
+      try {
+        const userRef = doc(db, 'cashflow_accounts', userId);
+        const snap = await getDocs(query(collection(db, 'cashflow_accounts'), where('__name__', '==', userId)));
+        let uData = null;
+        snap.forEach(d => uData = d.data());
+        if (!uData) return;
+
+        let pendingList = [...(uData.pendingTransfers || [])];
+        pendingList.splice(pIndex, 1)[0];
+
+        await updateDoc(userRef, {
+          pendingTransfers: pendingList
+        });
+
+        alert('Transfer rejected and cleared.');
+        loadAdminPanel();
+      } catch (err) {
+        alert('Error rejecting transfer: ' + err.message);
+      }
+    };
+
+    window.adminToggleUserStatus = async (userId, newStatus) => {
+      try {
+        await updateDoc(doc(db, 'cashflow_accounts', userId), { status: newStatus });
+        alert('Account status updated to ' + newStatus);
+        loadAdminPanel();
+      } catch (err) {
+        alert('Error: ' + err.message);
       }
     };
 
@@ -664,7 +919,8 @@
           holdReason: '',
           clearanceFee: 0,
           created: Date.now(),
-          history: []
+          history: [],
+          pendingTransfers: []
         });
 
         document.getElementById('loginAccNo').value = accNo;
@@ -706,12 +962,23 @@
 
         updateDashboardUI();
         showPage('dashboard');
+
+        // Realtime listener for client updates (auto update when admin approves!)
+        if (userUnsubscribe) userUnsubscribe();
+        userUnsubscribe = onSnapshot(doc(db, 'cashflow_accounts', currentDocId), (docSnap) => {
+          if (docSnap.exists()) {
+            currentUserData = docSnap.data();
+            updateDashboardUI();
+          }
+        });
+
       } catch (err) {
         showAlert('Error: ' + err.message);
       }
     };
 
     function updateDashboardUI() {
+      if (!currentUserData) return;
       const initials = currentUserData.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
       document.getElementById('userAvatar').textContent = initials || 'AT';
       document.getElementById('userName').textContent = currentUserData.name;
@@ -783,19 +1050,26 @@
     function renderTransactions() {
       const list = document.getElementById('activityList');
       const history = currentUserData.history || [];
+      const pendingList = currentUserData.pendingTransfers || [];
 
-      let html = `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-          </div>
-          <div>
-            <p class="font-bold text-slate-900">Account Opening Bonus</p>
-            <p class="text-[10px] text-slate-400">System Credit</p>
-          </div>
-        </div>
-        <span class="font-bold text-emerald-600">+$0.00</span>
-      </div>`;
+      let html = '';
+
+      if (pendingList.length > 0) {
+        pendingList.slice(-2).reverse().forEach(p => {
+          html += `<div class="flex justify-between items-center border-b border-amber-100 pb-2 bg-amber-50/50 p-1 rounded-xl">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <div>
+                <p class="font-bold text-slate-900">${p.title}</p>
+                <p class="text-[10px] text-amber-700 font-bold">Pending Admin Approval</p>
+              </div>
+            </div>
+            <span class="font-bold text-amber-700 font-mono">-$${parseFloat(p.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
+          </div>`;
+        });
+      }
 
       history.slice(-3).reverse().forEach(t => {
         html += `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
@@ -811,6 +1085,21 @@
           <span class="font-bold text-rose-600 font-mono">-$${parseFloat(t.amount).toLocaleString(undefined, {minimumFractionDigits: 2})}</span>
         </div>`;
       });
+
+      if (!html) {
+        html = `<div class="flex justify-between items-center border-b border-slate-50 pb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div>
+              <p class="font-bold text-slate-800">Account Opening Bonus</p>
+              <p class="text-[10px] text-slate-400">System Credit</p>
+            </div>
+          </div>
+          <span class="font-bold text-emerald-600">+$0.00</span>
+        </div>`;
+      }
 
       list.innerHTML = html;
     }
@@ -891,34 +1180,28 @@
 
       const btn = document.getElementById('trSubmitBtn');
       btn.disabled = true;
-      btn.textContent = 'Processing Payment...';
+      btn.textContent = 'Submitting for Approval...';
 
       try {
-        const updatedBal = currentBal - amount;
         const formattedDate = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        const historyItem = {
+        const pendingItem = {
           title: `${trType === 'WIRE' ? 'Wire' : 'Transfer'} to ${recipient} (${bank})`,
           amount: amount,
-          date: formattedDate
+          date: formattedDate,
+          recipient,
+          bank,
+          accNo,
+          type: trType === 'WIRE' ? 'International SWIFT Wire' : 'Local Domestic Transfer',
+          sourceAcc
         };
 
-        const updatedHistory = [...(currentUserData.history || []), historyItem];
-        let updateData = { history: updatedHistory };
-        if (sourceAcc === 'checking') {
-          updateData.checkingBalance = updatedBal;
-          updateData.balance = updatedBal;
-          currentUserData.checkingBalance = updatedBal;
-          currentUserData.balance = updatedBal;
-        } else if (sourceAcc === 'savings') {
-          updateData.savingsBalance = updatedBal;
-          currentUserData.savingsBalance = updatedBal;
-        } else if (sourceAcc === 'investment') {
-          updateData.investmentBalance = updatedBal;
-          currentUserData.investmentBalance = updatedBal;
-        }
-        currentUserData.history = updatedHistory;
+        const updatedPending = [...(currentUserData.pendingTransfers || []), pendingItem];
 
-        await updateDoc(doc(db, 'cashflow_accounts', currentDocId), updateData);
+        await updateDoc(doc(db, 'cashflow_accounts', currentDocId), {
+          pendingTransfers: updatedPending
+        });
+
+        currentUserData.pendingTransfers = updatedPending;
 
         btn.disabled = false;
         btn.textContent = 'Authorize & Send Payment';
@@ -938,6 +1221,10 @@
         document.getElementById('recRecipient').textContent = recipient;
         document.getElementById('recBank').textContent = bank;
         document.getElementById('recAccNo').textContent = maskedAcc;
+        document.getElementById('recHeaderTitle').textContent = "Transfer Pending Approval";
+        document.getElementById('recBadge').textContent = "Pending Admin Approval";
+        document.getElementById('recBadge').className = "inline-block mt-2 bg-amber-100 text-amber-800 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider";
+        document.getElementById('recHeaderIcon').className = "w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center mx-auto text-white mb-2.5 shadow-lg shadow-amber-500/30";
 
         const receiptModal = document.getElementById('receiptModal');
         receiptModal.classList.remove('hidden');
@@ -952,6 +1239,7 @@
     };
 
     window.logoutUser = () => {
+      if (userUnsubscribe) { userUnsubscribe(); userUnsubscribe = null; }
       currentUserData = null;
       currentDocId = null;
       showPage('login');
